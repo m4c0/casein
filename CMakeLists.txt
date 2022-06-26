@@ -9,7 +9,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_library(casein STATIC)
 target_compile_features(casein PUBLIC cxx_std_17)
-target_compile_options(casein PUBLIC $<$<PLATFORM_ID:Darwin>:-fobjc-arc>)
+target_compile_options(casein PUBLIC
+  $<$<PLATFORM_ID:Darwin>:-fobjc-arc>
+  $<$<PLATFORM_ID:iOS>:-fobjc-arc>)
 target_include_directories(casein PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
