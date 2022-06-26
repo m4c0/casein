@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 
-@interface CASAppDelegate : NSObject<UIAppDelegate>
+@interface CASAppDelegate : NSObject<UIApplicationDelegate>
 @end
 
 @implementation CASAppDelegate
