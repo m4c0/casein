@@ -20,7 +20,8 @@ target_link_libraries(casein PUBLIC
   "$<$<PLATFORM_ID:Darwin>:-framework Cocoa>"
   "$<$<PLATFORM_ID:iOS>:-framework UIKit>")
 target_link_options(casein PUBLIC 
-  $<$<PLATFORM_ID:Android>:-u ANativeActivity_onCreate>)
+  $<$<PLATFORM_ID:Android>:-u ANativeActivity_onCreate>
+  $<$<PLATFORM_ID:iOS>:-ObjC>)
 target_sources(casein PRIVATE
   $<$<PLATFORM_ID:Android>:src/glue/android_native_app_glue.c>
   $<$<PLATFORM_ID:Android>:src/android.cpp>
