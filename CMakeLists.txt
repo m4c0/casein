@@ -12,7 +12,11 @@ target_compile_features(casein PUBLIC cxx_std_17)
 target_include_directories(casein PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+target_link_libraries(casein PUBLIC
+  $<$<PLATFORM_ID:Android>:android log>)
 target_sources(casein PRIVATE
+  $<$<PLATFORM_ID:Android>:src/glue/android_native_app_clue.c>
+  $<$<PLATFORM_ID:Android>:src/android.cpp>
   $<$<PLATFORM_ID:Windows>:src/windows.cpp>)
 install(DIRECTORY inc/ TYPE INCLUDE)
 install(TARGETS casein EXPORT casein-targets)

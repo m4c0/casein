@@ -1,7 +1,7 @@
 #pragma once
 
 namespace casein {
-  enum event_type { START, REPAINT, QUIT };
+  enum event_type { START, REPAINT, STOP, QUIT };
 
   class event {
     event_type t;
@@ -26,6 +26,7 @@ namespace casein::events {
 
   using start = empty_event<START>;
   using repaint = empty_event<REPAINT>;
+  using stop = empty_event<STOP>;
   using quit = empty_event<QUIT>;
 }
 void casein_event(const casein::event & e);
