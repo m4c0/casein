@@ -13,6 +13,8 @@ static void handle_command(android_app * app, int32_t cmd) {
     casein_event(casein::events::quit {});
     ANativeActivity_finish(app->activity);
     break;
+  default:
+    break;
   }
 }
 
