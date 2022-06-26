@@ -6,8 +6,11 @@
 @end
 
 @implementation CASAppDelegate
+- (void)applicationDidFinishLaunching:(NSNotification *)n {
+  casein_event(casein::events::start {});
+}
 - (void)applicationWillTerminate:(NSApplication *)app {
-
+  casein_event(casein::events::quit {});
 }
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)app {
   return YES;
