@@ -14,6 +14,8 @@ target_include_directories(casein PUBLIC
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 target_link_libraries(casein PUBLIC
   $<$<PLATFORM_ID:Android>:android log>)
+target_link_options(casein PUBLIC 
+  $<$<PLATFORM_ID:Android>:-u ANativeActivity_onCreate>)
 target_sources(casein PRIVATE
   $<$<PLATFORM_ID:Android>:src/glue/android_native_app_glue.c>
   $<$<PLATFORM_ID:Android>:src/android.cpp>
@@ -23,7 +25,17 @@ install(TARGETS casein EXPORT casein-targets)
 install(EXPORT casein-targets DESTINATION cmake/casein)
 install(FILES casein-config.cmake DESTINATION cmake/casein)
 
+###########################################################################
 # Proof-of-concept, should be a nice way of understanding how to user this
 # library
-add_executable(casein-poc WIN32 poc/main.cpp)
+###########################################################################
+
+if(ANDROID)
+  # Casein assumes the usage of NativeActivity, which in turn requires a shared
+  # library, insted of a executable
+  add_library(casein-poc SHARED)
+else()
+  add_executable(casein-poc WIN32)
+endif()
 target_link_libraries(casein-poc PUBLIC casein)
+target_sources(casein-poc PRIVATE poc/main.cpp)
