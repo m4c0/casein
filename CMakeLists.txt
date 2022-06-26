@@ -38,14 +38,13 @@ if(ANDROID)
   # Casein assumes the usage of NativeActivity, which in turn requires a shared
   # library, insted of a executable
   add_library(casein-poc SHARED)
+elseif(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+  # In theory, this could be a "normal" MACOSX_BUNDLE executable, but we need
+  # an Apple dev team in the build machine, somehow
+  add_library(casein-poc SHARED)
 else()
   add_executable(casein-poc MACOSX_BUNDLE WIN32)
 endif()
 target_link_libraries(casein-poc PUBLIC casein)
 target_sources(casein-poc PRIVATE poc/main.cpp)
 
-if(APPLE)
-  set_target_properties(casein-poc PROPERTIES
-    MACOSX_BUNDLE_BUNDLE_NAME casein-poc
-    MACOSX_BUNDLE_GUI_IDENTIFIER "com.github.m4c0.casein")
-endif()
