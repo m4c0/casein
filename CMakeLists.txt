@@ -17,7 +17,8 @@ target_include_directories(casein PUBLIC
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 target_link_libraries(casein PUBLIC
   $<$<PLATFORM_ID:Android>:android log>
-  "$<$<PLATFORM_ID:Darwin>:-framework Cocoa>")
+  "$<$<PLATFORM_ID:Darwin>:-framework Cocoa>"
+  "$<$<PLATFORM_ID:iOS>:-framework UIKit>")
 target_link_options(casein PUBLIC 
   $<$<PLATFORM_ID:Android>:-u ANativeActivity_onCreate>)
 target_sources(casein PRIVATE
