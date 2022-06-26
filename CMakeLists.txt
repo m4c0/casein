@@ -37,7 +37,7 @@ if(ANDROID)
   # library, insted of a executable
   add_library(casein-poc SHARED)
 else()
-  add_executable(casein-poc WIN32)
+  add_executable(casein-poc MACOSX_BUNDLE WIN32)
 endif()
 target_link_libraries(casein-poc PUBLIC casein)
 target_sources(casein-poc PRIVATE poc/main.cpp)
