@@ -17,6 +17,7 @@ target_sources(casein PRIVATE
 install(DIRECTORY inc/ TYPE INCLUDE)
 install(TARGETS casein EXPORT casein-targets)
 install(EXPORT casein-targets DESTINATION cmake/casein)
+install(FILES casein-config.cmake DESTINATION cmake/casein)
 
 # Proof-of-concept, should be a nice way of understanding how to user this
 # library
