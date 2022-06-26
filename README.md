@@ -8,9 +8,9 @@ C++ boilerplate library for UI-based multiplatform apps
 2. Build:
 
    ```shell
-   $ cmake -S . -B build
+   $ cmake -S . -B build -DCMAKE_INSTALL_PREFIX=...
    $ cmake --build build
-   $ cmake --build --install
+   $ cmake --build build install
    ```
 
 ## Requirements
