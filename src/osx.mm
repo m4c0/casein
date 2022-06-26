@@ -54,8 +54,10 @@ int main(int argc, char ** argv) {
       title = @"App";
     }
 
+    CASAppDelegate * app_d = [CASAppDelegate new];
+
     NSApplication * app = [NSApplication sharedApplication];
-    app.delegate = [CASAppDelegate new];
+    app.delegate = app_d;
     app.mainMenu = setup_apple_menu(title);
     create_key_window(title);
     [app activateIgnoringOtherApps:YES];
