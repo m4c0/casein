@@ -8,6 +8,7 @@ project(casein
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_library(casein STATIC)
+target_include_directories(casein PUBLIC inc)
 target_sources(casein PUBLIC src/windows.cpp)
 
 # Proof-of-concept, should be a nice way of understanding how to user this
