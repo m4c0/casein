@@ -33,7 +33,7 @@ jobs:
           -DCMAKE_TOOLCHAIN_FILE=${{ env.ndk }}/build/cmake/android.toolchain.cmake
 
   ios:
-    runs-on: macosx-latest
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
     - uses: m4c0/gha-simple-cmake@e3ac067bb0eb9eb5fbd71bfe8d3ab6d629b873db
