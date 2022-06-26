@@ -22,6 +22,7 @@ target_sources(casein PRIVATE
   $<$<PLATFORM_ID:Android>:src/glue/android_native_app_glue.c>
   $<$<PLATFORM_ID:Android>:src/android.cpp>
   $<$<PLATFORM_ID:Darwin>:src/osx.mm>
+  $<$<PLATFORM_ID:iOS>:src/ios.mm>
   $<$<PLATFORM_ID:Windows>:src/windows.cpp>)
 install(DIRECTORY inc/ TYPE INCLUDE)
 install(TARGETS casein EXPORT casein-targets)
@@ -42,3 +43,9 @@ else()
 endif()
 target_link_libraries(casein-poc PUBLIC casein)
 target_sources(casein-poc PRIVATE poc/main.cpp)
+
+if(APPLE)
+  set_target_properties(casein-poc PROPERTIES
+    MACOSX_BUNDLE_BUNDLE_NAME casein-poc
+    MACOSX_BUNDLE_GUI_IDENTIFIER "com.github.m4c0.casein")
+endif()
