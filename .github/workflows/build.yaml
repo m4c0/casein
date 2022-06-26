@@ -1,0 +1,15 @@
+name: Build
+on:
+  - push
+
+jobs:
+  simple-build:
+    strategy:
+      matrix:
+        os: [windows]
+    runs-on: ${{matrix.os}}-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - uses: m4c0/gha-simple-cmake@e3ac067bb0eb9eb5fbd71bfe8d3ab6d629b873db
