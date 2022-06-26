@@ -8,10 +8,11 @@ project(casein
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_library(casein STATIC)
+target_compile_features(casein PUBLIC cxx_std_17)
 target_include_directories(casein PUBLIC inc)
 target_sources(casein PUBLIC src/windows.cpp)
 
 # Proof-of-concept, should be a nice way of understanding how to user this
 # library
-add_executable(casein-poc WIN32)
+add_executable(casein-poc WIN32 poc/main.cpp)
 target_link_libraries(casein-poc PUBLIC casein)
