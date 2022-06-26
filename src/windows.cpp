@@ -1,3 +1,4 @@
+#include "casein.hpp"
 #include "casein.windows.hpp"
 
 #include <exception>
@@ -9,7 +10,14 @@ static constexpr const auto window_class = "m4c0-window-class";
 
 static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param) {
   switch (msg) {
+  case WM_CREATE:
+    casein_event(casein::events::start {});
+    return 0;
+  case WM_PAINT:
+    casein_event(casein::events::repaint {});
+    return 0;
   case WM_DESTROY:
+    casein_event(casein::events::quit {});
     PostQuitMessage(0);
     return 0;
   default:
