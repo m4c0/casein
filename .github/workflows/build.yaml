@@ -31,3 +31,13 @@ jobs:
           -DANDROID_TOOLCHAIN=clang 
           -DANDROID_NDK=${{ env.ndk }}
           -DCMAKE_TOOLCHAIN_FILE=${{ env.ndk }}/build/cmake/android.toolchain.cmake
+
+  ios:
+    runs-on: macosx-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: m4c0/gha-simple-cmake@e3ac067bb0eb9eb5fbd71bfe8d3ab6d629b873db
+      with:
+        extra_configure_flags: -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 -DCMAKE_OSX_ARCHITECTURES=x86_64
+        extra_build_flags: -- -sdk iphonesimulator
+
