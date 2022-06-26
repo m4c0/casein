@@ -1,4 +1,18 @@
+#include "casein.hpp"
+
 #import <AppKit/AppKit.h>
+
+@interface CASAppDelegate : NSObject<NSApplicationDelegate>
+@end
+
+@implementation CASAppDelegate
+- (void)applicationWillTerminate:(NSApplication *)app {
+
+}
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)app {
+  return YES;
+}
+@end
 
 static NSMenu * setup_apple_menu(NSString * title) {
   NSMenu * bar = [NSMenu new];
@@ -38,6 +52,7 @@ int main(int argc, char ** argv) {
     }
 
     NSApplication * app = [NSApplication sharedApplication];
+    app.delegate = [CASAppDelegate new];
     app.mainMenu = setup_apple_menu(title);
     create_key_window(title);
     [app activateIgnoringOtherApps:YES];

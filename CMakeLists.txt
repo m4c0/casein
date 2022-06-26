@@ -20,7 +20,7 @@ target_link_options(casein PUBLIC
 target_sources(casein PRIVATE
   $<$<PLATFORM_ID:Android>:src/glue/android_native_app_glue.c>
   $<$<PLATFORM_ID:Android>:src/android.cpp>
-  $<$<PLATFORM_ID:Darwin>:src/osx.m>
+  $<$<PLATFORM_ID:Darwin>:src/osx.mm>
   $<$<PLATFORM_ID:Windows>:src/windows.cpp>)
 install(DIRECTORY inc/ TYPE INCLUDE)
 install(TARGETS casein EXPORT casein-targets)
