@@ -4,10 +4,9 @@
 static void handle_command(android_app * app, int32_t cmd) {
   switch (cmd) {
   case APP_CMD_INIT_WINDOW:
-    casein_event(casein::events::start {});
+    casein_event(casein::events::create_window { app });
     break;
   case APP_CMD_TERM_WINDOW:
-    casein_event(casein::events::stop {});
     break;
   case APP_CMD_STOP:
     casein_event(casein::events::quit {});

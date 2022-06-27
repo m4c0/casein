@@ -6,9 +6,6 @@
 @end
 
 @implementation CASAppDelegate
-- (void)applicationDidFinishLaunching:(NSNotification *)n {
-  casein_event(casein::events::start {});
-}
 - (void)applicationWillTerminate:(NSApplication *)app {
   casein_event(casein::events::quit {});
 }
@@ -59,7 +56,8 @@ int main(int argc, char ** argv) {
     NSApplication * app = [NSApplication sharedApplication];
     app.delegate = app_d;
     app.mainMenu = setup_apple_menu(title);
-    create_key_window(title);
+    NSWindow * wnd = create_key_window(title);
+    casein_event(casein::events::create_window { (__bridge void *)wnd });
     [app activateIgnoringOtherApps:YES];
     [app run];
     return 0;
