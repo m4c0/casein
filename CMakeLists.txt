@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20.4)
+cmake_minimum_required(VERSION 3.23)
 project(casein
   VERSION 1.0.0
   DESCRIPTION "C++ boilerplate library for UI-based multiplatform apps"
@@ -12,9 +12,6 @@ target_compile_features(casein PUBLIC cxx_std_17)
 target_compile_options(casein PUBLIC
   $<$<PLATFORM_ID:Darwin>:-fobjc-arc>
   $<$<PLATFORM_ID:iOS>:-fobjc-arc>)
-target_include_directories(casein PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
-  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 target_link_libraries(casein PUBLIC
   $<$<PLATFORM_ID:Android>:android log>
   "$<$<PLATFORM_ID:Darwin>:-framework Cocoa>"
@@ -29,8 +26,11 @@ target_sources(casein PRIVATE
   $<$<PLATFORM_ID:Darwin>:src/osx.mm>
   $<$<PLATFORM_ID:iOS>:src/ios.mm>
   $<$<PLATFORM_ID:Windows>:src/windows.cpp>)
-install(DIRECTORY inc/ TYPE INCLUDE)
-install(TARGETS casein EXPORT casein-targets)
+target_sources(casein PUBLIC FILE_SET HEADERS BASE_DIRS inc FILES 
+  inc/casein.hpp 
+  $<$<PLATFORM_ID:Windows>:inc/casein.windows.hpp>)
+
+install(TARGETS casein EXPORT casein-targets FILE_SET HEADERS)
 install(EXPORT casein-targets DESTINATION cmake/casein)
 install(FILES casein-config.cmake DESTINATION cmake/casein)
 
