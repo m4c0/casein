@@ -7,10 +7,10 @@
 
 @implementation CASAppDelegate
 - (void)application:(UIApplication *)app didFinishLaunchingWithOptions:(id)options {
-  casein_event(casein::create_window { (__bridge void *)app }); // TODO: pass window? view?
+  casein_event(casein::events::create_window { (__bridge void *)app }); // TODO: pass window? view?
 }
 - (void)applicationWillTerminate:(UIApplication *)app {
-  casein_event(casein::quit {});
+  casein_event(casein::events::quit {});
 }
 @end
 
