@@ -8,7 +8,7 @@ project(casein
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_library(casein STATIC)
-target_compile_features(casein PUBLIC cxx_std_17)
+target_compile_features(casein PUBLIC cxx_std_20)
 target_compile_options(casein PUBLIC
   $<$<PLATFORM_ID:Darwin>:-fobjc-arc>
   $<$<PLATFORM_ID:iOS>:-fobjc-arc>)
