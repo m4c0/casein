@@ -3,6 +3,13 @@
 namespace casein {
   enum event_type { CREATE_WINDOW, REPAINT, QUIT };
 
+  class event;
+
+  template<typename T>
+  concept is_event = requires(const T * t) {
+    static_cast<const event *>(t);
+  };
+
   class event {
     event_type t;
 
@@ -13,6 +20,11 @@ namespace casein {
   public:
     [[nodiscard]] constexpr event_type type() const noexcept {
       return t;
+    }
+
+    template<is_event Tp>
+    [[nodiscard]] constexpr const Tp & as() const noexcept {
+      return static_cast<const Tp &>(*this);
     }
   };
 }
