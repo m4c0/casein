@@ -24,3 +24,8 @@ C++ boilerplate library for UI-based multiplatform apps
 * Only meanful for multiplatorm
 * Expects users to install it via `cmake install` or similar
 
+## License
+
+MIT, with exception of the code inside `glue`, which has a different copyright
+(as described in the file `NOTICE` inside said folder).
+
