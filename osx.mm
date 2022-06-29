@@ -3,6 +3,7 @@
 #import <AppKit/AppKit.h>
 
 @interface CASAppDelegate : NSObject<NSApplicationDelegate>
+- (void)redraw:(NSTimer *)sender;
 @end
 
 @implementation CASAppDelegate
@@ -11,6 +12,9 @@
 }
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)app {
   return YES;
+}
+- (void)redraw:(NSTimer *)sender {
+  casein_event(casein::events::repaint {});
 }
 @end
 
@@ -41,7 +45,12 @@ static NSWindow * create_key_window(NSString * title) {
   [wnd center];
   [wnd makeKeyAndOrderFront:wnd];
 
+  casein_event(casein::events::create_window { (__bridge void *)wnd });
   return wnd;
+}
+
+static void setupTimer(CASAppDelegate * a) {
+  [NSTimer scheduledTimerWithTimeInterval:1.0 / 30.0 target:a selector:@selector(redraw:) userInfo:nil repeats:YES];
 }
 
 int main(int argc, char ** argv) {
@@ -56,8 +65,8 @@ int main(int argc, char ** argv) {
     NSApplication * app = [NSApplication sharedApplication];
     app.delegate = app_d;
     app.mainMenu = setup_apple_menu(title);
-    NSWindow * wnd = create_key_window(title);
-    casein_event(casein::events::create_window { (__bridge void *)wnd });
+    create_key_window(title);
+    setupTimer(app_d);
     [app activateIgnoringOtherApps:YES];
     [app run];
     return 0;
