@@ -21,14 +21,14 @@ target_link_options(casein PUBLIC
   $<$<PLATFORM_ID:Android>:-u ANativeActivity_onCreate>
   $<$<PLATFORM_ID:iOS>:-ObjC>)
 target_sources(casein PRIVATE
-  $<$<PLATFORM_ID:Android>:src/glue/android_native_app_glue.c>
-  $<$<PLATFORM_ID:Android>:src/android.cpp>
-  $<$<PLATFORM_ID:Darwin>:src/osx.mm>
-  $<$<PLATFORM_ID:iOS>:src/ios.mm>
-  $<$<PLATFORM_ID:Windows>:src/windows.cpp>)
-target_sources(casein PUBLIC FILE_SET HEADERS BASE_DIRS inc FILES 
-  inc/casein.hpp 
-  $<$<PLATFORM_ID:Windows>:inc/casein.windows.hpp>)
+  $<$<PLATFORM_ID:Android>:glue/android_native_app_glue.c>
+  $<$<PLATFORM_ID:Android>:android.cpp>
+  $<$<PLATFORM_ID:Darwin>:osx.mm>
+  $<$<PLATFORM_ID:iOS>:ios.mm>
+  $<$<PLATFORM_ID:Windows>:windows.cpp>)
+target_sources(casein PUBLIC FILE_SET HEADERS FILES
+  casein.hpp
+  $<$<PLATFORM_ID:Windows>:casein.windows.hpp>)
 
 install(TARGETS casein EXPORT casein-targets FILE_SET HEADERS)
 install(EXPORT casein-targets DESTINATION cmake/casein)
@@ -47,5 +47,5 @@ else()
   add_executable(casein-poc MACOSX_BUNDLE WIN32)
 endif()
 target_link_libraries(casein-poc PUBLIC casein)
-target_sources(casein-poc PRIVATE poc/main.cpp)
+target_sources(casein-poc PRIVATE poc.cpp)
 
