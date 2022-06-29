@@ -7,6 +7,10 @@ project(casein
 # Harmless but useful
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+#####################################
+# Base library, minimal requirements
+#####################################
+
 add_library(casein STATIC)
 target_compile_features(casein PUBLIC cxx_std_20)
 target_compile_options(casein PUBLIC
@@ -48,4 +52,22 @@ else()
 endif()
 target_link_libraries(casein-poc PUBLIC casein)
 target_sources(casein-poc PRIVATE poc.cpp)
+
+################################################################
+# SDL2 wrapper and its POC. Only available if SDL2 is available
+################################################################
+
+find_package(SDL2)
+if(SDL2_FOUND)
+  add_library(casein-sdl STATIC)
+  target_link_libraries(casein-sdl PUBLIC casein SDL2::SDL2-static)
+  target_sources(casein-sdl PRIVATE sdl.cpp)
+  install(TARGETS casein-sdl EXPORT casein-targets FILE_SET HEADERS)
+
+  if(WIN32 OR APPLE)
+    add_executable(casein-sdl-poc MACOSX_BUNDLE WIN32)
+    target_link_libraries(casein-sdl-poc PUBLIC casein-sdl)
+    target_sources(casein-sdl-poc PRIVATE poc.sdl.cpp)
+  endif()
+endif()
 
