@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include <memory>
+#include <stdexcept>
 
 [[nodiscard]] static auto & renderer() {
   static std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)> rnd { nullptr, &SDL_DestroyRenderer };
