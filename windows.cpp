@@ -7,18 +7,19 @@
 #include <windows.h>
 
 static constexpr const auto window_class = "m4c0-window-class";
+static constexpr const auto repaint_timer_id = 0xb16b00b5;
 
 static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param) {
   switch (msg) {
   case WM_CREATE:
     casein_event(casein::events::create_window { hwnd });
     return 0;
-  case WM_PAINT:
-    casein_event(casein::events::repaint {});
-    return 0;
   case WM_DESTROY:
     casein_event(casein::events::quit {});
     PostQuitMessage(0);
+    return 0;
+  case WM_TIMER:
+    if (w_param == repaint_timer_id) casein_event(casein::events::repaint {});
     return 0;
   default:
     return DefWindowProc(hwnd, msg, w_param, l_param);
@@ -45,7 +46,7 @@ static void register_class(HINSTANCE h_instance) {
   }
 }
 
-static void create_window(HINSTANCE h_instance, int show) {
+static auto create_window(HINSTANCE h_instance, int show) {
   constexpr const auto title_max_len = 256;
   TCHAR title[title_max_len];
   int size = LoadString(h_instance, IDS_CASEIN_APP_TITLE, title, title_max_len);
@@ -66,14 +67,21 @@ static void create_window(HINSTANCE h_instance, int show) {
 
   ShowWindow(hwnd, show);
   UpdateWindow(hwnd);
+
+  return hwnd;
 }
 
-static int main_loop() {
+static int main_loop(HWND hwnd) {
+  static constexpr const auto sixty_fps = 1000 / 30;
+
   MSG msg;
-  while (GetMessage(&msg, NULL, 0, 0)) {
+
+  SetTimer(hwnd, repaint_timer_id, sixty_fps, nullptr);
+  while (GetMessage(&msg, 0, 0, 0)) {
     TranslateMessage(&msg);
     DispatchMessage(&msg);
   }
+  KillTimer(hwnd, repaint_timer_id);
   return static_cast<int>(msg.wParam);
 }
 
@@ -83,8 +91,8 @@ int CALLBACK WinMain(
     _In_ LPSTR /* command line */,
     _In_ int cmd_show) try {
   register_class(h_instance);
-  create_window(h_instance, cmd_show);
-  return main_loop();
+  auto hwnd = create_window(h_instance, cmd_show);
+  return main_loop(hwnd);
 } catch (const std::exception & e) {
   MessageBox(NULL, _T(e.what()), _T("Unhandled error"), NULL);
   return 1;
