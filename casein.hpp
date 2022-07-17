@@ -1,7 +1,7 @@
 #pragma once
 
 namespace casein {
-  enum event_type { CREATE_WINDOW, REPAINT, QUIT };
+  enum event_type { CREATE_WINDOW, KEY_DOWN, KEY_UP, REPAINT, QUIT };
 
   class event;
 
@@ -58,5 +58,16 @@ namespace casein::events {
       return argument();
     }
   };
+
+  template<event_type ET>
+  struct key_event : public single_arg_event<ET, int> {
+    using single_arg_event<ET, int>::single_arg_event;
+
+    [[nodiscard]] constexpr int key_code() const noexcept {
+      return argument();
+    }
+  };
+  using key_down = key_event<KEY_DOWN>;
+  using key_up = key_event<KEY_UP>;
 }
 void casein_event(const casein::event & e);

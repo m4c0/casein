@@ -18,6 +18,12 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     casein_event(casein::events::quit {});
     PostQuitMessage(0);
     return 0;
+  case WM_KEYDOWN:
+    casein_event(casein::events::key_down { 0 });
+    return 0;
+  case WM_KEYUP:
+    casein_event(casein::events::key_up { 0 });
+    return 0;
   case WM_TIMER:
     if (w_param == repaint_timer_id) casein_event(casein::events::repaint {});
     return 0;
