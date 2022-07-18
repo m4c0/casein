@@ -7,23 +7,31 @@ project(casein
 # Harmless but useful
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+#####################################################
+# Definitions, shared between casein implementations
+#####################################################
+
+add_library(casein-defs INTERFACE)
+target_compile_features(casein-defs INTERFACE cxx_std_20)
+target_compile_options(casein-defs INTERFACE
+  $<$<PLATFORM_ID:Darwin>:-fobjc-arc>
+  $<$<PLATFORM_ID:iOS>:-fobjc-arc>)
+target_link_libraries(casein-defs INTERFACE
+  $<$<PLATFORM_ID:Android>:android log>
+  "$<$<PLATFORM_ID:Darwin>:-framework Cocoa>"
+  "$<$<PLATFORM_ID:iOS>:-framework Foundation>"
+  "$<$<PLATFORM_ID:iOS>:-framework UIKit>")
+target_link_options(casein-defs INTERFACE
+  $<$<PLATFORM_ID:Android>:-u ANativeActivity_onCreate>
+  $<$<PLATFORM_ID:iOS>:-ObjC>)
+install(TARGETS casein-defs EXPORT casein-targets)
+
 #####################################
 # Base library, minimal requirements
 #####################################
 
 add_library(casein STATIC)
-target_compile_features(casein PUBLIC cxx_std_20)
-target_compile_options(casein PUBLIC
-  $<$<PLATFORM_ID:Darwin>:-fobjc-arc>
-  $<$<PLATFORM_ID:iOS>:-fobjc-arc>)
-target_link_libraries(casein PUBLIC
-  $<$<PLATFORM_ID:Android>:android log>
-  "$<$<PLATFORM_ID:Darwin>:-framework Cocoa>"
-  "$<$<PLATFORM_ID:iOS>:-framework Foundation>"
-  "$<$<PLATFORM_ID:iOS>:-framework UIKit>")
-target_link_options(casein PUBLIC 
-  $<$<PLATFORM_ID:Android>:-u ANativeActivity_onCreate>
-  $<$<PLATFORM_ID:iOS>:-ObjC>)
+target_link_libraries(casein PUBLIC casein-defs)
 target_sources(casein PRIVATE
   $<$<PLATFORM_ID:Android>:glue/android_native_app_glue.c>
   $<$<PLATFORM_ID:Android>:android.cpp>
@@ -60,7 +68,7 @@ target_sources(casein-poc PRIVATE poc.cpp)
 find_package(SDL2)
 if(SDL2_FOUND)
   add_library(casein-sdl STATIC)
-  target_link_libraries(casein-sdl PUBLIC casein SDL2::SDL2-static)
+  target_link_libraries(casein-sdl PUBLIC casein-defs SDL2::SDL2-static SDL2::SDL2main)
   target_sources(casein-sdl PRIVATE sdl.cpp)
   install(TARGETS casein-sdl EXPORT casein-targets FILE_SET HEADERS)
 

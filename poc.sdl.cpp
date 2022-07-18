@@ -1,4 +1,4 @@
-#include "casein.sdl.hpp"
+#include "casein.hpp"
 
 #include <SDL_render.h>
 #include <SDL_timer.h>
@@ -9,7 +9,7 @@ static void draw_frame(SDL_Renderer * r) {
   SDL_RenderFillRect(r, nullptr);
 }
 
-void casein_sdl_event(const casein::event & e) {
+void casein_event(const casein::event & e) {
   static SDL_Renderer * renderer;
 
   switch (e.type()) {

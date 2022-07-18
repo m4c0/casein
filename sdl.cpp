@@ -1,63 +1,56 @@
 #include "casein.hpp"
-#include "casein.sdl.hpp"
 
 #include <SDL.h>
 #include <memory>
 #include <stdexcept>
 
-[[nodiscard]] static auto & renderer() {
-  static std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)> rnd { nullptr, &SDL_DestroyRenderer };
-  return rnd;
+static auto create_window() {
+  SDL_Window * wnd = SDL_CreateWindow("App", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
+  if (!wnd) {
+    throw std::runtime_error("Failed to create SDL window");
+  }
+  return std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> { wnd, &SDL_DestroyWindow };
 }
 
-static void init_renderer(void * handle) {
-  static std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> wnd { nullptr, &SDL_DestroyWindow };
+static auto create_renderer(SDL_Window * wnd) {
+  SDL_Renderer * rnd = SDL_CreateRenderer(wnd, -1, 0);
+  if (!rnd) {
+    throw std::runtime_error("Failed to create SDL renderer");
+  }
+  return std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)> { rnd, &SDL_DestroyRenderer };
+}
 
+int main(int /**/, char ** /**/) {
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     throw std::runtime_error("Failed to initialise SDL");
   }
 
-  wnd.reset(SDL_CreateWindowFrom(handle));
-  if (!wnd) {
-    throw std::runtime_error("Failed to create SDL window");
-  }
+  auto wnd = create_window();
+  auto rnd = create_renderer(wnd.get());
 
-  auto & rnd = renderer();
-  rnd.reset(SDL_CreateRenderer(wnd.get(), -1, 0));
-  if (!rnd) {
-    throw std::runtime_error("Failed to create SDL renderer");
-  }
-}
+  casein_event(casein::events::create_window { rnd.get() });
+  while (true) {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+      switch (event.type) {
+      case SDL_KEYDOWN:
+        casein_event(casein::events::key_down { 0 });
+        break;
+      case SDL_KEYUP:
+        casein_event(casein::events::key_up { 0 });
+        break;
+      case SDL_QUIT:
+        casein_event(casein::events::quit {});
+        SDL_Quit();
+        return 0;
+      default:
+        break;
+      }
+    }
 
-static void repaint() {
-  SDL_Renderer * rnd = renderer().get();
-
-  SDL_SetRenderDrawColor(rnd, 0, 0, 0, 255);
-  SDL_RenderClear(rnd);
-
-  casein_sdl_event(casein::events::repaint {});
-
-  SDL_RenderPresent(rnd);
-}
-
-void casein_event(const casein::event & e) {
-
-  switch (e.type()) {
-  case casein::CREATE_WINDOW:
-    init_renderer(e.as<casein::events::create_window>().native_window_handle());
-    // Dispatch a new event, but using SDL_Renderer as the new native handle
-    casein_sdl_event(casein::events::create_window { renderer().get() });
-    break;
-  case casein::REPAINT:
-    repaint();
-    break;
-  case casein::QUIT:
-    renderer().reset();
-    SDL_QuitSubSystem(SDL_INIT_VIDEO);
-    casein_sdl_event(e);
-    break;
-  default:
-    casein_sdl_event(e);
-    break;
+    SDL_SetRenderDrawColor(rnd.get(), 0, 0, 0, 255);
+    SDL_RenderClear(rnd.get());
+    casein_event(casein::events::repaint {});
+    SDL_RenderPresent(rnd.get());
   }
 }
