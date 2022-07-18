@@ -24,7 +24,8 @@ target_link_libraries(casein-defs INTERFACE
 target_link_options(casein-defs INTERFACE
   $<$<PLATFORM_ID:Android>:-u ANativeActivity_onCreate>
   $<$<PLATFORM_ID:iOS>:-ObjC>)
-install(TARGETS casein-defs EXPORT casein-targets)
+target_sources(casein-defs INTERFACE FILE_SET HEADERS FILES casein.hpp)
+install(TARGETS casein-defs EXPORT casein-targets FILE_SET HEADERS)
 
 #####################################
 # Base library, minimal requirements
@@ -39,7 +40,6 @@ target_sources(casein PRIVATE
   $<$<PLATFORM_ID:iOS>:ios.mm>
   $<$<PLATFORM_ID:Windows>:windows.cpp>)
 target_sources(casein PUBLIC FILE_SET HEADERS FILES
-  casein.hpp
   $<$<PLATFORM_ID:Windows>:casein.windows.hpp>)
 
 install(TARGETS casein EXPORT casein-targets FILE_SET HEADERS)
