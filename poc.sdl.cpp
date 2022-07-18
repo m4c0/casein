@@ -6,8 +6,7 @@
 static void draw_frame(SDL_Renderer * r) {
   const auto y = SDL_GetTicks() % 256;
   SDL_SetRenderDrawColor(r, 255, y, 0, 255);
-  SDL_RenderClear(r);
-  SDL_RenderPresent(r);
+  SDL_RenderFillRect(r, nullptr);
 }
 
 void casein_sdl_event(const casein::event & e) {

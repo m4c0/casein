@@ -29,12 +29,27 @@ static void init_renderer(void * handle) {
   }
 }
 
+static void repaint() {
+  SDL_Renderer * rnd = renderer().get();
+
+  SDL_SetRenderDrawColor(rnd, 0, 0, 0, 255);
+  SDL_RenderClear(rnd);
+
+  casein_sdl_event(casein::events::repaint {});
+
+  SDL_RenderPresent(rnd);
+}
+
 void casein_event(const casein::event & e) {
+
   switch (e.type()) {
   case casein::CREATE_WINDOW:
     init_renderer(e.as<casein::events::create_window>().native_window_handle());
     // Dispatch a new event, but using SDL_Renderer as the new native handle
     casein_sdl_event(casein::events::create_window { renderer().get() });
+    break;
+  case casein::REPAINT:
+    repaint();
     break;
   case casein::QUIT:
     renderer().reset();
