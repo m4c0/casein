@@ -18,6 +18,20 @@
 }
 @end
 
+@interface CASWindow : NSWindow
+@end
+
+@implementation CASWindow
+- (void)keyDown:(NSEvent *)event {
+  if (!event.ARepeat) casein_event(casein::events::key_down { 0 });
+  [super keyDown:event];
+}
+- (void)keyUp:(NSEvent *)event {
+  casein_event(casein::events::key_up { 0 });
+  [super keyUp:event];
+}
+@end
+
 static NSMenu * setup_apple_menu(NSString * title) {
   NSMenu * bar = [NSMenu new];
   NSMenuItem * app_item = [NSMenuItem new];
@@ -33,7 +47,7 @@ static NSMenu * setup_apple_menu(NSString * title) {
 }
 
 static NSWindow * create_key_window(NSString * title) {
-  NSWindow * wnd = [NSWindow new];
+  NSWindow * wnd = [CASWindow new];
   wnd.acceptsMouseMovedEvents = true;
   wnd.collectionBehavior = NSWindowCollectionBehaviorFullScreenPrimary;
   wnd.contentView = [NSView new];
