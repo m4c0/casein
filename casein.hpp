@@ -64,7 +64,7 @@ namespace casein::events {
     using single_arg_event<ET, int>::single_arg_event;
 
     [[nodiscard]] constexpr int key_code() const noexcept {
-      return argument();
+      return single_arg_event<ET, int>::argument();
     }
   };
   using key_down = key_event<KEY_DOWN>;
