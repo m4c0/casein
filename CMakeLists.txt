@@ -44,6 +44,13 @@ target_sources(casein PRIVATE
 target_sources(casein PUBLIC FILE_SET HEADERS FILES
   $<$<PLATFORM_ID:Windows>:casein.windows.hpp>)
 
+if (${CMAKE_SYSTEM_NAME} STREQUAL "WASI")
+  target_link_options(casein PUBLIC
+    -Wl,--export=casein_repaint
+    -Wl,--export=casein_key_down
+    -Wl,--export=casein_key_up)
+endif()
+
 install(TARGETS casein EXPORT casein-targets FILE_SET HEADERS)
 install(EXPORT casein-targets DESTINATION cmake/casein)
 install(FILES casein-config.cmake DESTINATION cmake/casein)
