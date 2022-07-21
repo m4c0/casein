@@ -2,14 +2,25 @@
   <head><title>Casein Proof-of-Concept</title></head>
   <body>
     <script type="text/javascript">
-      const imp = {
-              wasi_snapshot_preview1: { proc_exit: () => { throw "oops" } },
-            };
+      var exp;
+
+      function repaint() {
+        exp.casein_repaint();
+        window.requestAnimationFrame(repaint);
+      }
+      function start(exports) {
+        exp = exports;
+        exp._start();
+        window.requestAnimationFrame(repaint);
+      }
+
+      const imp = { wasi_snapshot_preview1: { proc_exit: () => { throw "oops" } } };
 
       fetch('casein-poc')
         .then(response => response.arrayBuffer())
         .then(bytes => WebAssembly.instantiate(bytes, imp))
-        .then(obj => obj.instance.exports._start())
+        .then(obj => obj.instance.exports)
+        .then(start)
     </script>
   </body>
 </html>
