@@ -1,0 +1,15 @@
+<html>
+  <head><title>Casein Proof-of-Concept</title></head>
+  <body>
+    <script type="text/javascript">
+      const imp = {
+              wasi_snapshot_preview1: { proc_exit: () => { throw "oops" } },
+            };
+
+      fetch('casein-poc')
+        .then(response => response.arrayBuffer())
+        .then(bytes => WebAssembly.instantiate(bytes, imp))
+        .then(obj => obj.instance.exports._start())
+    </script>
+  </body>
+</html>

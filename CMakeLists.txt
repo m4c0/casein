@@ -38,7 +38,9 @@ target_sources(casein PRIVATE
   $<$<PLATFORM_ID:Android>:android.cpp>
   $<$<PLATFORM_ID:Darwin>:osx.mm>
   $<$<PLATFORM_ID:iOS>:ios.mm>
-  $<$<PLATFORM_ID:Windows>:windows.cpp>)
+  $<$<PLATFORM_ID:Windows>:windows.cpp>
+  $<$<STREQUAL:${CMAKE_SYSTEM_NAME},WASI>:wasm.cpp>
+  )
 target_sources(casein PUBLIC FILE_SET HEADERS FILES
   $<$<PLATFORM_ID:Windows>:casein.windows.hpp>)
 
@@ -65,17 +67,19 @@ target_sources(casein-poc PRIVATE poc.cpp)
 # SDL2 wrapper and its POC. Only available if SDL2 is available
 ################################################################
 
-find_package(SDL2)
-if(SDL2_FOUND)
-  add_library(casein-sdl STATIC)
-  target_link_libraries(casein-sdl PUBLIC casein-defs SDL2::SDL2-static SDL2::SDL2main)
-  target_sources(casein-sdl PRIVATE sdl.cpp)
-  install(TARGETS casein-sdl EXPORT casein-targets FILE_SET HEADERS)
+if(NOT ${CMAKE_SYSTEM_NAME} STREQUAL "WASI")
+  find_package(SDL2)
+  if(SDL2_FOUND)
+    add_library(casein-sdl STATIC)
+    target_link_libraries(casein-sdl PUBLIC casein-defs SDL2::SDL2-static SDL2::SDL2main)
+    target_sources(casein-sdl PRIVATE sdl.cpp)
+    install(TARGETS casein-sdl EXPORT casein-targets FILE_SET HEADERS)
 
-  if(WIN32 OR APPLE)
-    add_executable(casein-sdl-poc MACOSX_BUNDLE WIN32)
-    target_link_libraries(casein-sdl-poc PUBLIC casein-sdl)
-    target_sources(casein-sdl-poc PRIVATE poc.sdl.cpp)
+    if(WIN32 OR APPLE)
+      add_executable(casein-sdl-poc MACOSX_BUNDLE WIN32)
+      target_link_libraries(casein-sdl-poc PUBLIC casein-sdl)
+      target_sources(casein-sdl-poc PRIVATE poc.sdl.cpp)
+    endif()
   endif()
 endif()
 
