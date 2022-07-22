@@ -12,6 +12,8 @@ extern "C" void casein_key_up() {
 extern "C" void casein_repaint() {
   casein_event(casein::events::repaint {});
 }
-int main() {
+extern "C" void casein_create_window() {
   casein_event(casein::events::create_window { nullptr });
+}
+int main() {
 }

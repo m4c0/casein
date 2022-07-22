@@ -46,6 +46,7 @@ target_sources(casein PUBLIC FILE_SET HEADERS FILES
 
 if (${CMAKE_SYSTEM_NAME} STREQUAL "WASI")
   target_link_options(casein PUBLIC
+    -Wl,--export=casein_create_window
     -Wl,--export=casein_repaint
     -Wl,--export=casein_key_down
     -Wl,--export=casein_key_up)
