@@ -39,6 +39,15 @@ int main(int /**/, char ** /**/) {
       case SDL_KEYUP:
         casein_event(casein::events::key_up { 0 });
         break;
+      case SDL_MOUSEBUTTONDOWN:
+        casein_event(casein::events::mouse_down { event.button.button });
+        break;
+      case SDL_MOUSEBUTTONUP:
+        casein_event(casein::events::mouse_up { event.button.button });
+        break;
+      case SDL_MOUSEMOTION:
+        casein_event(casein::events::mouse_move { event.button.x, event.button.y });
+        break;
       case SDL_QUIT:
         casein_event(casein::events::quit {});
         SDL_Quit();
