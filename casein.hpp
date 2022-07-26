@@ -1,7 +1,16 @@
 #pragma once
 
 namespace casein {
-  enum event_type { CREATE_WINDOW, KEY_DOWN, KEY_UP, REPAINT, QUIT };
+  enum event_type {
+    CREATE_WINDOW,
+    KEY_DOWN,
+    KEY_UP,
+    MOUSE_DOWN,
+    MOUSE_MOVE,
+    MOUSE_UP,
+    REPAINT,
+    QUIT,
+  };
 
   class event;
 
@@ -27,6 +36,11 @@ namespace casein {
       return static_cast<const Tp &>(*this);
     }
   };
+
+  struct point {
+    int x;
+    int y;
+  };
 }
 namespace casein::events {
   template<event_type ET>
@@ -35,8 +49,6 @@ namespace casein::events {
     constexpr empty_event() : event(ET) {
     }
   };
-  using repaint = empty_event<REPAINT>;
-  using quit = empty_event<QUIT>;
 
   template<event_type ET, typename A>
   class single_arg_event : public event {
@@ -51,13 +63,6 @@ namespace casein::events {
     constexpr single_arg_event(A a) : event(ET), a(a) {
     }
   };
-  struct create_window : public single_arg_event<CREATE_WINDOW, void *> {
-    using single_arg_event::single_arg_event;
-
-    [[nodiscard]] constexpr void * native_window_handle() const noexcept {
-      return argument();
-    }
-  };
 
   template<event_type ET>
   struct key_event : public single_arg_event<ET, int> {
@@ -67,7 +72,35 @@ namespace casein::events {
       return single_arg_event<ET, int>::argument();
     }
   };
+
+  template<event_type ET>
+  struct mouse_button_event : public single_arg_event<ET, int> {
+    using single_arg_event<ET, int>::single_arg_event;
+
+    [[nodiscard]] constexpr int button() const noexcept {
+      return single_arg_event<ET, int>::argument();
+    }
+  };
+
+  struct create_window : public single_arg_event<CREATE_WINDOW, void *> {
+    using single_arg_event::single_arg_event;
+
+    [[nodiscard]] constexpr void * native_window_handle() const noexcept {
+      return argument();
+    }
+  };
+  struct mouse_move : public single_arg_event<MOUSE_MOVE, point> {
+    using single_arg_event::single_arg_event;
+
+    [[nodiscard]] constexpr point at() const noexcept {
+      return argument();
+    }
+  };
   using key_down = key_event<KEY_DOWN>;
   using key_up = key_event<KEY_UP>;
+  using mouse_down = mouse_button_event<MOUSE_DOWN>;
+  using mouse_up = mouse_button_event<MOUSE_UP>;
+  using repaint = empty_event<REPAINT>;
+  using quit = empty_event<QUIT>;
 }
 void casein_event(const casein::event & e);
