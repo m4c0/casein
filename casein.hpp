@@ -90,7 +90,8 @@ namespace casein::events {
     }
   };
   struct mouse_move : public single_arg_event<MOUSE_MOVE, point> {
-    using single_arg_event::single_arg_event;
+    constexpr mouse_move(int x, int y) : single_arg_event(point { x, y }) {
+    }
 
     [[nodiscard]] constexpr point at() const noexcept {
       return argument();
