@@ -24,27 +24,23 @@
 @implementation CASWindow
 - (void)keyDown:(NSEvent *)event {
   if (!event.ARepeat) casein_event(casein::events::key_down { 0 });
-  [super keyDown:event];
 }
 - (void)keyUp:(NSEvent *)event {
   casein_event(casein::events::key_up { 0 });
-  [super keyUp:event];
 }
 - (void)mouseDown:(NSEvent *)event {
-  casein_event(casein::events::mouse_down { 0 });
-  [super mouseDown:event];
+  casein_event(casein::events::mouse_down { static_cast<int>(event.buttonNumber) });
 }
 - (void)mouseDragged:(NSEvent *)event {
-  casein_event(casein::events::mouse_move { 0, 0 });
-  [super mouseDragged:event];
+  [self mouseMoved:event]; 
 }
 - (void)mouseMoved:(NSEvent *)event {
-  casein_event(casein::events::mouse_move { 0, 0 });
-  [super mouseMoved:event];
+  int lx = static_cast<int>(event.locationInWindow.x);
+  int ly = static_cast<int>(self.frame.size.height - event.locationInWindow.y);
+  casein_event(casein::events::mouse_move { lx, ly });
 }
 - (void)mouseUp:(NSEvent *)event {
-  casein_event(casein::events::mouse_up { 0 });
-  [super mouseUp:event];
+  casein_event(casein::events::mouse_up { static_cast<int>(event.buttonNumber) });
 }
 @end
 
