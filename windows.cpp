@@ -24,6 +24,15 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
   case WM_KEYUP:
     casein_event(casein::events::key_up { 0 });
     return 0;
+  case WM_LBUTTONDOWN:
+    casein_event(casein::events::mouse_down { 0 });
+    return 0;
+  case WM_LBUTTONUP:
+    casein_event(casein::events::mouse_up { 0 });
+    return 0;
+  case WM_MOUSEMOVE:
+    casein_event(casein::events::mouse_move { GET_X_LPARAM(l_param), GET_Y_LPARAM(l_param) });
+    return 0;
   case WM_TIMER:
     if (w_param == repaint_timer_id) casein_event(casein::events::repaint {});
     return 0;
