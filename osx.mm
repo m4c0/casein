@@ -30,6 +30,22 @@
   casein_event(casein::events::key_up { 0 });
   [super keyUp:event];
 }
+- (void)mouseDown:(NSEvent *)event {
+  casein_event(casein::events::mouse_down { 0 });
+  [super mouseDown:event];
+}
+- (void)mouseDragged:(NSEvent *)event {
+  casein_event(casein::events::mouse_move { 0, 0 });
+  [super mouseDragged:event];
+}
+- (void)mouseMoved:(NSEvent *)event {
+  casein_event(casein::events::mouse_move { 0, 0 });
+  [super mouseMoved:event];
+}
+- (void)mouseUp:(NSEvent *)event {
+  casein_event(casein::events::mouse_up { 0 });
+  [super mouseUp:event];
+}
 @end
 
 static NSMenu * setup_apple_menu(NSString * title) {
