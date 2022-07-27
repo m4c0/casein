@@ -49,7 +49,10 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "WASI")
     -Wl,--export=casein_create_window
     -Wl,--export=casein_repaint
     -Wl,--export=casein_key_down
-    -Wl,--export=casein_key_up)
+    -Wl,--export=casein_key_up
+    -Wl,--export=casein_mouse_down
+    -Wl,--export=casein_mouse_move
+    -Wl,--export=casein_mouse_up)
 endif()
 
 install(TARGETS casein EXPORT casein-targets FILE_SET HEADERS)

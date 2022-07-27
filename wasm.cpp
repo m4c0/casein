@@ -9,6 +9,15 @@ extern "C" void casein_key_down() {
 extern "C" void casein_key_up() {
   casein_event(casein::events::key_up { 0 });
 }
+extern "C" void casein_mouse_down() {
+  casein_event(casein::events::mouse_down { 0 });
+}
+extern "C" void casein_mouse_move(int x, int y) {
+  casein_event(casein::events::mouse_move { x, y });
+}
+extern "C" void casein_mouse_up() {
+  casein_event(casein::events::mouse_up { 0 });
+}
 extern "C" void casein_repaint() {
   casein_event(casein::events::repaint {});
 }
