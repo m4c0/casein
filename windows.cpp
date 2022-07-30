@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <tchar.h>
 #include <windows.h>
+#include <windowsx.h>
 
 static constexpr const auto window_class = "m4c0-window-class";
 static constexpr const auto repaint_timer_id = 0xb16b00b5;
