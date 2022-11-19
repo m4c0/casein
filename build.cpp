@@ -13,7 +13,9 @@ int main(int argc, char ** argv) {
   m->for_feature(cocoa).add_unit<objc>("osx");
   m->for_feature(cocoa).add_unit<>("externc");
 
-  m->for_feature(uikit).add_impl("ios");
+  m->for_feature(uikit).add_unit<objc>("ios");
+  m->for_feature(uikit).add_unit<>("externc");
+
   m->for_feature(windows_api).add_impl("windows");
 
   m->for_feature(webassembly).add_unit<>("externc");
