@@ -1,6 +1,7 @@
 <html>
   <head><title>Casein Proof-of-Concept</title></head>
   <body>
+    <script type="text/javascript" src="out/wasm/poc.js"></script>
     <script type="text/javascript">
       var exp;
 
@@ -10,17 +11,17 @@
       }
       function start(exports) {
         exp = exports;
-        exp._start();
+        exp.casein_create_window();
         window.requestAnimationFrame(repaint);
+        console.log("started");
       }
 
-      const imp = { wasi_snapshot_preview1: { proc_exit: () => { throw "oops" } } };
-
-      fetch('casein-poc')
-        .then(response => response.arrayBuffer())
-        .then(bytes => WebAssembly.instantiate(bytes, imp))
-        .then(obj => obj.instance.exports)
-        .then(start)
+      (function() {
+        ecow({ base_dir: "out/wasm" }).then(obj => {
+          obj.start();
+          start(obj.exports);
+        });
+      })();
     </script>
   </body>
 </html>

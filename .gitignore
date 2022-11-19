@@ -1,2 +1,4 @@
-build/
-
+*.json
+build
+build-poc
+out
