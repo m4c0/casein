@@ -1,16 +1,17 @@
-#include "casein.hpp"
+@import UIKit;
 
-#import <UIKit/UIKit.h>
+#include "externc.h"
 
 @interface CASAppDelegate : NSObject<UIApplicationDelegate>
 @end
 
 @implementation CASAppDelegate
-- (void)application:(UIApplication *)app didFinishLaunchingWithOptions:(id)options {
-  casein_event(casein::events::create_window { (__bridge void *)app }); // TODO: pass window? view?
+- (BOOL)application:(UIApplication *)app didFinishLaunchingWithOptions:(id)options {
+  casein_create_window((__bridge void *)app); // TODO: pass window? view?
+  return YES;
 }
 - (void)applicationWillTerminate:(UIApplication *)app {
-  casein_event(casein::events::quit {});
+  casein_quit();
 }
 @end
 
