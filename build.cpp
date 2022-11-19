@@ -33,16 +33,5 @@ int main(int argc, char ** argv) {
   poc->add_unit<>("poc");
   poc->add_ref(m);
 
-  /*
-  auto m_sdl = all.add_unit<per_feat<mod>>("casein_sdl");
-  m_sdl->for_feature(cocoa).add_impl("sdl");
-  m_sdl->for_feature(uikit).add_impl("sdl");
-  m_sdl->for_feature(windows_api).add_impl("sdl");
-
-  auto poc_sdl = all.add_unit<app>("poc.sdl");
-  poc_sdl->add_unit<>("poc.sdl");
-  poc_sdl->add_ref(m_sdl);
-  */
-
   return run_main(all, argc, argv);
 }
