@@ -1,6 +1,6 @@
-#pragma once
+export module casein;
 
-namespace casein {
+export namespace casein {
   enum event_type {
     CREATE_WINDOW,
     KEY_DOWN,
@@ -15,9 +15,7 @@ namespace casein {
   class event;
 
   template<typename T>
-  concept is_event = requires(const T * t) {
-    static_cast<const event *>(t);
-  };
+  concept is_event = requires(const T * t) { static_cast<const event *>(t); };
 
   class event {
     event_type t;
@@ -42,7 +40,7 @@ namespace casein {
     int y;
   };
 }
-namespace casein::events {
+export namespace casein::events {
   template<event_type ET>
   class empty_event : public event {
   public:
@@ -104,4 +102,17 @@ namespace casein::events {
   using repaint = empty_event<REPAINT>;
   using quit = empty_event<QUIT>;
 }
-void casein_event(const casein::event & e);
+export namespace casein {
+  class event_handler;
+  event_handler *& handler() {
+    static event_handler * i;
+    return i;
+  }
+
+  struct event_handler {
+    event_handler() {
+      handler() = this;
+    }
+    virtual void handle(const casein::event & e) = 0;
+  };
+}
