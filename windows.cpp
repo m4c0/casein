@@ -1,4 +1,3 @@
-module;
 #include "casein.windows.hpp"
 
 #include <exception>
@@ -7,7 +6,7 @@ module;
 #include <windows.h>
 #include <windowsx.h>
 
-module casein;
+import casein;
 
 static constexpr const auto window_class = "m4c0-window-class";
 static constexpr const auto repaint_timer_id = 0xb16b00b5;

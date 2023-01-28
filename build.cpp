@@ -16,7 +16,8 @@ int main(int argc, char ** argv) {
   m->for_feature(uikit).add_unit<objc>("ios");
   m->for_feature(uikit).add_unit<>("externc");
 
-  m->for_feature(windows_api).add_impl("windows");
+  m->for_feature(windows_api).add_unit<>("windows");
+  m->for_feature(windows_api).add_system_library("user32");
 
   m->for_feature(webassembly).add_unit<>("externc");
 
