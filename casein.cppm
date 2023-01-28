@@ -102,17 +102,4 @@ export namespace casein::events {
   using repaint = empty_event<REPAINT>;
   using quit = empty_event<QUIT>;
 }
-export namespace casein {
-  class event_handler;
-  event_handler *& handler() {
-    static event_handler * i;
-    return i;
-  }
-
-  struct event_handler {
-    event_handler() {
-      handler() = this;
-    }
-    virtual void handle(const casein::event & e) = 0;
-  };
-}
+extern "C" void casein_handle(const casein::event & e);

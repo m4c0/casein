@@ -5,18 +5,16 @@ void on_window_created(void * /*handle*/) {
   // the event. Vulkan can use it to initialise all its shenanigans, etc.
 }
 
-static struct ce : casein::event_handler {
-  void handle(const casein::event & e) override {
-    switch (e.type()) {
-    case casein::CREATE_WINDOW:
-      // You can fetch the native handle (HWND, NSWindow, etc) like this:
-      on_window_created(e.as<casein::events::create_window>().native_window_handle());
-      break;
-    case casein::QUIT:
-      // SDL_Quit, release shenanigans, etc
-      break;
-    default:
-      break;
-    }
+extern "C" void casein_handle(const casein::event & e) {
+  switch (e.type()) {
+  case casein::CREATE_WINDOW:
+    // You can fetch the native handle (HWND, NSWindow, etc) like this:
+    on_window_created(e.as<casein::events::create_window>().native_window_handle());
+    break;
+  case casein::QUIT:
+    // SDL_Quit, release shenanigans, etc
+    break;
+  default:
+    break;
   }
-} i;
+}

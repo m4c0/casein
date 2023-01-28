@@ -11,32 +11,34 @@ import casein;
 static constexpr const auto window_class = "m4c0-window-class";
 static constexpr const auto repaint_timer_id = 0xb16b00b5;
 
+extern "C" void casein_handle(const casein::event & e);
+
 static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param) {
   switch (msg) {
   case WM_CREATE:
-    casein::handler()->handle(casein::events::create_window { hwnd });
+    casein_handle(casein::events::create_window { hwnd });
     return 0;
   case WM_DESTROY:
-    casein::handler()->handle(casein::events::quit {});
+    casein_handle(casein::events::quit {});
     PostQuitMessage(0);
     return 0;
   case WM_KEYDOWN:
-    casein::handler()->handle(casein::events::key_down { 0 });
+    casein_handle(casein::events::key_down { 0 });
     return 0;
   case WM_KEYUP:
-    casein::handler()->handle(casein::events::key_up { 0 });
+    casein_handle(casein::events::key_up { 0 });
     return 0;
   case WM_LBUTTONDOWN:
-    casein::handler()->handle(casein::events::mouse_down { 0 });
+    casein_handle(casein::events::mouse_down { 0 });
     return 0;
   case WM_LBUTTONUP:
-    casein::handler()->handle(casein::events::mouse_up { 0 });
+    casein_handle(casein::events::mouse_up { 0 });
     return 0;
   case WM_MOUSEMOVE:
-    casein::handler()->handle(casein::events::mouse_move { GET_X_LPARAM(l_param), GET_Y_LPARAM(l_param) });
+    casein_handle(casein::events::mouse_move { GET_X_LPARAM(l_param), GET_Y_LPARAM(l_param) });
     return 0;
   case WM_TIMER:
-    if (w_param == repaint_timer_id) casein::handler()->handle(casein::events::repaint {});
+    if (w_param == repaint_timer_id) casein_handle(casein::events::repaint {});
     return 0;
   default:
     return DefWindowProc(hwnd, msg, w_param, l_param);
