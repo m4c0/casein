@@ -7,8 +7,7 @@ int main(int argc, char ** argv) {
 
   auto m = all.add_unit<per_feat<mod>>("casein");
 
-  m->for_feature(android_ndk).add_impl("android");
-  m->for_feature(android_ndk).add_unit<>("glue/android_native_app_glue.c");
+  m->for_feature(android_ndk).add_unit<>("android");
 
   m->for_feature(cocoa).add_unit<objc>("osx");
   m->for_feature(cocoa).add_unit<>("externc");
