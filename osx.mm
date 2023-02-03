@@ -1,4 +1,5 @@
 @import AppKit;
+@import MetalKit;
 
 #include "externc.h"
 
@@ -62,7 +63,7 @@ static NSWindow * create_key_window(NSString * title) {
   NSWindow * wnd = [CASWindow new];
   wnd.acceptsMouseMovedEvents = true;
   wnd.collectionBehavior = NSWindowCollectionBehaviorFullScreenPrimary;
-  wnd.contentView = [NSView new];
+  wnd.contentView = [MTKView new];
   wnd.styleMask = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable
                 | NSWindowStyleMaskResizable;
   wnd.title = title;
@@ -71,7 +72,7 @@ static NSWindow * create_key_window(NSString * title) {
   [wnd center];
   [wnd makeKeyAndOrderFront:wnd];
 
-  casein_create_window((__bridge void *)wnd);
+  casein_create_window((__bridge void *)wnd.contentView.layer);
   return wnd;
 }
 
