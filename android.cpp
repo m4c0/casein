@@ -1,15 +1,20 @@
-#include "casein.hpp"
-#include "glue/android_native_app_glue.h"
+import casein;
+
+extern "C" {
+#include "glue/android_native_app_glue.c"
+}
+
+extern "C" void casein_handle(const casein::event &);
 
 static void handle_command(android_app * app, int32_t cmd) {
   switch (cmd) {
   case APP_CMD_INIT_WINDOW:
-    casein_event(casein::events::create_window { app });
+    casein_handle(casein::events::create_window { app->window });
     break;
   case APP_CMD_TERM_WINDOW:
     break;
   case APP_CMD_STOP:
-    casein_event(casein::events::quit {});
+    casein_handle(casein::events::quit {});
     ANativeActivity_finish(app->activity);
     break;
   default:

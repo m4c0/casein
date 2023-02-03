@@ -1,6 +1,19 @@
-#pragma once
+module;
+#ifdef __APPLE__
+typedef struct CAMetalLayer casein_native_handle;
+#elif defined(_WIN32)
+typedef struct HWND__ casein_native_handle;
+#elif defined(__ANDROID__)
+typedef struct ANativeWindow casein_native_handle;
+#elif defined(__wasm__)
+using casein_native_handle = void;
+#endif
 
-namespace casein {
+export module casein;
+
+export namespace casein {
+  using native_handle_t = ::casein_native_handle *;
+
   enum event_type {
     CREATE_WINDOW,
     KEY_DOWN,
@@ -15,9 +28,7 @@ namespace casein {
   class event;
 
   template<typename T>
-  concept is_event = requires(const T * t) {
-    static_cast<const event *>(t);
-  };
+  concept is_event = requires(const T * t) { static_cast<const event *>(t); };
 
   class event {
     event_type t;
@@ -42,7 +53,7 @@ namespace casein {
     int y;
   };
 }
-namespace casein::events {
+export namespace casein::events {
   template<event_type ET>
   class empty_event : public event {
   public:
@@ -82,10 +93,10 @@ namespace casein::events {
     }
   };
 
-  struct create_window : public single_arg_event<CREATE_WINDOW, void *> {
+  struct create_window : public single_arg_event<CREATE_WINDOW, native_handle_t> {
     using single_arg_event::single_arg_event;
 
-    [[nodiscard]] constexpr void * native_window_handle() const noexcept {
+    [[nodiscard]] constexpr native_handle_t native_window_handle() const noexcept {
       return argument();
     }
   };
@@ -104,4 +115,4 @@ namespace casein::events {
   using repaint = empty_event<REPAINT>;
   using quit = empty_event<QUIT>;
 }
-void casein_event(const casein::event & e);
+extern "C" void casein_handle(const casein::event & e);
