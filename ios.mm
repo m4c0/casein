@@ -1,3 +1,4 @@
+@import MetalKit;
 @import UIKit;
 
 #include "externc.h"
@@ -7,7 +8,7 @@
 
 @implementation CASAppDelegate
 - (BOOL)application:(UIApplication *)app didFinishLaunchingWithOptions:(id)options {
-  casein_create_window((__bridge void *)app); // TODO: pass window? view?
+  casein_create_window((__bridge void *)app); // TODO: pass CAMetalLayer
   return YES;
 }
 - (void)applicationWillTerminate:(UIApplication *)app {
