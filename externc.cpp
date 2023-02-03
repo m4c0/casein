@@ -23,7 +23,7 @@ extern "C" void casein_repaint() {
   casein_handle(casein::events::repaint {});
 }
 extern "C" void casein_create_window(void * ptr) {
-  casein_handle(casein::events::create_window { ptr });
+  casein_handle(casein::events::create_window { static_cast<casein::native_handle_t>(ptr) });
 }
 extern "C" void casein_quit() {
   casein_handle(casein::events::quit {});

@@ -1,6 +1,22 @@
+module;
+#ifdef __APPLE__
+typedef struct CAMetalLayer * casein_native_handle;
+#elif defined(_WIN32)
+typedef struct HWND__ * casein_native_handle;
+#elif defined(__ANDROID__)
+struct casein_native_handle {
+  struct AAssetManager * asset_manager;
+  struct ANativeWindow * native_window;
+};
+#else
+using casein_native_handle = void *;
+#endif
+
 export module casein;
 
 export namespace casein {
+  using native_handle_t = ::casein_native_handle;
+
   enum event_type {
     CREATE_WINDOW,
     KEY_DOWN,
@@ -80,10 +96,10 @@ export namespace casein::events {
     }
   };
 
-  struct create_window : public single_arg_event<CREATE_WINDOW, void *> {
+  struct create_window : public single_arg_event<CREATE_WINDOW, native_handle_t> {
     using single_arg_event::single_arg_event;
 
-    [[nodiscard]] constexpr void * native_window_handle() const noexcept {
+    [[nodiscard]] constexpr native_handle_t native_window_handle() const noexcept {
       return argument();
     }
   };

@@ -1,6 +1,6 @@
 import casein;
 
-void on_window_created(void * /*handle*/) {
+void on_window_created(auto /*handle*/) {
   // If this was SDL, you could do SDL_Init+SDL_CreateWindowFrom using the native handle provided by the argument of
   // the event. Vulkan can use it to initialise all its shenanigans, etc.
 }
