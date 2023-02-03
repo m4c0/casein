@@ -8,14 +8,9 @@ extern "C" void casein_handle(const casein::event &);
 
 static void handle_command(android_app * app, int32_t cmd) {
   switch (cmd) {
-  case APP_CMD_INIT_WINDOW: {
-    auto h = casein::native_handle_t {
-      .asset_manager = app->activity->assetManager,
-      .native_window = app->window,
-    };
-    casein_handle(casein::events::create_window { h });
+  case APP_CMD_INIT_WINDOW:
+    casein_handle(casein::events::create_window { app->window });
     break;
-  }
   case APP_CMD_TERM_WINDOW:
     break;
   case APP_CMD_STOP:
