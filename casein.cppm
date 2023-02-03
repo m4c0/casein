@@ -1,21 +1,18 @@
 module;
 #ifdef __APPLE__
-typedef struct CAMetalLayer * casein_native_handle;
+typedef struct CAMetalLayer casein_native_handle;
 #elif defined(_WIN32)
-typedef struct HWND__ * casein_native_handle;
+typedef struct HWND__ casein_native_handle;
 #elif defined(__ANDROID__)
-struct casein_native_handle {
-  struct AAssetManager * asset_manager;
-  struct ANativeWindow * native_window;
-};
-#else
-using casein_native_handle = void *;
+typedef struct ANativeWindow casein_native_handle;
+#elif defined(__wasm__)
+using casein_native_handle = void;
 #endif
 
 export module casein;
 
 export namespace casein {
-  using native_handle_t = ::casein_native_handle;
+  using native_handle_t = ::casein_native_handle *;
 
   enum event_type {
     CREATE_WINDOW,
