@@ -1,6 +1,6 @@
-#include "casein.hpp"
+@import AppKit;
 
-#import <AppKit/AppKit.h>
+#include "externc.h"
 
 @interface CASAppDelegate : NSObject<NSApplicationDelegate>
 - (void)redraw:(NSTimer *)sender;
@@ -8,13 +8,13 @@
 
 @implementation CASAppDelegate
 - (void)applicationWillTerminate:(NSApplication *)app {
-  casein_event(casein::events::quit {});
+  casein_quit();
 }
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)app {
   return YES;
 }
 - (void)redraw:(NSTimer *)sender {
-  casein_event(casein::events::repaint {});
+  casein_repaint();
 }
 @end
 
@@ -23,13 +23,13 @@
 
 @implementation CASWindow
 - (void)keyDown:(NSEvent *)event {
-  if (!event.ARepeat) casein_event(casein::events::key_down { 0 });
+  if (!event.ARepeat) casein_key_down(0);
 }
 - (void)keyUp:(NSEvent *)event {
-  casein_event(casein::events::key_up { 0 });
+  casein_key_up(0);
 }
 - (void)mouseDown:(NSEvent *)event {
-  casein_event(casein::events::mouse_down { static_cast<int>(event.buttonNumber) });
+  casein_mouse_down(static_cast<int>(event.buttonNumber));
 }
 - (void)mouseDragged:(NSEvent *)event {
   [self mouseMoved:event]; 
@@ -37,10 +37,10 @@
 - (void)mouseMoved:(NSEvent *)event {
   int lx = static_cast<int>(event.locationInWindow.x);
   int ly = static_cast<int>(self.frame.size.height - event.locationInWindow.y);
-  casein_event(casein::events::mouse_move { lx, ly });
+  casein_mouse_move(lx, ly);
 }
 - (void)mouseUp:(NSEvent *)event {
-  casein_event(casein::events::mouse_up { static_cast<int>(event.buttonNumber) });
+  casein_mouse_up(static_cast<int>(event.buttonNumber));
 }
 @end
 
@@ -71,7 +71,7 @@ static NSWindow * create_key_window(NSString * title) {
   [wnd center];
   [wnd makeKeyAndOrderFront:wnd];
 
-  casein_event(casein::events::create_window { (__bridge void *)wnd });
+  casein_create_window((__bridge void *)wnd);
   return wnd;
 }
 

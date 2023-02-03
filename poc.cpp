@@ -1,11 +1,11 @@
-#include "casein.hpp"
+import casein;
 
-void on_window_created(void * /*handle*/) {
+void on_window_created(auto /*handle*/) {
   // If this was SDL, you could do SDL_Init+SDL_CreateWindowFrom using the native handle provided by the argument of
   // the event. Vulkan can use it to initialise all its shenanigans, etc.
 }
 
-void casein_event(const casein::event & e) {
+extern "C" void casein_handle(const casein::event & e) {
   switch (e.type()) {
   case casein::CREATE_WINDOW:
     // You can fetch the native handle (HWND, NSWindow, etc) like this:
