@@ -4,7 +4,6 @@
 #include "externc.h"
 
 @interface CASAppDelegate : NSObject<NSApplicationDelegate>
-- (void)redraw:(NSTimer *)sender;
 @end
 
 @implementation CASAppDelegate
@@ -13,9 +12,6 @@
 }
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)app {
   return YES;
-}
-- (void)redraw:(NSTimer *)sender {
-  casein_repaint();
 }
 @end
 
@@ -45,6 +41,36 @@
 }
 @end
 
+@interface CASView : MTKView<MTKViewDelegate>
+@property BOOL first_frame;
+@end
+
+@implementation CASView
+- (instancetype)init {
+  self = [super init];
+  if (self) {
+    self.device = MTLCreateSystemDefaultDevice();
+    self.delegate = self;
+  }
+  return self;
+}
+
+- (BOOL)acceptsFirstResponder {
+  return YES;
+}
+
+- (void)drawInMTKView:(MTKView *)view {
+  if (!self.first_frame) {
+    self.first_frame = YES;
+    casein_create_window((__bridge void *)self.layer);
+  }
+  casein_repaint();
+}
+
+- (void)mtkView:(MTKView *)view drawableSizeWillChange:(CGSize)size {
+}
+@end
+
 static NSMenu * setup_apple_menu(NSString * title) {
   NSMenu * bar = [NSMenu new];
   NSMenuItem * app_item = [NSMenuItem new];
@@ -63,7 +89,7 @@ static NSWindow * create_key_window(NSString * title) {
   NSWindow * wnd = [CASWindow new];
   wnd.acceptsMouseMovedEvents = true;
   wnd.collectionBehavior = NSWindowCollectionBehaviorFullScreenPrimary;
-  wnd.contentView = [MTKView new];
+  wnd.contentView = [CASView new];
   wnd.styleMask = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable
                 | NSWindowStyleMaskResizable;
   wnd.title = title;
@@ -71,13 +97,7 @@ static NSWindow * create_key_window(NSString * title) {
   [wnd setFrame:NSMakeRect(0, 0, 800, 600) display:YES];
   [wnd center];
   [wnd makeKeyAndOrderFront:wnd];
-
-  casein_create_window((__bridge void *)wnd.contentView.layer);
   return wnd;
-}
-
-static void setupTimer(CASAppDelegate * a) {
-  [NSTimer scheduledTimerWithTimeInterval:1.0 / 30.0 target:a selector:@selector(redraw:) userInfo:nil repeats:YES];
 }
 
 int main(int argc, char ** argv) {
@@ -93,7 +113,6 @@ int main(int argc, char ** argv) {
     app.delegate = app_d;
     app.mainMenu = setup_apple_menu(title);
     create_key_window(title);
-    setupTimer(app_d);
     [app activateIgnoringOtherApps:YES];
     [app run];
     return 0;
