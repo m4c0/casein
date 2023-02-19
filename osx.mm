@@ -42,7 +42,7 @@
 @end
 
 @interface CASView : MTKView<MTKViewDelegate>
-@property BOOL first_frame;
+@property BOOL prepared;
 @end
 
 @implementation CASView
@@ -60,11 +60,12 @@
 }
 
 - (void)drawInMTKView:(MTKView *)view {
-  if (!self.first_frame) {
-    self.first_frame = YES;
+  if (self.prepared) {
+    casein_repaint();
+  } else {
     casein_create_window((__bridge void *)self.layer);
+    self.prepared = YES;
   }
-  casein_repaint();
 }
 
 - (void)mtkView:(MTKView *)view drawableSizeWillChange:(CGSize)size {
