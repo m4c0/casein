@@ -2,6 +2,7 @@
 @import MetalKit;
 
 #include "externc.h"
+#include "keys.hpp"
 
 @interface CASAppDelegate : NSObject<NSApplicationDelegate>
 @end
@@ -19,11 +20,32 @@
 @end
 
 @implementation CASWindow
+- (keys)codeForEvent:(NSEvent *)event {
+  if (event.modifierFlags & NSEventModifierFlagNumericPad) {
+    NSString *arrow = event.charactersIgnoringModifiers;
+    switch (arrow.length) {
+      case 1:
+        switch ([arrow characterAtIndex:0]) {
+          case NSLeftArrowFunctionKey:
+            return K_LEFT;
+          case NSRightArrowFunctionKey:
+            return K_RIGHT;
+          case NSUpArrowFunctionKey:
+            return K_UP;
+          case NSDownArrowFunctionKey:
+            return K_DOWN;
+        }
+    }
+  }
+  return K_OTHER;
+}
 - (void)keyDown:(NSEvent *)event {
-  if (!event.ARepeat) casein_key_down(0);
+  if (event.ARepeat) return;
+
+  casein_key_down([self codeForEvent:event]);
 }
 - (void)keyUp:(NSEvent *)event {
-  casein_key_up(0);
+  casein_key_up([self codeForEvent:event]);
 }
 - (void)mouseDown:(NSEvent *)event {
   casein_mouse_down(static_cast<int>(event.buttonNumber));
