@@ -14,6 +14,8 @@ export module casein;
 export namespace casein {
   using native_handle_t = ::casein_native_handle *;
 
+#include "keys.hpp"
+
   enum event_type {
     CREATE_WINDOW,
     KEY_DOWN,
