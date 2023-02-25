@@ -21,23 +21,24 @@
 
 @implementation CASWindow
 - (keys)codeForEvent:(NSEvent *)event {
-  if (event.modifierFlags & NSEventModifierFlagNumericPad) {
-    NSString *arrow = event.charactersIgnoringModifiers;
-    switch (arrow.length) {
-      case 1:
-        switch ([arrow characterAtIndex:0]) {
-          case NSLeftArrowFunctionKey:
-            return K_LEFT;
-          case NSRightArrowFunctionKey:
-            return K_RIGHT;
-          case NSUpArrowFunctionKey:
-            return K_UP;
-          case NSDownArrowFunctionKey:
-            return K_DOWN;
-        }
-    }
+  NSString *arrow = event.charactersIgnoringModifiers;
+  switch (arrow.length) {
+    case 1:
+      switch (unichar c = [arrow characterAtIndex:0]) {
+        case NSLeftArrowFunctionKey:
+          return K_LEFT;
+        case NSRightArrowFunctionKey:
+          return K_RIGHT;
+        case NSUpArrowFunctionKey:
+          return K_UP;
+        case NSDownArrowFunctionKey:
+          return K_DOWN;
+        default:
+          if (c >= 32 && c <= 127)
+            return K_SPACE;
+      }
   }
-  return K_OTHER;
+  return K_NULL;
 }
 - (void)keyDown:(NSEvent *)event {
   if (event.ARepeat) return;

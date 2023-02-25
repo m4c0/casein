@@ -1,8 +1,9 @@
 #pragma once
 
 enum keys : unsigned {
-  K_OTHER,
-  K_DOWN,
+  K_NULL,
+  K_SPACE = ' ',
+  K_DOWN = 0x100,
   K_LEFT,
   K_RIGHT,
   K_UP,
