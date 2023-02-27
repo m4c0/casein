@@ -4,10 +4,10 @@ import casein;
 
 extern "C" void casein_handle(const casein::event & e);
 
-extern "C" void casein_key_down(int key) {
+extern "C" void casein_key_down(casein::keys key) {
   casein_handle(casein::events::key_down { key });
 }
-extern "C" void casein_key_up(int key) {
+extern "C" void casein_key_up(casein::keys key) {
   casein_handle(casein::events::key_up { key });
 }
 extern "C" void casein_mouse_down(int btn) {
