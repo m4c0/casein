@@ -27,6 +27,7 @@ inline auto casein() {
   wasm.add_feat<export_symbol>("casein_mouse_down");
   wasm.add_feat<export_symbol>("casein_mouse_move");
   wasm.add_feat<export_symbol>("casein_mouse_up");
+  wasm.add_feat<setup_js>("casein");
 
   return m;
 }
