@@ -78,11 +78,11 @@ export namespace casein::events {
   };
 
   template<event_type ET>
-  struct key_event : public single_arg_event<ET, int> {
-    using single_arg_event<ET, int>::single_arg_event;
+  struct key_event : public single_arg_event<ET, keys> {
+    using single_arg_event<ET, keys>::single_arg_event;
 
-    [[nodiscard]] constexpr int key_code() const noexcept {
-      return single_arg_event<ET, int>::argument();
+    [[nodiscard]] constexpr keys key() const noexcept {
+      return single_arg_event<ET, keys>::argument();
     }
   };
 

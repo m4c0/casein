@@ -20,8 +20,8 @@ inline constexpr auto key_for_keycode(int code) {
 }
 
 extern "C" void casein_keycode_down(int key) {
-  casein_handle(casein::events::key_down { key });
+  casein_handle(casein::events::key_down { key_for_keycode(key) });
 }
 extern "C" void casein_keycode_up(int key) {
-  casein_handle(casein::events::key_up { key });
+  casein_handle(casein::events::key_up { key_for_keycode(key) });
 }
