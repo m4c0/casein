@@ -17,16 +17,16 @@ inline auto casein() {
   m->for_feature(windows_api).add_unit<>("windows");
   m->for_feature(windows_api).add_system_library("user32");
 
-  m->for_feature(webassembly).add_unit<>("externc");
-
-  auto mwjs = m->for_feature(webassembly).add_feat<js>();
-  mwjs->set("casein_create_window", "");
-  mwjs->set("casein_repaint", "");
-  mwjs->set("casein_key_down", "");
-  mwjs->set("casein_key_up", "");
-  mwjs->set("casein_mouse_down", "");
-  mwjs->set("casein_mouse_move", "");
-  mwjs->set("casein_mouse_up", "");
+  auto wasm = m->for_feature(webassembly);
+  wasm.add_unit<>("externc");
+  wasm.add_unit<>("wasm");
+  wasm.add_feat<export_symbol>("casein_create_window");
+  wasm.add_feat<export_symbol>("casein_repaint");
+  wasm.add_feat<export_symbol>("casein_keycode_down");
+  wasm.add_feat<export_symbol>("casein_keycode_up");
+  wasm.add_feat<export_symbol>("casein_mouse_down");
+  wasm.add_feat<export_symbol>("casein_mouse_move");
+  wasm.add_feat<export_symbol>("casein_mouse_up");
 
   return m;
 }
