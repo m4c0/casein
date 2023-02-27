@@ -17,7 +17,7 @@ inline auto casein() {
   m->for_feature(windows_api).add_unit<>("windows");
   m->for_feature(windows_api).add_system_library("user32");
 
-  auto wasm = m->for_feature(webassembly);
+  auto & wasm = m->for_feature(webassembly);
   wasm.add_unit<>("externc");
   wasm.add_unit<>("wasm");
   wasm.add_feat<export_symbol>("casein_create_window");
