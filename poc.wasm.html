@@ -10,6 +10,9 @@
         window.requestAnimationFrame(repaint);
       }
       function start(exports) {
+        document.addEventListener('keydown', (e) => exports.casein_keycode_down(e.keyCode));
+        document.addEventListener('keyup', (e) => exports.casein_keycode_up(e.keyCode));
+
         exp = exports;
         exp.casein_create_window();
         window.requestAnimationFrame(repaint);
