@@ -5,24 +5,23 @@ C++ boilerplate library for UI-based multiplatform apps
 ## Usage/install
 
 1. Fetch the code
-2. Build:
+2. Fetch [ecow][ecow] in the same directory as this one
+3. Build:
 
    ```shell
-   $ cmake -S . -B build -DCMAKE_INSTALL_PREFIX=...
-   $ cmake --build build
-   $ cmake --build build install
+   $ clang++ -std=c++20 -I../ecow build.cpp -o build
+   $ ./build
    ```
 
 ## Requirements
 
-* CMake
-* Modern C++ compiler
+* Clang 15 or above
 
 ## Implicit requirements
 
 * Only useful for UI apps (i.e. console apps should be fine with ye old `main`
 * Only meanful for multiplatorm
-* Expects users to install it via `cmake install` or similar
+* Expects users to use `ecow` as a build system
 
 ## License
 
