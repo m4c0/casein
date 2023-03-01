@@ -23,10 +23,10 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     PostQuitMessage(0);
     return 0;
   case WM_KEYDOWN:
-    casein_handle(casein::events::key_down { 0 });
+    casein_handle(casein::events::key_down { casein::K_NULL });
     return 0;
   case WM_KEYUP:
-    casein_handle(casein::events::key_up { 0 });
+    casein_handle(casein::events::key_up { casein::K_NULL });
     return 0;
   case WM_LBUTTONDOWN:
     casein_handle(casein::events::mouse_down { 0 });
