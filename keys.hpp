@@ -1,5 +1,3 @@
-#pragma once
-
 enum keys : unsigned {
   K_NULL,
   K_SPACE = ' ',

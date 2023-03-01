@@ -1,7 +1,5 @@
 import casein;
 
-#include "externc.h"
-
 extern "C" void casein_handle(const casein::event & e);
 
 extern "C" void casein_key_down(casein::keys key) {
