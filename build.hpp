@@ -7,6 +7,8 @@ inline auto casein() {
   auto m = unit::create<per_feat<mod>>("casein");
 
   m->for_feature(android_ndk).add_unit<>("android");
+  m->for_feature(android_ndk).add_system_library("android");
+  m->for_feature(android_ndk).add_system_library("log");
 
   m->for_feature(cocoa).add_unit<objc>("osx");
   m->for_feature(cocoa).add_unit<>("externc");
