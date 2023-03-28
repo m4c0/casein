@@ -28,12 +28,18 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
   case WM_KEYUP:
     casein_handle(casein::events::key_up { casein::K_NULL });
     return 0;
-  case WM_LBUTTONDOWN:
-    casein_handle(casein::events::mouse_down { 0 });
+  case WM_LBUTTONDOWN: {
+    auto x = GET_X_LPARAM(l_param);
+    auto y = GET_Y_LPARAM(l_param);
+    casein_handle(casein::events::mouse_down { x, y, 0 });
     return 0;
-  case WM_LBUTTONUP:
-    casein_handle(casein::events::mouse_up { 0 });
+  }
+  case WM_LBUTTONUP: {
+    auto x = GET_X_LPARAM(l_param);
+    auto y = GET_Y_LPARAM(l_param);
+    casein_handle(casein::events::mouse_up { x, y, 0 });
     return 0;
+  }
   case WM_MOUSEMOVE:
     casein_handle(casein::events::mouse_move { GET_X_LPARAM(l_param), GET_Y_LPARAM(l_param) });
     return 0;
