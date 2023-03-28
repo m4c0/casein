@@ -54,6 +54,11 @@ export namespace casein {
     int x;
     int y;
   };
+  struct click {
+    int x;
+    int y;
+    int button;
+  };
 }
 export namespace casein::events {
   template<event_type ET>
@@ -87,11 +92,12 @@ export namespace casein::events {
   };
 
   template<event_type ET>
-  struct mouse_button_event : public single_arg_event<ET, int> {
-    using single_arg_event<ET, int>::single_arg_event;
+  struct mouse_button_event : public single_arg_event<ET, click> {
+    constexpr mouse_button_event(int x, int y, int b) : single_arg_event<ET, casein::click>({ x, y, b }) {
+    }
 
-    [[nodiscard]] constexpr int button() const noexcept {
-      return single_arg_event<ET, int>::argument();
+    [[nodiscard]] constexpr auto click() const noexcept {
+      return single_arg_event<ET, casein::click>::argument();
     }
   };
 

@@ -48,7 +48,9 @@
   casein_key_up([self codeForEvent:event]);
 }
 - (void)mouseDown:(NSEvent *)event {
-  casein_mouse_down(static_cast<int>(event.buttonNumber));
+  int lx = static_cast<int>(event.locationInWindow.x);
+  int ly = static_cast<int>(self.frame.size.height - event.locationInWindow.y);
+  casein_mouse_down(lx, ly, static_cast<int>(event.buttonNumber));
 }
 - (void)mouseDragged:(NSEvent *)event {
   [self mouseMoved:event]; 
@@ -59,7 +61,9 @@
   casein_mouse_move(lx, ly);
 }
 - (void)mouseUp:(NSEvent *)event {
-  casein_mouse_up(static_cast<int>(event.buttonNumber));
+  int lx = static_cast<int>(event.locationInWindow.x);
+  int ly = static_cast<int>(self.frame.size.height - event.locationInWindow.y);
+  casein_mouse_up(lx, ly, static_cast<int>(event.buttonNumber));
 }
 @end
 
