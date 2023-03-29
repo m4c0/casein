@@ -49,6 +49,10 @@
 - (NSPoint)translateMousePosition:(NSEvent *)event {
   NSPoint p = [self.contentView convertPoint:event.locationInWindow fromView:nil];
   p.y = self.contentView.frame.size.height - p.y;
+
+  p.x *= self.backingScaleFactor;
+  p.y *= self.backingScaleFactor;
+
   return p;
 }
 - (void)mouseDown:(NSEvent *)event {
