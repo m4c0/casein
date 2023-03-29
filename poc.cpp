@@ -12,6 +12,7 @@ extern "C" void casein_handle(const casein::event & e) {
   case casein::CREATE_WINDOW:
     // You can fetch the native handle (HWND, NSWindow, etc) like this:
     on_window_created(*e.as<casein::events::create_window>());
+    printf("window created\n");
     break;
   case casein::MOUSE_DOWN: {
     const auto & [x, y, btn] = *e.as<casein::events::mouse_down>();
