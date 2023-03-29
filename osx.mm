@@ -49,10 +49,6 @@
 - (NSPoint)translateMousePosition:(NSEvent *)event {
   NSPoint p = [self.contentView convertPoint:event.locationInWindow fromView:nil];
   p.y = self.contentView.frame.size.height - p.y;
-
-  p.x *= self.backingScaleFactor;
-  p.y *= self.backingScaleFactor;
-
   return p;
 }
 - (void)mouseDown:(NSEvent *)event {
@@ -95,12 +91,19 @@
     casein_repaint();
   } else {
     casein_create_window((__bridge void *)self.layer);
+    [self sendResizeEvent];
     self.prepared = YES;
   }
 }
 
+- (void)sendResizeEvent {
+  casein_resize_window(self.frame.size.width, self.frame.size.height, [self inLiveResize]);
+}
+
 - (void)mtkView:(MTKView *)view drawableSizeWillChange:(CGSize)size {
-  casein_resize_window(size.width, size.height, [self inLiveResize]);
+  if (self.prepared) {
+    [self sendResizeEvent];
+  }
 }
 
 // http://smokyonion.github.io/blog/2012/11/11/how-to-make-your-mac-apps-retina-ready/
