@@ -47,23 +47,25 @@
 - (void)keyUp:(NSEvent *)event {
   casein_key_up([self codeForEvent:event]);
 }
+- (NSPoint)translateMousePosition:(NSEvent *)event {
+  NSPoint p = [self.contentView convertPoint:event.locationInWindow fromView:nil];
+  p.y = self.contentView.frame.size.height - p.y;
+  return p;
+}
 - (void)mouseDown:(NSEvent *)event {
-  int lx = static_cast<int>(event.locationInWindow.x);
-  int ly = static_cast<int>(self.frame.size.height - event.locationInWindow.y);
-  casein_mouse_down(lx, ly, static_cast<int>(event.buttonNumber));
+  NSPoint p = [self translateMousePosition:event];
+  casein_mouse_down(static_cast<int>(p.x), static_cast<int>(p.y), static_cast<int>(event.buttonNumber));
 }
 - (void)mouseDragged:(NSEvent *)event {
   [self mouseMoved:event]; 
 }
 - (void)mouseMoved:(NSEvent *)event {
-  int lx = static_cast<int>(event.locationInWindow.x);
-  int ly = static_cast<int>(self.frame.size.height - event.locationInWindow.y);
-  casein_mouse_move(lx, ly);
+  NSPoint p = [self translateMousePosition:event];
+  casein_mouse_move(static_cast<int>(p.x), static_cast<int>(p.y));
 }
 - (void)mouseUp:(NSEvent *)event {
-  int lx = static_cast<int>(event.locationInWindow.x);
-  int ly = static_cast<int>(self.frame.size.height - event.locationInWindow.y);
-  casein_mouse_up(lx, ly, static_cast<int>(event.buttonNumber));
+  NSPoint p = [self translateMousePosition:event];
+  casein_mouse_up(static_cast<int>(p.x), static_cast<int>(p.y), static_cast<int>(event.buttonNumber));
 }
 @end
 
