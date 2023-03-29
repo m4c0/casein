@@ -82,54 +82,30 @@ export namespace casein::events {
     constexpr single_arg_event(A a) : event(ET), a(a) {
     }
 
-    [[nodiscard]] constexpr A argument() const noexcept {
-      return a;
-    }
     [[nodiscard]] constexpr A operator*() const noexcept {
       return a;
     }
   };
 
   template<event_type ET>
-  struct key_event : public single_arg_event<ET, keys> {
-    using single_arg_event<ET, keys>::single_arg_event;
-
-    [[nodiscard]] constexpr keys key() const noexcept {
-      return single_arg_event<ET, keys>::argument();
-    }
-  };
+  using key_event = single_arg_event<ET, keys>;
 
   template<event_type ET>
   struct mouse_button_event : public single_arg_event<ET, click> {
     constexpr mouse_button_event(int x, int y, int b) : single_arg_event<ET, casein::click>({ x, y, b }) {
     }
-
-    [[nodiscard]] constexpr auto click() const noexcept {
-      return single_arg_event<ET, casein::click>::argument();
-    }
   };
 
-  struct create_window : public single_arg_event<CREATE_WINDOW, native_handle_t> {
-    using single_arg_event::single_arg_event;
-
-    [[nodiscard]] constexpr native_handle_t native_window_handle() const noexcept {
-      return argument();
-    }
-  };
   struct resize_window : public single_arg_event<RESIZE_WINDOW, resize> {
     constexpr resize_window(int w, int h, bool l) : single_arg_event({ w, h, l }) {
     }
-
-    using single_arg_event::argument;
   };
   struct mouse_move : public single_arg_event<MOUSE_MOVE, point> {
     constexpr mouse_move(int x, int y) : single_arg_event(point { x, y }) {
     }
-
-    [[nodiscard]] constexpr point at() const noexcept {
-      return argument();
-    }
   };
+
+  using create_window = single_arg_event<CREATE_WINDOW, native_handle_t>;
   using key_down = key_event<KEY_DOWN>;
   using key_up = key_event<KEY_UP>;
   using mouse_down = mouse_button_event<MOUSE_DOWN>;
