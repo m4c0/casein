@@ -96,6 +96,33 @@
 }
 
 - (void)mtkView:(MTKView *)view drawableSizeWillChange:(CGSize)size {
+  casein_resize_window(size.width, size.height, [self inLiveResize]);
+}
+
+// http://smokyonion.github.io/blog/2012/11/11/how-to-make-your-mac-apps-retina-ready/
+- (void)scaleDidChange:(NSNotification *)n {
+  NSWindow * window = [self window];
+  if (!window) window = [NSApp mainWindow];
+  if (!window) return;
+
+  if ([self.layer respondsToSelector:@selector(contentsScale)]) {
+    [self.layer setContentsScale:window.backingScaleFactor];
+  }
+}
+
+- (void)viewDidMoveToWindow {
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(scaleDidChange:)
+                                               name:@"NSWindowDidChangeBackingPropertiesNotification"
+                                             object:[self window]];
+  [self scaleDidChange:nil];
+}
+
+- (void)removeFromSuperview {
+  [super removeFromSuperview];
+  [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                  name:@"NSWindowDidChangeBackingPropertiesNotification"
+                                                object:[self window]];
 }
 @end
 
