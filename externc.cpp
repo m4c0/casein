@@ -9,13 +9,13 @@ extern "C" void casein_key_up(casein::keys key) {
   casein_handle(casein::events::key_up { key });
 }
 extern "C" void casein_mouse_down(int x, int y, int btn) {
-  casein_handle(casein::events::mouse_down { x, y, btn });
+  casein_handle(casein::events::mouse_down { { x, y, btn } });
 }
 extern "C" void casein_mouse_move(int x, int y) {
-  casein_handle(casein::events::mouse_move { x, y });
+  casein_handle(casein::events::mouse_move { { x, y } });
 }
 extern "C" void casein_mouse_up(int x, int y, int btn) {
-  casein_handle(casein::events::mouse_up { x, y, btn });
+  casein_handle(casein::events::mouse_up { { x, y, btn } });
 }
 extern "C" void casein_repaint() {
   casein_handle(casein::events::repaint {});
@@ -27,5 +27,5 @@ extern "C" void casein_quit() {
   casein_handle(casein::events::quit {});
 }
 extern "C" void casein_resize_window(int w, int h, bool live) {
-  casein_handle(casein::events::resize_window { w, h, live });
+  casein_handle(casein::events::resize_window { { w, h, live } });
 }
