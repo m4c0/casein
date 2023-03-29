@@ -78,13 +78,15 @@ export namespace casein::events {
   class single_arg_event : public event {
     A a;
 
-  protected:
+  public:
+    constexpr single_arg_event(A a) : event(ET), a(a) {
+    }
+
     [[nodiscard]] constexpr A argument() const noexcept {
       return a;
     }
-
-  public:
-    constexpr single_arg_event(A a) : event(ET), a(a) {
+    [[nodiscard]] constexpr A operator*() const noexcept {
+      return a;
     }
   };
 
