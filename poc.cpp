@@ -1,6 +1,6 @@
 import casein;
 
-extern "C" void printf(const char *, ...);
+extern "C" int printf(const char *, ...);
 
 void on_window_created(auto /*handle*/) {
   // If this was SDL, you could do SDL_Init+SDL_CreateWindowFrom using the native handle provided by the argument of
