@@ -20,22 +20,21 @@
 
 @implementation CASWindow
 - (keys)codeForEvent:(NSEvent *)event {
-  NSString *arrow = event.charactersIgnoringModifiers;
+  NSString * arrow = event.charactersIgnoringModifiers;
   switch (arrow.length) {
-    case 1:
-      switch (unichar c = [arrow characterAtIndex:0]) {
-        case NSLeftArrowFunctionKey:
-          return K_LEFT;
-        case NSRightArrowFunctionKey:
-          return K_RIGHT;
-        case NSUpArrowFunctionKey:
-          return K_UP;
-        case NSDownArrowFunctionKey:
-          return K_DOWN;
-        default:
-          if (c >= 32 && c <= 127)
-            return K_SPACE;
-      }
+  case 1:
+    switch (unichar c = [arrow characterAtIndex:0]) {
+    case NSLeftArrowFunctionKey:
+      return K_LEFT;
+    case NSRightArrowFunctionKey:
+      return K_RIGHT;
+    case NSUpArrowFunctionKey:
+      return K_UP;
+    case NSDownArrowFunctionKey:
+      return K_DOWN;
+    default:
+      if (c >= 32 && c <= 127) return K_SPACE;
+    }
   }
   return K_NULL;
 }
@@ -57,7 +56,7 @@
   casein_mouse_down(static_cast<int>(p.x), static_cast<int>(p.y), static_cast<int>(event.buttonNumber));
 }
 - (void)mouseDragged:(NSEvent *)event {
-  [self mouseMoved:event]; 
+  [self mouseMoved:event];
 }
 - (void)mouseMoved:(NSEvent *)event {
   NSPoint p = [self translateMousePosition:event];
