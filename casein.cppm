@@ -24,6 +24,7 @@ export namespace casein {
     MOUSE_MOVE,
     MOUSE_UP,
     REPAINT,
+    RESIZE_WINDOW,
     QUIT,
   };
 
@@ -58,6 +59,11 @@ export namespace casein {
     int x;
     int y;
     int button;
+  };
+  struct resize {
+    int width;
+    int height;
+    bool live;
   };
 }
 export namespace casein::events {
@@ -107,6 +113,12 @@ export namespace casein::events {
     [[nodiscard]] constexpr native_handle_t native_window_handle() const noexcept {
       return argument();
     }
+  };
+  struct resize_window : public single_arg_event<RESIZE_WINDOW, resize> {
+    constexpr resize_window(int w, int h, bool l) : single_arg_event({ w, h, l }) {
+    }
+
+    using single_arg_event::argument;
   };
   struct mouse_move : public single_arg_event<MOUSE_MOVE, point> {
     constexpr mouse_move(int x, int y) : single_arg_event(point { x, y }) {
