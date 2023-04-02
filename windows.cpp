@@ -43,6 +43,12 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
   case WM_MOUSEMOVE:
     casein_handle(casein::events::mouse_move { { GET_X_LPARAM(l_param), GET_Y_LPARAM(l_param) } });
     return 0;
+  case WM_SIZE: {
+    auto w = LOWORD(l_param);
+    auto h = HIWORD(l_param);
+    casein_handle(casein::events::resize_window { { w, h } });
+    return 0;
+  }
   case WM_TIMER:
     if (w_param == repaint_timer_id) casein_handle(casein::events::repaint {});
     return 0;
