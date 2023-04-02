@@ -19,6 +19,8 @@ jobs:
           os: ${{ matrix.os }}
       - name: 🧀 Prepare Deps
         uses: m4c0/casein/.github/actions/deps@main
+      - name: 🧀 Fetch Silog
+        uses: m4c0/silog/.github/actions/deps@main
       - name: 🔨 Build
         uses: m4c0/ecow/.github/actions/compile@main
         with:

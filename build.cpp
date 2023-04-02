@@ -1,3 +1,4 @@
+#include "../silog/build.hpp"
 #include "build.hpp"
 
 int main(int argc, char ** argv) {
@@ -8,6 +9,7 @@ int main(int argc, char ** argv) {
   all.add_ref(m);
 
   auto poc = all.add_unit<app>("poc");
+  poc->add_wsdep("silog", silog());
   poc->add_unit<>("poc");
   poc->add_ref(m);
 
