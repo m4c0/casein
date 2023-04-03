@@ -63,6 +63,7 @@ export namespace casein {
   struct resize {
     int width;
     int height;
+    float scale_factor;
     bool live;
   };
 }
