@@ -10,5 +10,5 @@ void casein_mouse_move(int x, int y);
 void casein_mouse_up(int x, int y, int btn);
 void casein_quit();
 void casein_repaint();
-void casein_resize_window(int w, int h, bool live);
+void casein_resize_window(int w, int h, float scale, bool live);
 }

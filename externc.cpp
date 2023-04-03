@@ -26,6 +26,6 @@ extern "C" void casein_create_window(void * ptr) {
 extern "C" void casein_quit() {
   casein_handle(casein::events::quit {});
 }
-extern "C" void casein_resize_window(int w, int h, bool live) {
-  casein_handle(casein::events::resize_window { { w, h, live } });
+extern "C" void casein_resize_window(int w, int h, float scale, bool live) {
+  casein_handle(casein::events::resize_window { { w, h, scale, live } });
 }

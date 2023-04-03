@@ -46,7 +46,7 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
   case WM_SIZE: {
     auto w = LOWORD(l_param);
     auto h = HIWORD(l_param);
-    casein_handle(casein::events::resize_window { { w, h } });
+    casein_handle(casein::events::resize_window { { w, h, 1.0f, false } });
     return 0;
   }
   case WM_TIMER:
