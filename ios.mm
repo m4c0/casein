@@ -1,6 +1,7 @@
 @import MetalKit;
 @import UIKit;
 
+#include "CASView.h"
 #include "externc.h"
 
 @interface CASAppDelegate : NSObject<UIApplicationDelegate>
@@ -9,18 +10,14 @@
 
 @implementation CASAppDelegate
 - (BOOL)application:(UIApplication *)app didFinishLaunchingWithOptions:(id)options {
-  MTKView * v = [MTKView new];
-  // TODO: Add delegate
 
   UIViewController * vc = [UIViewController new];
-  vc.view = v;
+  vc.view = [CASView new];
 
   self.window = [UIWindow new];
   self.window.frame = [UIScreen mainScreen].bounds;
   self.window.rootViewController = vc;
   [self.window makeKeyAndVisible];
-
-  casein_create_window((__bridge void *)app); // TODO: pass CAMetalLayer
   return YES;
 }
 - (void)applicationWillTerminate:(UIApplication *)app {
