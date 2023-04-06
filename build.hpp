@@ -10,9 +10,11 @@ inline auto casein() {
   m->for_feature(android_ndk).add_system_library("android");
   m->for_feature(android_ndk).add_system_library("log");
 
+  m->for_feature(cocoa).add_unit<objc>("CASView");
   m->for_feature(cocoa).add_unit<objc>("osx");
   m->for_feature(cocoa).add_unit<>("externc");
 
+  m->for_feature(uikit).add_unit<objc>("CASView");
   m->for_feature(uikit).add_unit<objc>("ios");
   m->for_feature(uikit).add_unit<>("externc");
 
