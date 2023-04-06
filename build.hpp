@@ -24,13 +24,6 @@ inline auto casein() {
   auto & wasm = m->for_feature(webassembly);
   wasm.add_unit<>("externc");
   wasm.add_unit<>("wasm");
-  wasm.add_feat<export_symbol>("casein_create_window");
-  wasm.add_feat<export_symbol>("casein_repaint");
-  wasm.add_feat<export_symbol>("casein_keycode_down");
-  wasm.add_feat<export_symbol>("casein_keycode_up");
-  wasm.add_feat<export_symbol>("casein_mouse_down");
-  wasm.add_feat<export_symbol>("casein_mouse_move");
-  wasm.add_feat<export_symbol>("casein_mouse_up");
   wasm.add_feat<setup_js>("casein");
 
   return m;
