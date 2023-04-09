@@ -37,7 +37,7 @@
 - (BOOL)application:(UIApplication *)app didFinishLaunchingWithOptions:(id)options {
 
   UIViewController * vc = [CASViewController new];
-  vc.view = [UIView new];
+  vc.view = [CASView new];
 
   self.window = [UIWindow new];
   self.window.frame = [UIScreen mainScreen].bounds;
