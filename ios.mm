@@ -34,10 +34,46 @@
 @end
 
 @implementation CASAppDelegate
+- (void)sendKey:(keys)k {
+  casein_key_down(k);
+  casein_key_up(k);
+}
+- (void)swipeLeft {
+  [self sendKey:K_LEFT];
+}
+- (void)swipeRight {
+  [self sendKey:K_RIGHT];
+}
+- (void)swipeTop {
+  [self sendKey:K_UP];
+}
+- (void)swipeBottom {
+  [self sendKey:K_DOWN];
+}
 - (BOOL)application:(UIApplication *)app didFinishLaunchingWithOptions:(id)options {
 
   UIViewController * vc = [CASViewController new];
   vc.view = [CASView new];
+
+  UISwipeGestureRecognizer * left = [UISwipeGestureRecognizer new];
+  left.direction = UISwipeGestureRecognizerDirectionLeft;
+  [left addTarget:self action:@selector(swipeLeft)];
+  [vc.view addGestureRecognizer:left];
+
+  UISwipeGestureRecognizer * right = [UISwipeGestureRecognizer new];
+  right.direction = UISwipeGestureRecognizerDirectionRight;
+  [right addTarget:self action:@selector(swipeRight)];
+  [vc.view addGestureRecognizer:right];
+
+  UISwipeGestureRecognizer * top = [UISwipeGestureRecognizer new];
+  top.direction = UISwipeGestureRecognizerDirectionUp;
+  [top addTarget:self action:@selector(swipeTop)];
+  [vc.view addGestureRecognizer:top];
+
+  UISwipeGestureRecognizer * bottom = [UISwipeGestureRecognizer new];
+  bottom.direction = UISwipeGestureRecognizerDirectionDown;
+  [bottom addTarget:self action:@selector(swipeBottom)];
+  [vc.view addGestureRecognizer:bottom];
 
   self.window = [UIWindow new];
   self.window.frame = [UIScreen mainScreen].bounds;
