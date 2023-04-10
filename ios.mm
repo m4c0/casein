@@ -11,21 +11,21 @@
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
   UITouch * t = [touches anyObject];
   CGPoint p = [t locationInView:[self view]];
-  casein_mouse_down(p.x, [self view].frame.size.height - p.y, t.tapCount);
+  casein_mouse_down(p.x,  p.y, t.tapCount);
 }
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
   UITouch * t = [touches anyObject];
   CGPoint p = [t locationInView:[self view]];
-  casein_mouse_up(p.x, self.view.frame.size.height - p.y, t.tapCount);
+  casein_mouse_up(p.x,  p.y, t.tapCount);
 }
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
   CGPoint p = [[touches anyObject] locationInView:self.view];
-  casein_mouse_move(p.x, self.view.frame.size.height - p.y);
+  casein_mouse_move(p.x,  p.y);
 }
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
   UITouch * t = [touches anyObject];
   CGPoint p = [t locationInView:[self view]];
-  casein_mouse_up(p.x, self.view.frame.size.height - p.y, t.tapCount);
+  casein_mouse_up(p.x,  p.y, t.tapCount);
 }
 @end
 
