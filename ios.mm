@@ -13,8 +13,7 @@
 }
 
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
-  casein_key_down(K_SPACE);
-  casein_key_up(K_SPACE);
+  casein_gesture(G_SHAKE);
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -43,21 +42,17 @@
 @end
 
 @implementation CASAppDelegate
-- (void)sendKey:(keys)k {
-  casein_key_down(k);
-  casein_key_up(k);
-}
 - (void)swipeLeft {
-  [self sendKey:K_LEFT];
+  casein_gesture(G_SWIPE_LEFT);
 }
 - (void)swipeRight {
-  [self sendKey:K_RIGHT];
+  casein_gesture(G_SWIPE_RIGHT);
 }
 - (void)swipeTop {
-  [self sendKey:K_UP];
+  casein_gesture(G_SWIPE_UP);
 }
 - (void)swipeBottom {
-  [self sendKey:K_DOWN];
+  casein_gesture(G_SWIPE_DOWN);
 }
 - (BOOL)application:(UIApplication *)app didFinishLaunchingWithOptions:(id)options {
   app.applicationSupportsShakeToEdit = YES;

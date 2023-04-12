@@ -13,6 +13,9 @@ extern "C" void casein_handle(const casein::event & e) {
     on_window_created(*e.as<casein::events::create_window>());
     silog::log(silog::info, "window created");
     break;
+  case casein::GESTURE:
+    silog::log(silog::info, "gesture");
+    break;
   case casein::MOUSE_DOWN: {
     const auto & [x, y, btn] = *e.as<casein::events::mouse_down>();
     silog::log(silog::info, "mouse down");

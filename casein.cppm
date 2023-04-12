@@ -18,6 +18,7 @@ export namespace casein {
 
   enum event_type {
     CREATE_WINDOW,
+    GESTURE,
     KEY_DOWN,
     KEY_UP,
     MOUSE_DOWN,
@@ -89,6 +90,7 @@ export namespace casein::events {
   };
 
   using create_window = single_arg_event<CREATE_WINDOW, native_handle_t>;
+  using gesture = single_arg_event<GESTURE, gestures>;
   using key_down = single_arg_event<KEY_DOWN, keys>;
   using key_up = single_arg_event<KEY_UP, keys>;
   using mouse_down = single_arg_event<MOUSE_DOWN, click>;
