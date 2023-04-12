@@ -8,6 +8,15 @@
 @end
 
 @implementation CASViewController
+- (BOOL)canBecomeFirstResponder {
+  return YES;
+}
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+  casein_key_down(K_SPACE);
+  casein_key_up(K_SPACE);
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
   UITouch * t = [touches anyObject];
   CGPoint p = [t locationInView:[self view]];
@@ -51,6 +60,7 @@
   [self sendKey:K_DOWN];
 }
 - (BOOL)application:(UIApplication *)app didFinishLaunchingWithOptions:(id)options {
+  app.applicationSupportsShakeToEdit = YES;
 
   UIViewController * vc = [CASViewController new];
   vc.view = [CASView new];
