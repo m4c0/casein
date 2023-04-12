@@ -11,6 +11,9 @@ extern "C" void casein_handle(const casein::event & e);
 extern "C" void EXP(casein_key_down)(casein::keys key) {
   casein_handle(casein::events::key_down { key });
 }
+extern "C" void EXP(casein_gesture)(casein::gestures g) {
+  casein_handle(casein::events::gesture { g });
+}
 extern "C" void EXP(casein_key_up)(casein::keys key) {
   casein_handle(casein::events::key_up { key });
 }

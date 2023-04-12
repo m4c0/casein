@@ -3,6 +3,7 @@
 
 extern "C" {
 void casein_create_window(void * ptr);
+void casein_gesture(gestures g);
 void casein_key_down(keys key);
 void casein_key_up(keys key);
 void casein_mouse_down(int x, int y, int btn);
