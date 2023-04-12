@@ -4,5 +4,4 @@ runs:
   steps:
     - uses: m4c0/ecow/.github/actions/checkout@main
       with:
-        repository: m4c0/casein
         path: casein
