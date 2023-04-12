@@ -2,7 +2,7 @@ name: Prepare Deps
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v3
+    - uses: m4c0/ecow/.github/actions/checkout@main
       with:
         repository: m4c0/casein
         path: casein
