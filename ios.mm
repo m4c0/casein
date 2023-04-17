@@ -7,6 +7,7 @@ using casein_native_handle = CAMetalLayer;
 #include "common.hpp"
 
 @interface CASViewController : UIViewController
+- (void)tap:(UIGestureRecognizer *)gr;
 @end
 
 @implementation CASViewController
@@ -21,24 +22,34 @@ using casein_native_handle = CAMetalLayer;
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
   UITouch * t = [touches anyObject];
   CGPoint p = [t locationInView:[self view]];
-  casein_handle(casein::events::mouse_down {
+  casein_handle(casein::events::touch_down {
       { static_cast<int>(p.x), static_cast<int>(p.y), static_cast<int>(t.tapCount) - 1 } });
 }
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
   UITouch * t = [touches anyObject];
   CGPoint p = [t locationInView:[self view]];
-  casein_handle(
-      casein::events::mouse_up { { static_cast<int>(p.x), static_cast<int>(p.y), static_cast<int>(t.tapCount) - 1 } });
+  casein_handle(casein::events::touch_cancel {
+      { static_cast<int>(p.x), static_cast<int>(p.y), static_cast<int>(t.tapCount) - 1 } });
 }
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
   CGPoint p = [[touches anyObject] locationInView:self.view];
-  casein_handle(casein::events::mouse_move { { static_cast<int>(p.x), static_cast<int>(p.y) } });
+  casein_handle(casein::events::touch_move { { static_cast<int>(p.x), static_cast<int>(p.y) } });
 }
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
   UITouch * t = [touches anyObject];
   CGPoint p = [t locationInView:[self view]];
   casein_handle(
-      casein::events::mouse_up { { static_cast<int>(p.x), static_cast<int>(p.y), static_cast<int>(t.tapCount) - 1 } });
+      casein::events::touch_up { { static_cast<int>(p.x), static_cast<int>(p.y), static_cast<int>(t.tapCount) - 1 } });
+}
+
+- (void)tap:(UITapGestureRecognizer *)gr {
+  CGPoint p = [gr locationInView:[self view]];
+  casein_handle(casein::events::touch_move { { static_cast<int>(p.x), static_cast<int>(p.y) } });
+  if (gr.numberOfTapsRequired == 1) {
+    casein_handle(casein::events::gesture { casein::G_TAP_1 });
+  } else {
+    casein_handle(casein::events::gesture { casein::G_TAP_2 });
+  }
 }
 @end
 
@@ -85,6 +96,19 @@ using casein_native_handle = CAMetalLayer;
   bottom.direction = UISwipeGestureRecognizerDirectionDown;
   [bottom addTarget:self action:@selector(swipeBottom)];
   [vc.view addGestureRecognizer:bottom];
+
+  UITapGestureRecognizer * dblTap = [UITapGestureRecognizer new];
+  dblTap.numberOfTapsRequired = 2;
+  dblTap.numberOfTouchesRequired = 1;
+  [dblTap addTarget:vc action:@selector(tap:)];
+  [vc.view addGestureRecognizer:dblTap];
+
+  UITapGestureRecognizer * tap = [UITapGestureRecognizer new];
+  tap.numberOfTapsRequired = 1;
+  tap.numberOfTouchesRequired = 1;
+  [tap requireGestureRecognizerToFail:dblTap];
+  [tap addTarget:vc action:@selector(tap:)];
+  [vc.view addGestureRecognizer:tap];
 
   self.window = [UIWindow new];
   self.window.frame = [UIScreen mainScreen].bounds;
