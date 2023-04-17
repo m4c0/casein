@@ -22,14 +22,12 @@ using casein_native_handle = CAMetalLayer;
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
   UITouch * t = [touches anyObject];
   CGPoint p = [t locationInView:[self view]];
-  casein_handle(casein::events::touch_down {
-      { static_cast<int>(p.x), static_cast<int>(p.y), static_cast<int>(t.tapCount) - 1 } });
+  casein_handle(casein::events::touch_down { { static_cast<int>(p.x), static_cast<int>(p.y) } });
 }
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
   UITouch * t = [touches anyObject];
   CGPoint p = [t locationInView:[self view]];
-  casein_handle(casein::events::touch_cancel {
-      { static_cast<int>(p.x), static_cast<int>(p.y), static_cast<int>(t.tapCount) - 1 } });
+  casein_handle(casein::events::touch_cancel { { static_cast<int>(p.x), static_cast<int>(p.y) } });
 }
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
   CGPoint p = [[touches anyObject] locationInView:self.view];
@@ -38,8 +36,7 @@ using casein_native_handle = CAMetalLayer;
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
   UITouch * t = [touches anyObject];
   CGPoint p = [t locationInView:[self view]];
-  casein_handle(
-      casein::events::touch_up { { static_cast<int>(p.x), static_cast<int>(p.y), static_cast<int>(t.tapCount) - 1 } });
+  casein_handle(casein::events::touch_up { { static_cast<int>(p.x), static_cast<int>(p.y) } });
 }
 
 - (void)tap:(UITapGestureRecognizer *)gr {

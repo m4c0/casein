@@ -105,10 +105,10 @@ namespace casein::events {
   using quit = empty_event<QUIT>;
   using repaint = empty_event<REPAINT>;
   using resize_window = single_arg_event<RESIZE_WINDOW, resize>;
-  using touch_cancel = single_arg_event<TOUCH_CANCEL, click>;
-  using touch_down = single_arg_event<TOUCH_DOWN, click>;
+  using touch_cancel = single_arg_event<TOUCH_CANCEL, point>;
+  using touch_down = single_arg_event<TOUCH_DOWN, point>;
   using touch_move = single_arg_event<TOUCH_MOVE, point>;
-  using touch_up = single_arg_event<TOUCH_UP, click>;
+  using touch_up = single_arg_event<TOUCH_UP, point>;
 }
 
 extern "C" void casein_handle(const casein::event & e);
