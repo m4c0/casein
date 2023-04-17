@@ -28,7 +28,6 @@ namespace casein {
     K_UP,
   };
   enum gestures {
-    G_LONG_PRESS,
     G_TAP_1,
     G_TAP_2,
     G_SHAKE,
@@ -66,6 +65,11 @@ namespace casein {
     int x;
     int y;
     int button;
+  };
+  struct touch {
+    int x;
+    int y;
+    bool long_press;
   };
   struct resize {
     int width;
@@ -106,10 +110,10 @@ namespace casein::events {
   using quit = empty_event<QUIT>;
   using repaint = empty_event<REPAINT>;
   using resize_window = single_arg_event<RESIZE_WINDOW, resize>;
-  using touch_cancel = single_arg_event<TOUCH_CANCEL, point>;
-  using touch_down = single_arg_event<TOUCH_DOWN, point>;
-  using touch_move = single_arg_event<TOUCH_MOVE, point>;
-  using touch_up = single_arg_event<TOUCH_UP, point>;
+  using touch_cancel = single_arg_event<TOUCH_CANCEL, touch>;
+  using touch_down = single_arg_event<TOUCH_DOWN, touch>;
+  using touch_move = single_arg_event<TOUCH_MOVE, touch>;
+  using touch_up = single_arg_event<TOUCH_UP, touch>;
 }
 
 extern "C" void casein_handle(const casein::event & e);

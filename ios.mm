@@ -18,24 +18,45 @@ using casein_native_handle = CAMetalLayer;
   casein_handle(casein::events::gesture { casein::G_SHAKE });
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-  UITouch * t = [touches anyObject];
+- (casein::touch)touchOfLocatable:(id)t loong:(bool)l {
   CGPoint p = [t locationInView:[self view]];
-  casein_handle(casein::events::touch_down { { static_cast<int>(p.x), static_cast<int>(p.y) } });
+  return casein::touch { static_cast<int>(p.x), static_cast<int>(p.y), l };
+}
+- (casein::touch)touchOfTouches:(NSSet *)touches {
+  UITouch * t = [touches anyObject];
+  return [self touchOfLocatable:t loong:false];
+}
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+  casein_handle(casein::events::touch_down { [self touchOfTouches:touches] });
 }
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-  UITouch * t = [touches anyObject];
-  CGPoint p = [t locationInView:[self view]];
-  casein_handle(casein::events::touch_cancel { { static_cast<int>(p.x), static_cast<int>(p.y) } });
+  casein_handle(casein::events::touch_cancel { [self touchOfTouches:touches] });
 }
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-  CGPoint p = [[touches anyObject] locationInView:self.view];
-  casein_handle(casein::events::touch_move { { static_cast<int>(p.x), static_cast<int>(p.y) } });
+  casein_handle(casein::events::touch_move { [self touchOfTouches:touches] });
 }
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-  UITouch * t = [touches anyObject];
-  CGPoint p = [t locationInView:[self view]];
-  casein_handle(casein::events::touch_up { { static_cast<int>(p.x), static_cast<int>(p.y) } });
+  casein_handle(casein::events::touch_up { [self touchOfTouches:touches] });
+}
+- (void)press:(UIGestureRecognizer *)gr {
+  casein::touch t = [self touchOfLocatable:gr loong:true];
+
+  switch (gr.state) {
+  case UIGestureRecognizerStateBegan:
+    casein_handle(casein::events::touch_down { t });
+    break;
+  case UIGestureRecognizerStateChanged:
+    casein_handle(casein::events::touch_move { t });
+    break;
+  case UIGestureRecognizerStateCancelled:
+    casein_handle(casein::events::touch_cancel { t });
+    break;
+  case UIGestureRecognizerStateEnded:
+    casein_handle(casein::events::touch_up { t });
+    break;
+  default:
+    break;
+  }
 }
 @end
 
@@ -59,9 +80,6 @@ using casein_native_handle = CAMetalLayer;
 
 - (void)tap {
   casein_handle(casein::events::gesture { casein::G_TAP_1 });
-}
-- (void)press {
-  casein_handle(casein::events::gesture { casein::G_LONG_PRESS });
 }
 
 - (BOOL)application:(UIApplication *)app didFinishLaunchingWithOptions:(id)options {
@@ -98,7 +116,7 @@ using casein_native_handle = CAMetalLayer;
 
   UILongPressGestureRecognizer * press = [UILongPressGestureRecognizer new];
   [press requireGestureRecognizerToFail:tap];
-  [press addTarget:self action:@selector(press)];
+  [press addTarget:vc action:@selector(press:)];
   [vc.view addGestureRecognizer:press];
 
   self.window = [UIWindow new];
