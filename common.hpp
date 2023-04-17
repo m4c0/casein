@@ -14,6 +14,10 @@ namespace casein {
     REPAINT,
     RESIZE_WINDOW,
     QUIT,
+    TOUCH_CANCEL,
+    TOUCH_DOWN,
+    TOUCH_MOVE,
+    TOUCH_UP,
   };
   enum keys : unsigned {
     K_NULL,
@@ -24,6 +28,8 @@ namespace casein {
     K_UP,
   };
   enum gestures {
+    G_TAP_1,
+    G_TAP_2,
     G_SHAKE,
     G_SWIPE_DOWN,
     G_SWIPE_LEFT,
@@ -99,6 +105,10 @@ namespace casein::events {
   using quit = empty_event<QUIT>;
   using repaint = empty_event<REPAINT>;
   using resize_window = single_arg_event<RESIZE_WINDOW, resize>;
+  using touch_cancel = single_arg_event<TOUCH_CANCEL, click>;
+  using touch_down = single_arg_event<TOUCH_DOWN, click>;
+  using touch_move = single_arg_event<TOUCH_MOVE, point>;
+  using touch_up = single_arg_event<TOUCH_UP, click>;
 }
 
 extern "C" void casein_handle(const casein::event & e);

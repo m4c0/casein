@@ -14,7 +14,17 @@ extern "C" void casein_handle(const casein::event & e) {
     silog::log(silog::info, "window created");
     break;
   case casein::GESTURE:
-    silog::log(silog::info, "gesture");
+    switch (*e.as<casein::events::gesture>()) {
+    case casein::G_TAP_1:
+      silog::log(silog::info, "tap");
+      break;
+    case casein::G_TAP_2:
+      silog::log(silog::info, "double tap");
+      break;
+    default:
+      silog::log(silog::info, "gesture");
+      break;
+    }
     break;
   case casein::MOUSE_DOWN: {
     const auto & [x, y, btn] = *e.as<casein::events::mouse_down>();
@@ -30,6 +40,11 @@ extern "C" void casein_handle(const casein::event & e) {
     // SDL_Quit, release shenanigans, etc
     silog::log(silog::info, "quit");
     break;
+  case casein::TOUCH_DOWN: {
+    const auto & [x, y, btn] = *e.as<casein::events::touch_down>();
+    silog::log(silog::info, "touch down");
+    break;
+  }
   default:
     break;
   }
