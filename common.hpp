@@ -33,9 +33,6 @@ namespace casein {
 
   class event;
 
-  template<typename T>
-  concept is_event = requires(const T * t) { static_cast<const event *>(t); };
-
   class event {
     event_type t;
 
@@ -48,7 +45,7 @@ namespace casein {
       return t;
     }
 
-    template<is_event Tp>
+    template<typename Tp>
     [[nodiscard]] constexpr const Tp & as() const noexcept {
       return static_cast<const Tp &>(*this);
     }
@@ -103,3 +100,5 @@ namespace casein::events {
   using repaint = empty_event<REPAINT>;
   using resize_window = single_arg_event<RESIZE_WINDOW, resize>;
 }
+
+extern "C" void casein_handle(const casein::event & e);
