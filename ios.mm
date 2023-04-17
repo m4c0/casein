@@ -7,7 +7,6 @@ using casein_native_handle = CAMetalLayer;
 #include "common.hpp"
 
 @interface CASViewController : UIViewController
-- (void)tap:(UIGestureRecognizer *)gr;
 @end
 
 @implementation CASViewController
@@ -38,16 +37,6 @@ using casein_native_handle = CAMetalLayer;
   CGPoint p = [t locationInView:[self view]];
   casein_handle(casein::events::touch_up { { static_cast<int>(p.x), static_cast<int>(p.y) } });
 }
-
-- (void)tap:(UITapGestureRecognizer *)gr {
-  CGPoint p = [gr locationInView:[self view]];
-  casein_handle(casein::events::touch_move { { static_cast<int>(p.x), static_cast<int>(p.y) } });
-  if (gr.numberOfTapsRequired == 1) {
-    casein_handle(casein::events::gesture { casein::G_TAP_1 });
-  } else {
-    casein_handle(casein::events::gesture { casein::G_TAP_2 });
-  }
-}
 @end
 
 @interface CASAppDelegate : NSObject<UIApplicationDelegate>
@@ -66,6 +55,13 @@ using casein_native_handle = CAMetalLayer;
 }
 - (void)swipeBottom {
   casein_handle(casein::events::gesture { casein::G_SWIPE_DOWN });
+}
+
+- (void)tap {
+  casein_handle(casein::events::gesture { casein::G_TAP_1 });
+}
+- (void)press {
+  casein_handle(casein::events::gesture { casein::G_LONG_PRESS });
 }
 
 - (BOOL)application:(UIApplication *)app didFinishLaunchingWithOptions:(id)options {
@@ -94,18 +90,16 @@ using casein_native_handle = CAMetalLayer;
   [bottom addTarget:self action:@selector(swipeBottom)];
   [vc.view addGestureRecognizer:bottom];
 
-  UITapGestureRecognizer * dblTap = [UITapGestureRecognizer new];
-  dblTap.numberOfTapsRequired = 2;
-  dblTap.numberOfTouchesRequired = 1;
-  [dblTap addTarget:vc action:@selector(tap:)];
-  [vc.view addGestureRecognizer:dblTap];
-
   UITapGestureRecognizer * tap = [UITapGestureRecognizer new];
   tap.numberOfTapsRequired = 1;
   tap.numberOfTouchesRequired = 1;
-  [tap requireGestureRecognizerToFail:dblTap];
-  [tap addTarget:vc action:@selector(tap:)];
+  [tap addTarget:self action:@selector(tap)];
   [vc.view addGestureRecognizer:tap];
+
+  UILongPressGestureRecognizer * press = [UILongPressGestureRecognizer new];
+  [press requireGestureRecognizerToFail:tap];
+  [press addTarget:self action:@selector(press)];
+  [vc.view addGestureRecognizer:press];
 
   self.window = [UIWindow new];
   self.window.frame = [UIScreen mainScreen].bounds;
