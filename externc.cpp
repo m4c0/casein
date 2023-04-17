@@ -18,13 +18,13 @@ extern "C" void EXP(casein_key_up)(casein::keys key) {
   casein_handle(casein::events::key_up { key });
 }
 extern "C" void EXP(casein_mouse_down)(int x, int y, int btn) {
-  casein_handle(casein::events::mouse_down { { x, y, btn } });
+  casein_handle(casein::events::mouse_down { { x, y } });
 }
 extern "C" void EXP(casein_mouse_move)(int x, int y) {
   casein_handle(casein::events::mouse_move { { x, y } });
 }
 extern "C" void EXP(casein_mouse_up)(int x, int y, int btn) {
-  casein_handle(casein::events::mouse_up { { x, y, btn } });
+  casein_handle(casein::events::mouse_up { { x, y } });
 }
 extern "C" void EXP(casein_repaint)() {
   casein_handle(casein::events::repaint {});

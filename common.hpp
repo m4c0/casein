@@ -27,6 +27,10 @@ namespace casein {
     K_RIGHT,
     K_UP,
   };
+  enum mouse_buttons {
+    M_LEFT,
+    M_RIGHT,
+  };
   enum gestures {
     G_TAP_1,
     G_TAP_2,
@@ -64,7 +68,7 @@ namespace casein {
   struct click {
     int x;
     int y;
-    int button;
+    mouse_buttons button;
   };
   struct touch {
     int x;
