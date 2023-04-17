@@ -54,10 +54,10 @@ using casein_native_handle = CAMetalLayer;
   p.y = self.contentView.frame.size.height - p.y;
   return p;
 }
+
 - (void)mouseDown:(NSEvent *)event {
   NSPoint p = [self translateMousePosition:event];
-  casein_handle(casein::events::mouse_down {
-      { static_cast<int>(p.x), static_cast<int>(p.y), static_cast<int>(event.buttonNumber) } });
+  casein_handle(casein::events::mouse_down { { static_cast<int>(p.x), static_cast<int>(p.y), casein::M_LEFT } });
 }
 - (void)mouseDragged:(NSEvent *)event {
   [self mouseMoved:event];
@@ -68,8 +68,23 @@ using casein_native_handle = CAMetalLayer;
 }
 - (void)mouseUp:(NSEvent *)event {
   NSPoint p = [self translateMousePosition:event];
-  casein_handle(casein::events::mouse_up {
-      { static_cast<int>(p.x), static_cast<int>(p.y), static_cast<int>(event.buttonNumber) } });
+  casein_handle(casein::events::mouse_up { { static_cast<int>(p.x), static_cast<int>(p.y), casein::M_LEFT } });
+}
+
+- (void)rightMouseDown:(NSEvent *)event {
+  NSPoint p = [self translateMousePosition:event];
+  casein_handle(casein::events::mouse_down { { static_cast<int>(p.x), static_cast<int>(p.y), casein::M_RIGHT } });
+}
+- (void)rightMouseDragged:(NSEvent *)event {
+  [self mouseMoved:event];
+}
+- (void)rightMouseMoved:(NSEvent *)event {
+  NSPoint p = [self translateMousePosition:event];
+  casein_handle(casein::events::mouse_move { { static_cast<int>(p.x), static_cast<int>(p.y) } });
+}
+- (void)rightMouseUp:(NSEvent *)event {
+  NSPoint p = [self translateMousePosition:event];
+  casein_handle(casein::events::mouse_up { { static_cast<int>(p.x), static_cast<int>(p.y), casein::M_RIGHT } });
 }
 @end
 
