@@ -15,5 +15,3 @@ export module casein;
 export {
 #include "common.hpp"
 }
-
-extern "C" void casein_handle(const casein::event & e);

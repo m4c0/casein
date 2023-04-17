@@ -1,15 +1,17 @@
 @import AppKit;
 @import MetalKit;
 
+using casein_native_handle = CAMetalLayer;
+
 #include "CASView.h"
-#include "externc.h"
+#include "common.hpp"
 
 @interface CASAppDelegate : NSObject<NSApplicationDelegate>
 @end
 
 @implementation CASAppDelegate
 - (void)applicationWillTerminate:(NSApplication *)app {
-  casein_quit();
+  casein_handle(casein::events::quit {});
 }
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)app {
   return YES;
@@ -20,32 +22,32 @@
 @end
 
 @implementation CASWindow
-- (keys)codeForEvent:(NSEvent *)event {
+- (casein::keys)codeForEvent:(NSEvent *)event {
   NSString * arrow = event.charactersIgnoringModifiers;
   switch (arrow.length) {
   case 1:
     switch (unichar c = [arrow characterAtIndex:0]) {
     case NSLeftArrowFunctionKey:
-      return K_LEFT;
+      return casein::K_LEFT;
     case NSRightArrowFunctionKey:
-      return K_RIGHT;
+      return casein::K_RIGHT;
     case NSUpArrowFunctionKey:
-      return K_UP;
+      return casein::K_UP;
     case NSDownArrowFunctionKey:
-      return K_DOWN;
+      return casein::K_DOWN;
     default:
-      if (c >= 32 && c <= 127) return K_SPACE;
+      if (c >= 32 && c <= 127) return casein::K_SPACE;
     }
   }
-  return K_NULL;
+  return casein::K_NULL;
 }
 - (void)keyDown:(NSEvent *)event {
   if (event.ARepeat) return;
 
-  casein_key_down([self codeForEvent:event]);
+  casein_handle(casein::events::key_down { [self codeForEvent:event] });
 }
 - (void)keyUp:(NSEvent *)event {
-  casein_key_up([self codeForEvent:event]);
+  casein_handle(casein::events::key_up { [self codeForEvent:event] });
 }
 - (NSPoint)translateMousePosition:(NSEvent *)event {
   NSPoint p = [self.contentView convertPoint:event.locationInWindow fromView:nil];
@@ -54,18 +56,20 @@
 }
 - (void)mouseDown:(NSEvent *)event {
   NSPoint p = [self translateMousePosition:event];
-  casein_mouse_down(static_cast<int>(p.x), static_cast<int>(p.y), static_cast<int>(event.buttonNumber));
+  casein_handle(casein::events::mouse_down {
+      { static_cast<int>(p.x), static_cast<int>(p.y), static_cast<int>(event.buttonNumber) } });
 }
 - (void)mouseDragged:(NSEvent *)event {
   [self mouseMoved:event];
 }
 - (void)mouseMoved:(NSEvent *)event {
   NSPoint p = [self translateMousePosition:event];
-  casein_mouse_move(static_cast<int>(p.x), static_cast<int>(p.y));
+  casein_handle(casein::events::mouse_move { { static_cast<int>(p.x), static_cast<int>(p.y) } });
 }
 - (void)mouseUp:(NSEvent *)event {
   NSPoint p = [self translateMousePosition:event];
-  casein_mouse_up(static_cast<int>(p.x), static_cast<int>(p.y), static_cast<int>(event.buttonNumber));
+  casein_handle(casein::events::mouse_up {
+      { static_cast<int>(p.x), static_cast<int>(p.y), static_cast<int>(event.buttonNumber) } });
 }
 @end
 
