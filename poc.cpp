@@ -41,8 +41,8 @@ extern "C" void casein_handle(const casein::event & e) {
     silog::log(silog::info, "quit");
     break;
   case casein::TOUCH_DOWN: {
-    const auto & [x, y] = *e.as<casein::events::touch_down>();
-    silog::log(silog::info, "touch down");
+    const auto & [x, y, lp] = *e.as<casein::events::touch_down>();
+    silog::log(silog::info, lp ? "long press down" : "touch down");
     break;
   }
   default:
