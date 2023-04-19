@@ -18,6 +18,7 @@ namespace casein {
     TOUCH_DOWN,
     TOUCH_MOVE,
     TOUCH_UP,
+    MAX_EVENT_TYPE,
   };
   enum keys : unsigned {
     K_NULL,
@@ -26,6 +27,7 @@ namespace casein {
     K_LEFT,
     K_RIGHT,
     K_UP,
+    K_MAX,
   };
   enum mouse_buttons {
     M_LEFT,
@@ -39,6 +41,7 @@ namespace casein {
     G_SWIPE_LEFT,
     G_SWIPE_RIGHT,
     G_SWIPE_UP,
+    G_MAX,
   };
 
   class event;
@@ -96,6 +99,8 @@ namespace casein::events {
     A a;
 
   public:
+    using type = A;
+
     constexpr single_arg_event(A a) : event(ET), a(a) {
     }
 
