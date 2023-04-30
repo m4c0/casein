@@ -49,4 +49,7 @@ export namespace casein {
       if (fn) fn(e);
     }
   };
+
+  using key_map = subevent_map<events::key_down, K_MAX>;
+  using gesture_map = subevent_map<events::gesture, G_MAX>;
 }
