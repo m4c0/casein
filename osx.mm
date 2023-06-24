@@ -36,7 +36,7 @@ using casein_native_handle = CAMetalLayer;
     case NSDownArrowFunctionKey:
       return casein::K_DOWN;
     default:
-      if (c >= 32 && c <= 127) return casein::K_SPACE;
+      if (c >= 32 && c <= 127) return static_cast<casein::keys>(c);
     }
   }
   return casein::K_NULL;
