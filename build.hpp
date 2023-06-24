@@ -12,11 +12,9 @@ inline auto casein() {
 
   m->for_feature(cocoa).add_unit<objc>("CASView");
   m->for_feature(cocoa).add_unit<objc>("osx");
-  m->for_feature(cocoa).add_unit<>("externc");
 
   m->for_feature(uikit).add_unit<objc>("CASView");
   m->for_feature(uikit).add_unit<objc>("ios");
-  m->for_feature(uikit).add_unit<>("externc");
 
   m->for_feature(windows_api).add_unit<>("windows");
   m->for_feature(windows_api).add_system_library("user32");
