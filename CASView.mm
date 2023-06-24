@@ -1,5 +1,7 @@
+using casein_native_handle = void;
 #include "CASView.h"
-#include "externc.h"
+
+#include "common.hpp"
 
 @import MetalKit;
 
@@ -19,9 +21,9 @@
 
 - (void)drawInMTKView:(MTKView *)view {
   if (self.prepared) {
-    casein_repaint();
+    casein_handle(casein::events::repaint {});
   } else {
-    casein_create_window((__bridge void *)self.layer);
+    casein_handle(casein::events::create_window { (__bridge void *)self.layer });
     [self sendResizeEvent];
     self.prepared = YES;
   }
@@ -45,7 +47,12 @@
 #endif
 
 - (void)sendResizeEvent {
-  casein_resize_window(self.frame.size.width, self.frame.size.height, [self backingScaleFactor], [self inLiveResize]);
+  casein_handle(casein::events::resize_window { {
+      static_cast<int>(self.frame.size.width),
+      static_cast<int>(self.frame.size.height),
+      [self backingScaleFactor],
+      [self inLiveResize] == YES,
+  } });
 }
 
 - (void)mtkView:(MTKView *)view drawableSizeWillChange:(CGSize)size {
