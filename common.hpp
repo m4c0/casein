@@ -23,6 +23,12 @@ namespace casein {
   enum keys : unsigned {
     K_NULL,
     K_SPACE = ' ',
+    K_A = 'a',
+    K_D = 'd',
+    K_E = 'e',
+    K_Q = 'q',
+    K_S = 's',
+    K_W = 'w',
     K_DOWN = 0x100,
     K_LEFT,
     K_RIGHT,
