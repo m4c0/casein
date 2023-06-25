@@ -13,6 +13,25 @@ static constexpr const auto repaint_timer_id = 0xb16b00b5;
 
 extern "C" void casein_handle(const casein::event & e);
 
+static casein::keys wp2c(WPARAM wp) {
+  switch (wp) {
+  case VK_LEFT:
+    return casein::K_LEFT;
+  case VK_RIGHT:
+    return casein::K_RIGHT;
+  case VK_UP:
+    return casein::K_UP;
+  case VK_DOWN:
+    return casein::K_DOWN;
+  case VK_SPACE:
+    return casein::K_SPACE;
+  default:
+    if (wp >= 0x41 && wp <= 0x5A) {
+      return static_cast<casein::keys>(casein::K_A + (wp - 0x41));
+    }
+    return casein::K_NULL;
+  }
+}
 static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param) {
   switch (msg) {
   case WM_CREATE:
@@ -23,10 +42,10 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     PostQuitMessage(0);
     return 0;
   case WM_KEYDOWN:
-    casein_handle(casein::events::key_down { casein::K_NULL });
+    casein_handle(casein::events::key_down { wp2c(w_param) });
     return 0;
   case WM_KEYUP:
-    casein_handle(casein::events::key_up { casein::K_NULL });
+    casein_handle(casein::events::key_up { wp2c(w_param) });
     return 0;
   case WM_LBUTTONDOWN: {
     auto x = GET_X_LPARAM(l_param);
