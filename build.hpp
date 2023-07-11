@@ -1,5 +1,5 @@
 #pragma once
-#include "ecow.hpp"
+#include "../ecow/ecow.hpp"
 
 inline auto casein() {
   using namespace ecow;
