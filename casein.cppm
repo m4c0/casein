@@ -53,3 +53,19 @@ export namespace casein {
   using key_map = subevent_map<events::key_down, K_MAX>;
   using gesture_map = subevent_map<events::gesture, G_MAX>;
 }
+
+#ifdef LECO_TARGET_MACOSX
+#pragma leco add_impl CASView osx
+#pragma leco add_framework AppKit MetalKit Metal
+#elif LECO_TARGET_IOS
+#pragma leco add_impl CASView ios
+#pragma leco add_framework MetalKit UIKit
+#elif LECO_TARGET_WINDOWS
+#pragma leco add_impl windows
+#pragma leco add_library user32
+#elif LECO_TARGET_ANDROID
+#pragma leco add_impl android
+#pragma leco add_library android
+#elif LECO_TARGET_WASM
+#pragma leco add_impl externc wasm
+#endif
