@@ -1,6 +1,5 @@
 #pragma once
-
-@import MetalKit;
+#import <MetalKit/MetalKit.h>
 
 @interface CASView : MTKView<MTKViewDelegate>
 @property BOOL prepared;
