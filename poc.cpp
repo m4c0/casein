@@ -1,3 +1,4 @@
+#pragma leco tool
 import casein;
 import silog;
 
