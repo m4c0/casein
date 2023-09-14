@@ -1,5 +1,5 @@
-@import AppKit;
-@import MetalKit;
+#import <AppKit/AppKit.h>
+#import <MetalKit/MetalKit.h>
 
 using casein_native_handle = CAMetalLayer;
 

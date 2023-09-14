@@ -1,9 +1,8 @@
+#import <MetalKit/MetalKit.h>
+
 using casein_native_handle = void;
 #include "CASView.h"
-
 #include "common.hpp"
-
-@import MetalKit;
 
 @implementation CASView
 - (instancetype)init {
