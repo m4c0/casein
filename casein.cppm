@@ -59,7 +59,7 @@ export namespace casein {
 #pragma leco add_framework AppKit MetalKit Metal
 #elif LECO_TARGET_IOS
 #pragma leco add_impl CASView ios
-#pragma leco add_framework MetalKit UIKit
+#pragma leco add_framework MetalKit Metal UIKit
 #elif LECO_TARGET_WINDOWS
 #pragma leco add_impl windows
 #pragma leco add_library user32
