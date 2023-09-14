@@ -1,4 +1,4 @@
-#pragma leco tool
+#pragma leco app
 import casein;
 import silog;
 
