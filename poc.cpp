@@ -28,12 +28,12 @@ extern "C" void casein_handle(const casein::event & e) {
     }
     break;
   case casein::MOUSE_DOWN: {
-    const auto & [x, y, btn] = *e.as<casein::events::mouse_down>();
+    [[maybe_unused]] const auto & [x, y, btn] = *e.as<casein::events::mouse_down>();
     silog::log(silog::info, "mouse down");
     break;
   }
   case casein::RESIZE_WINDOW: {
-    const auto & [w, h, scale, live] = *e.as<casein::events::resize_window>();
+    [[maybe_unused]] const auto & [w, h, scale, live] = *e.as<casein::events::resize_window>();
     silog::log(silog::info, "resize window");
     break;
   }
