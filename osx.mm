@@ -1,10 +1,5 @@
-#import <AppKit/AppKit.h>
-#import <MetalKit/MetalKit.h>
-
-using casein_native_handle = CAMetalLayer;
-
-#include "CASView.h"
-#include "common.hpp"
+@import AppKit;
+#import "CASView.h"
 
 @interface CASAppDelegate : NSObject<NSApplicationDelegate>
 @end

@@ -1,8 +1,4 @@
-#import <MetalKit/MetalKit.h>
-
-using casein_native_handle = void;
 #include "CASView.h"
-#include "common.hpp"
 
 @implementation CASView
 - (instancetype)init {
@@ -22,7 +18,8 @@ using casein_native_handle = void;
   if (self.prepared) {
     casein_handle(casein::events::repaint {});
   } else {
-    casein_handle(casein::events::create_window { (__bridge void *)self.layer });
+    void * l = (__bridge void *)self.layer;
+    casein_handle(casein::events::create_window { (__bridge CAMetalLayer *)l });
     [self sendResizeEvent];
     self.prepared = YES;
   }
