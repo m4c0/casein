@@ -1,10 +1,5 @@
-#import <MetalKit/MetalKit.h>
-#import <UIKit/UIKit.h>
-
-using casein_native_handle = CAMetalLayer;
-
+@import UIKit;
 #include "CASView.h"
-#include "common.hpp"
 
 @interface CASViewController : UIViewController
 @end
