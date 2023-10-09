@@ -14,6 +14,7 @@ namespace casein {
     REPAINT,
     RESIZE_WINDOW,
     QUIT,
+    TIMER,
     TOUCH_CANCEL,
     TOUCH_DOWN,
     TOUCH_MOVE,
@@ -134,6 +135,7 @@ namespace casein::events {
   using quit = empty_event<QUIT>;
   using repaint = empty_event<REPAINT>;
   using resize_window = single_arg_event<RESIZE_WINDOW, resize>;
+  using timer = empty_event<TIMER>;
   using touch_cancel = single_arg_event<TOUCH_CANCEL, touch>;
   using touch_down = single_arg_event<TOUCH_DOWN, touch>;
   using touch_move = single_arg_event<TOUCH_MOVE, touch>;

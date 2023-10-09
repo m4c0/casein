@@ -9,7 +9,7 @@
 import casein;
 
 static constexpr const auto window_class = "m4c0-window-class";
-static constexpr const auto repaint_timer_id = 0xb16b00b5;
+static constexpr const auto timer_id = 0xb16b00b5;
 
 extern "C" void casein_handle(const casein::event & e);
 
@@ -62,6 +62,9 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
   case WM_MOUSEMOVE:
     casein_handle(casein::events::mouse_move { { GET_X_LPARAM(l_param), GET_Y_LPARAM(l_param) } });
     return 0;
+  case WM_PAINT:
+    casein_handle(casein::events::repaint {});
+    return DefWindowProc(hwnd, msg, w_param, l_param);
   case WM_RBUTTONDOWN: {
     auto x = GET_X_LPARAM(l_param);
     auto y = GET_Y_LPARAM(l_param);
@@ -81,7 +84,7 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     return 0;
   }
   case WM_TIMER:
-    if (w_param == repaint_timer_id) casein_handle(casein::events::repaint {});
+    if (w_param == timer_id) casein_handle(casein::events::timer {});
     return 0;
   default:
     return DefWindowProc(hwnd, msg, w_param, l_param);
@@ -134,16 +137,16 @@ static auto create_window(HINSTANCE h_instance, int show) {
 }
 
 static int main_loop(HWND hwnd) {
-  static constexpr const auto sixty_fps = 1000 / 30;
+  static constexpr const auto ms_per_tick = 1000 / 20;
 
   MSG msg;
 
-  SetTimer(hwnd, repaint_timer_id, sixty_fps, nullptr);
+  SetTimer(hwnd, timer_id, ms_per_tick, nullptr);
   while (GetMessage(&msg, 0, 0, 0)) {
     TranslateMessage(&msg);
     DispatchMessage(&msg);
   }
-  KillTimer(hwnd, repaint_timer_id);
+  KillTimer(hwnd, timer_id);
   return static_cast<int>(msg.wParam);
 }
 
