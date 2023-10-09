@@ -20,6 +20,14 @@
   } else {
     void * l = (__bridge void *)self.layer;
     casein_handle(casein::events::create_window { (__bridge CAMetalLayer *)l });
+
+    float interval = 1.0 / 20.0;
+    [NSTimer scheduledTimerWithTimeInterval:interval
+                                    repeats:YES
+                                      block:^(NSTimer * t) {
+                                        casein_handle(casein::events::timer {});
+                                      }];
+
     [self sendResizeEvent];
     self.prepared = YES;
   }
