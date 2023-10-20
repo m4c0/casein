@@ -8,7 +8,7 @@ void on_window_created(auto /*handle*/) {
 }
 
 struct me_handler : public casein::handler {
-  void mouse_down() override {
+  void mouse_down(const casein::events::mouse_down &) override {
     silog::log(silog::info, "mouse down");
   }
 };
