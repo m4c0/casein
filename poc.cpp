@@ -7,7 +7,16 @@ void on_window_created(auto /*handle*/) {
   // the event. Vulkan can use it to initialise all its shenanigans, etc.
 }
 
+struct me_handler : public casein::handler {
+  void mouse_down() override {
+    silog::log(silog::info, "mouse down");
+  }
+};
+
 extern "C" void casein_handle(const casein::event & e) {
+  static me_handler h {};
+  h.handle(e);
+
   switch (e.type()) {
   case casein::CREATE_WINDOW:
     // You can fetch the native handle (HWND, NSWindow, etc) like this:
@@ -27,11 +36,6 @@ extern "C" void casein_handle(const casein::event & e) {
       break;
     }
     break;
-  case casein::MOUSE_DOWN: {
-    [[maybe_unused]] const auto & [x, y, btn] = *e.as<casein::events::mouse_down>();
-    silog::log(silog::info, "mouse down");
-    break;
-  }
   case casein::RESIZE_WINDOW: {
     [[maybe_unused]] const auto & [w, h, scale, live] = *e.as<casein::events::resize_window>();
     silog::log(silog::info, "resize window");
