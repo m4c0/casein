@@ -3,6 +3,9 @@
 namespace casein {
   using native_handle_t = ::casein_native_handle *;
 
+  constexpr const auto base_width = 1280;
+  constexpr const auto base_height = 720;
+
   enum event_type {
     CREATE_WINDOW,
     GESTURE,
