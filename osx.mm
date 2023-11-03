@@ -60,6 +60,7 @@
 - (void)mouseMoved:(NSEvent *)event {
   NSPoint p = [self translateMousePosition:event];
   casein_handle(casein::events::mouse_move { { static_cast<int>(p.x), static_cast<int>(p.y) } });
+  casein_handle(casein::events::mouse_move_rel { { static_cast<int>(event.deltaX), static_cast<int>(event.deltaY) } });
 }
 - (void)mouseUp:(NSEvent *)event {
   NSPoint p = [self translateMousePosition:event];

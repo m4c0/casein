@@ -17,6 +17,8 @@ export namespace casein {
     }
     virtual void mouse_move(const events::mouse_move &) {
     }
+    virtual void mouse_move_rel(const events::mouse_move_rel &) {
+    }
     virtual void mouse_up(const events::mouse_up &) {
     }
     virtual void repaint(const events::repaint &) {
@@ -55,6 +57,9 @@ export namespace casein {
         break;
       case MOUSE_MOVE:
         mouse_move(e.as<events::mouse_move>());
+        break;
+      case MOUSE_MOVE_REL:
+        mouse_move_rel(e.as<events::mouse_move_rel>());
         break;
       case MOUSE_UP:
         mouse_up(e.as<events::mouse_up>());

@@ -13,6 +13,7 @@ namespace casein {
     KEY_UP,
     MOUSE_DOWN,
     MOUSE_MOVE,
+    MOUSE_MOVE_REL,
     MOUSE_UP,
     REPAINT,
     RESIZE_WINDOW,
@@ -134,6 +135,7 @@ namespace casein::events {
   using key_up = single_arg_event<KEY_UP, keys>;
   using mouse_down = single_arg_event<MOUSE_DOWN, click>;
   using mouse_move = single_arg_event<MOUSE_MOVE, point>;
+  using mouse_move_rel = single_arg_event<MOUSE_MOVE_REL, point>;
   using mouse_up = single_arg_event<MOUSE_UP, click>;
   using quit = empty_event<QUIT>;
   using repaint = empty_event<REPAINT>;
