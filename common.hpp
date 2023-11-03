@@ -88,11 +88,6 @@ namespace casein {
     int x;
     int y;
   };
-  struct click {
-    int x;
-    int y;
-    mouse_buttons button;
-  };
   struct touch {
     int x;
     int y;
@@ -133,10 +128,10 @@ namespace casein::events {
   using gesture = single_arg_event<GESTURE, gestures>;
   using key_down = single_arg_event<KEY_DOWN, keys>;
   using key_up = single_arg_event<KEY_UP, keys>;
-  using mouse_down = single_arg_event<MOUSE_DOWN, click>;
+  using mouse_down = single_arg_event<MOUSE_DOWN, mouse_buttons>;
   using mouse_move = single_arg_event<MOUSE_MOVE, point>;
   using mouse_move_rel = single_arg_event<MOUSE_MOVE_REL, point>;
-  using mouse_up = single_arg_event<MOUSE_UP, click>;
+  using mouse_up = single_arg_event<MOUSE_UP, mouse_buttons>;
   using quit = empty_event<QUIT>;
   using repaint = empty_event<REPAINT>;
   using resize_window = single_arg_event<RESIZE_WINDOW, resize>;
