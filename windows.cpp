@@ -63,6 +63,8 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     casein_handle(casein::events::mouse_move { { GET_X_LPARAM(l_param), GET_Y_LPARAM(l_param) } });
     return 0;
   case WM_PAINT:
+    // From ValidateRect docs: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-validaterect
+    // "The system continues to generate WM_PAINT messages until the current update region is validated."
     casein_handle(casein::events::repaint {});
     return DefWindowProc(hwnd, msg, w_param, l_param);
   case WM_RBUTTONDOWN: {
@@ -78,6 +80,7 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     return 0;
   }
   case WM_SIZE: {
+    // case WM_EXITSIZEMOVE: <-- TODO: this might be useful for the "live resize" (if needed)
     auto w = LOWORD(l_param);
     auto h = HIWORD(l_param);
     casein_handle(casein::events::resize_window { { w, h, 1.0f, false } });
