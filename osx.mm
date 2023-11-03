@@ -51,8 +51,8 @@
 }
 
 - (void)mouseDown:(NSEvent *)event {
-  NSPoint p = [self translateMousePosition:event];
-  casein_handle(casein::events::mouse_down { { static_cast<int>(p.x), static_cast<int>(p.y), casein::M_LEFT } });
+  [self mouseMoved:event];
+  casein_handle(casein::events::mouse_down { casein::M_LEFT });
 }
 - (void)mouseDragged:(NSEvent *)event {
   [self mouseMoved:event];
@@ -63,24 +63,23 @@
   casein_handle(casein::events::mouse_move_rel { { static_cast<int>(event.deltaX), static_cast<int>(event.deltaY) } });
 }
 - (void)mouseUp:(NSEvent *)event {
-  NSPoint p = [self translateMousePosition:event];
-  casein_handle(casein::events::mouse_up { { static_cast<int>(p.x), static_cast<int>(p.y), casein::M_LEFT } });
+  [self mouseMoved:event];
+  casein_handle(casein::events::mouse_up { casein::M_LEFT });
 }
 
 - (void)rightMouseDown:(NSEvent *)event {
-  NSPoint p = [self translateMousePosition:event];
-  casein_handle(casein::events::mouse_down { { static_cast<int>(p.x), static_cast<int>(p.y), casein::M_RIGHT } });
+  [self mouseMoved:event];
+  casein_handle(casein::events::mouse_down { casein::M_RIGHT });
 }
 - (void)rightMouseDragged:(NSEvent *)event {
   [self mouseMoved:event];
 }
 - (void)rightMouseMoved:(NSEvent *)event {
-  NSPoint p = [self translateMousePosition:event];
-  casein_handle(casein::events::mouse_move { { static_cast<int>(p.x), static_cast<int>(p.y) } });
+  [self mouseMoved:event];
 }
 - (void)rightMouseUp:(NSEvent *)event {
-  NSPoint p = [self translateMousePosition:event];
-  casein_handle(casein::events::mouse_up { { static_cast<int>(p.x), static_cast<int>(p.y), casein::M_RIGHT } });
+  [self mouseMoved:event];
+  casein_handle(casein::events::mouse_up { casein::M_RIGHT });
 }
 @end
 
