@@ -1,10 +1,15 @@
 #include "casein.windows.hpp"
 
 #include <exception>
+#include <hidusage.h>
 #include <stdexcept>
 #include <tchar.h>
 #include <windows.h>
 #include <windowsx.h>
+
+// https://handmade.network/forums/t/2011-keyboard_inputs_-_scancodes,_raw_input,_text_input,_key_names
+// https://msdn.microsoft.com/en-us/library/windows/desktop/ms645565(v=vs.85).aspx
+// https://docs.microsoft.com/en-us/windows/win32/inputdev/using-raw-input
 
 import casein;
 
@@ -12,6 +17,49 @@ static constexpr const auto window_class = "m4c0-window-class";
 static constexpr const auto timer_id = 0xb16b00b5;
 
 extern "C" void casein_handle(const casein::event & e);
+
+static void handle_raw_mouse(RAWMOUSE & mouse) noexcept {
+  if (mouse.usFlags & MOUSE_MOVE_ABSOLUTE) {
+    bool is_virt_desktop = (mouse.usFlags & MOUSE_VIRTUAL_DESKTOP) == MOUSE_VIRTUAL_DESKTOP;
+
+    int width = GetSystemMetrics(is_virt_desktop ? SM_CXVIRTUALSCREEN : SM_CXSCREEN);
+    int height = GetSystemMetrics(is_virt_desktop ? SM_CYVIRTUALSCREEN : SM_CYSCREEN);
+
+    int x = int((mouse.lLastX / 65535.0f) * width);
+    int y = int((mouse.lLastY / 65535.0f) * height);
+    casein_handle(casein::events::mouse_move { { x, y } });
+  } else {
+    auto x = mouse.lLastX;
+    auto y = mouse.lLastY;
+    if (x != 0 || y != 0) {
+      casein_handle(casein::events::mouse_move_rel { { x, y } });
+    }
+  }
+
+  if (mouse.usButtonFlags & RI_MOUSE_LEFT_BUTTON_DOWN) {
+    casein_handle(casein::events::mouse_down { casein::M_LEFT });
+  } else if (mouse.usButtonFlags & RI_MOUSE_LEFT_BUTTON_UP) {
+    casein_handle(casein::events::mouse_up { casein::M_LEFT });
+  } else if (mouse.usButtonFlags & RI_MOUSE_RIGHT_BUTTON_DOWN) {
+    casein_handle(casein::events::mouse_down { casein::M_RIGHT });
+  } else if (mouse.usButtonFlags & RI_MOUSE_RIGHT_BUTTON_UP) {
+    casein_handle(casein::events::mouse_up { casein::M_RIGHT });
+  }
+}
+
+static void handle_raw_input(WPARAM wp, LPARAM lp) {
+  RAWINPUT raw {};
+  UINT raw_size = sizeof(raw);
+  if (-1 == GetRawInputData((HRAWINPUT)lp, RID_INPUT, &raw, &raw_size, sizeof(RAWINPUTHEADER)))
+    // TODO: log? abort?
+    return;
+
+  switch (raw.header.dwType) {
+  case RIM_TYPEMOUSE:
+    handle_raw_mouse(raw.data.mouse);
+    break;
+  }
+}
 
 static casein::keys wp2c(WPARAM wp) {
   switch (wp) {
@@ -41,44 +89,20 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     casein_handle(casein::events::quit {});
     PostQuitMessage(0);
     return 0;
+  case WM_INPUT:
+    handle_raw_input(w_param, l_param);
+    return 0;
   case WM_KEYDOWN:
     casein_handle(casein::events::key_down { wp2c(w_param) });
     return 0;
   case WM_KEYUP:
     casein_handle(casein::events::key_up { wp2c(w_param) });
     return 0;
-  case WM_LBUTTONDOWN: {
-    auto x = GET_X_LPARAM(l_param);
-    auto y = GET_Y_LPARAM(l_param);
-    casein_handle(casein::events::mouse_down { { static_cast<int>(x), static_cast<int>(y), casein::M_LEFT } });
-    return 0;
-  }
-  case WM_LBUTTONUP: {
-    auto x = GET_X_LPARAM(l_param);
-    auto y = GET_Y_LPARAM(l_param);
-    casein_handle(casein::events::mouse_up { { static_cast<int>(x), static_cast<int>(y), casein::M_LEFT } });
-    return 0;
-  }
-  case WM_MOUSEMOVE:
-    casein_handle(casein::events::mouse_move { { GET_X_LPARAM(l_param), GET_Y_LPARAM(l_param) } });
-    return 0;
   case WM_PAINT:
     // From ValidateRect docs: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-validaterect
     // "The system continues to generate WM_PAINT messages until the current update region is validated."
     casein_handle(casein::events::repaint {});
     return DefWindowProc(hwnd, msg, w_param, l_param);
-  case WM_RBUTTONDOWN: {
-    auto x = GET_X_LPARAM(l_param);
-    auto y = GET_Y_LPARAM(l_param);
-    casein_handle(casein::events::mouse_down { { static_cast<int>(x), static_cast<int>(y), casein::M_RIGHT } });
-    return 0;
-  }
-  case WM_RBUTTONUP: {
-    auto x = GET_X_LPARAM(l_param);
-    auto y = GET_Y_LPARAM(l_param);
-    casein_handle(casein::events::mouse_up { { static_cast<int>(x), static_cast<int>(y), casein::M_RIGHT } });
-    return 0;
-  }
   case WM_SIZE: {
     // case WM_EXITSIZEMOVE: <-- TODO: this might be useful for the "live resize" (if needed)
     auto w = LOWORD(l_param);
@@ -139,6 +163,16 @@ static auto create_window(HINSTANCE h_instance, int show) {
   return hwnd;
 }
 
+static void setup_raw_input() {
+  RAWINPUTDEVICE rids[1] {};
+
+  rids[0].usUsagePage = HID_USAGE_PAGE_GENERIC;
+  rids[0].usUsage = HID_USAGE_GENERIC_MOUSE;
+
+  if (!RegisterRawInputDevices(rids.data(), rids.size(), sizeof(rids[0])))
+    throw std::runtime_error("Failed to register raw input devices");
+}
+
 static int main_loop(HWND hwnd) {
   static constexpr const auto ms_per_tick = 1000 / 20;
 
@@ -160,6 +194,7 @@ int CALLBACK WinMain(
     _In_ int cmd_show) try {
   register_class(h_instance);
   auto hwnd = create_window(h_instance, cmd_show);
+  setup_raw_input();
   return main_loop(hwnd);
 } catch (const std::exception & e) {
   MessageBox(NULL, _T(e.what()), _T("Unhandled error"), NULL);
