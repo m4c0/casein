@@ -1,17 +1,20 @@
+module;
 #include "casein.windows.hpp"
 
 #include <exception>
-#include <hidusage.h>
 #include <stdexcept>
 #include <tchar.h>
 #include <windows.h>
 #include <windowsx.h>
 
+// Forcing this after <windows.h>
+#include <hidusage.h>
+
 // https://handmade.network/forums/t/2011-keyboard_inputs_-_scancodes,_raw_input,_text_input,_key_names
 // https://msdn.microsoft.com/en-us/library/windows/desktop/ms645565(v=vs.85).aspx
 // https://docs.microsoft.com/en-us/windows/win32/inputdev/using-raw-input
 
-import casein;
+module casein;
 
 static constexpr const auto window_class = "m4c0-window-class";
 static constexpr const auto timer_id = 0xb16b00b5;
@@ -169,7 +172,7 @@ static void setup_raw_input() {
   rids[0].usUsagePage = HID_USAGE_PAGE_GENERIC;
   rids[0].usUsage = HID_USAGE_GENERIC_MOUSE;
 
-  if (!RegisterRawInputDevices(rids.data(), rids.size(), sizeof(rids[0])))
+  if (!RegisterRawInputDevices(rids, 1, sizeof(rids[0])))
     throw std::runtime_error("Failed to register raw input devices");
 }
 
@@ -187,7 +190,7 @@ static int main_loop(HWND hwnd) {
   return static_cast<int>(msg.wParam);
 }
 
-int CALLBACK WinMain(
+extern "C" int CALLBACK WinMain(
     _In_ HINSTANCE h_instance,
     _In_opt_ HINSTANCE /* unused */,
     _In_ LPSTR /* command line */,
