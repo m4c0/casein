@@ -92,6 +92,18 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     casein_handle(casein::events::quit {});
     PostQuitMessage(0);
     return 0;
+  case WM_EXITSIZEMOVE: {
+    WINDOWINFO wi {};
+    wi.cbSize = sizeof(WINDOWINFO);
+    GetWindowInfo(hwnd, &wi);
+
+    auto [l, t, r, b] = wi.rcClient;
+    auto w = r - l;
+    auto h = b - t;
+
+    casein_handle(casein::events::resize_window { { w, h, 1.0f, false } });
+    return 0;
+  }
   case WM_INPUT:
     handle_raw_input(w_param, l_param);
     return 0;
@@ -107,7 +119,6 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     casein_handle(casein::events::repaint {});
     return DefWindowProc(hwnd, msg, w_param, l_param);
   case WM_SIZE: {
-    // case WM_EXITSIZEMOVE: <-- TODO: this might be useful for the "live resize" (if needed)
     auto w = LOWORD(l_param);
     auto h = HIWORD(l_param);
     casein_handle(casein::events::resize_window { { w, h, 1.0f, false } });
