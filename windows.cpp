@@ -22,16 +22,7 @@ static constexpr const auto timer_id = 0xb16b00b5;
 extern "C" void casein_handle(const casein::event & e);
 
 static void handle_raw_mouse(RAWMOUSE & mouse) noexcept {
-  if (mouse.usFlags & MOUSE_MOVE_ABSOLUTE) {
-    bool is_virt_desktop = (mouse.usFlags & MOUSE_VIRTUAL_DESKTOP) == MOUSE_VIRTUAL_DESKTOP;
-
-    int width = GetSystemMetrics(is_virt_desktop ? SM_CXVIRTUALSCREEN : SM_CXSCREEN);
-    int height = GetSystemMetrics(is_virt_desktop ? SM_CYVIRTUALSCREEN : SM_CYSCREEN);
-
-    int x = int((mouse.lLastX / 65535.0f) * width);
-    int y = int((mouse.lLastY / 65535.0f) * height);
-    casein_handle(casein::events::mouse_move { { x, y } });
-  } else {
+  if ((mouse.usFlags & MOUSE_MOVE_ABSOLUTE) == 0) {
     auto x = mouse.lLastX;
     auto y = mouse.lLastY;
     if (x != 0 || y != 0) {
@@ -113,6 +104,12 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
   case WM_KEYUP:
     casein_handle(casein::events::key_up { wp2c(w_param) });
     return 0;
+  case WM_MOUSEMOVE: {
+    auto x = GET_X_LPARAM(l_param);
+    auto y = GET_Y_LPARAM(l_param);
+    casein_handle(casein::events::mouse_move { { x, y } });
+    return 0;
+  }
   case WM_PAINT:
     // From ValidateRect docs: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-validaterect
     // "The system continues to generate WM_PAINT messages until the current update region is validated."
