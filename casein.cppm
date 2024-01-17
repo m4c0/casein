@@ -19,8 +19,28 @@ export namespace casein {
     }
   };
 
-  template<typename ET, ET::type Max>
+  template<typename ET, ET::type Max, typename Handler>
   class subevent_map {
+    using callback = void (Handler::*)();
+
+    callback m_map[Max] {};
+    Handler * m_handler;
+
+  public:
+    explicit constexpr subevent_map(Handler * h) noexcept : m_handler { h } {
+    }
+
+    [[nodiscard]] constexpr auto & operator[](ET::type idx) noexcept {
+      return m_map[idx];
+    }
+
+    constexpr void handle(const event & e) const {
+      auto fn = m_map[*e.as<ET>()];
+      if (fn) (m_handler->*fn)();
+    }
+  };
+  template<typename ET, ET::type Max>
+  class subevent_map<ET, Max, void> {
     using callback = void (*)(const event & e);
 
     callback m_map[Max];
@@ -36,9 +56,20 @@ export namespace casein {
     }
   };
 
-  using key_map = subevent_map<events::key_down, K_MAX>;
-  using gesture_map = subevent_map<events::gesture, G_MAX>;
-}
+  template<typename Handler = void>
+  struct key_down_map : subevent_map<events::key_down, K_MAX, Handler> {
+    using subevent_map<events::key_down, K_MAX, Handler>::subevent_map;
+  };
+  template<typename H>
+  key_down_map(H *) -> key_down_map<H>;
+
+  template<typename Handler = void>
+  struct gesture_map : subevent_map<events::gesture, G_MAX, Handler> {
+    using subevent_map<events::gesture, G_MAX, Handler>::subevent_map;
+  };
+  template<typename H>
+  gesture_map(H *) -> gesture_map<H>;
+} // namespace casein
 
 #ifdef LECO_TARGET_MACOSX
 #pragma leco add_impl CASView osx
