@@ -7,7 +7,27 @@ void on_window_created(auto /*handle*/) {
   // the event. Vulkan can use it to initialise all its shenanigans, etc.
 }
 
+struct key_handler {
+  void left() {
+    silog::log(silog::info, "<left> key down");
+  }
+  void right() {
+    silog::log(silog::info, "<right> key down");
+  }
+};
+
 struct me_handler : public casein::handler {
+  void key_down(const casein::events::key_down & e) override {
+    static key_handler h {};
+    static constexpr const auto map = [] {
+      casein::key_down_map res { &h };
+      res[casein::K_LEFT] = &key_handler::left;
+      res[casein::K_RIGHT] = &key_handler::right;
+      return res;
+    }();
+    map.handle(e);
+  }
+
   void mouse_down(const casein::events::mouse_down &) override {
     silog::log(silog::info, "mouse down");
   }
