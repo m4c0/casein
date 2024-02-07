@@ -54,6 +54,7 @@ namespace casein {
     K_Y = 'y',
     K_Z = 'z',
     K_DOWN = 0x100,
+    K_ENTER,
     K_LEFT,
     K_RIGHT,
     K_UP,
