@@ -65,6 +65,8 @@ static casein::keys wp2c(WPARAM wp) {
     return casein::K_UP;
   case VK_DOWN:
     return casein::K_DOWN;
+  case VK_RETURN:
+    return casein::K_ENTER;
   case VK_SPACE:
     return casein::K_SPACE;
   default:
