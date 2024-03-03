@@ -76,17 +76,18 @@ static casein::keys wp2c(WPARAM wp) {
     return casein::K_NULL;
   }
 }
-extern "C" void casein_exit(int code) {
-  casein_handle(casein::events::quit {});
-  PostQuitMessage(code);
-}
 static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param) {
   switch (msg) {
   case WM_CREATE:
     casein_handle(casein::events::create_window { hwnd });
     return 0;
+  case WM_CLOSE:
+    // Required to enable another thread sending "plz exit" messages
+    DestroyWindow(hwnd);
+    return 0;
   case WM_DESTROY:
-    casein_exit(0);
+    casein_handle(casein::events::quit {});
+    PostQuitMessage(0);
     return 0;
   case WM_EXITSIZEMOVE: {
     WINDOWINFO wi {};
@@ -189,6 +190,13 @@ static void setup_raw_input() {
     throw std::runtime_error("Failed to register raw input devices");
 }
 
+static HWND g_hwnd;
+extern "C" void casein_exit(int code) {
+  // This is the only way to properly programatically exit an app from any thread. Other attempts froze the app or kept
+  // it as a "background app".
+  SendMessage(g_hwnd, WM_CLOSE, 0, 0);
+}
+
 static int main_loop(HWND hwnd) {
   static constexpr const auto ms_per_tick = 1000 / 20;
 
@@ -209,7 +217,7 @@ extern "C" int CALLBACK WinMain(
     _In_ LPSTR /* command line */,
     _In_ int cmd_show) try {
   register_class(h_instance);
-  auto hwnd = create_window(h_instance, cmd_show);
+  auto hwnd = g_hwnd = create_window(h_instance, cmd_show);
   setup_raw_input();
   return main_loop(hwnd);
 } catch (const std::exception & e) {
