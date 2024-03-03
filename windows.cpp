@@ -76,14 +76,17 @@ static casein::keys wp2c(WPARAM wp) {
     return casein::K_NULL;
   }
 }
+extern "C" void casein_exit(int code) {
+  casein_handle(casein::events::quit {});
+  PostQuitMessage(code);
+}
 static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param) {
   switch (msg) {
   case WM_CREATE:
     casein_handle(casein::events::create_window { hwnd });
     return 0;
   case WM_DESTROY:
-    casein_handle(casein::events::quit {});
-    PostQuitMessage(0);
+    casein_exit(0);
     return 0;
   case WM_EXITSIZEMOVE: {
     WINDOWINFO wi {};

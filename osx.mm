@@ -116,6 +116,12 @@ static NSWindow * create_key_window(NSString * title) {
   return wnd;
 }
 
+int exit_code { 0 };
+extern "C" void casein_exit(int code) {
+  exit_code = code;
+  [NSApp terminate:nil];
+}
+
 int main(int argc, char ** argv) {
   @autoreleasepool {
     NSString * title = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
@@ -131,6 +137,6 @@ int main(int argc, char ** argv) {
     create_key_window(title);
     [app activateIgnoringOtherApps:YES];
     [app run];
-    return 0;
+    return exit_code;
   }
 }
