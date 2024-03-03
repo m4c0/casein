@@ -71,6 +71,14 @@ export namespace casein {
   gesture_map(H *) -> gesture_map<H>;
 } // namespace casein
 
+extern "C" void casein_exit(int);
+namespace casein {
+  // Signal the app to eventually exit.
+  export void exit(int code) {
+    casein_exit(code);
+  }
+}
+
 #ifdef LECO_TARGET_MACOSX
 #pragma leco add_impl CASView osx
 #pragma leco add_framework AppKit MetalKit Metal
