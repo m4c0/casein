@@ -8,6 +8,8 @@ typedef struct HWND__ casein_native_handle;
 typedef struct ANativeWindow casein_native_handle;
 #elif defined(__wasm__)
 using casein_native_handle = void;
+#elif __linux__
+using casein_native_handle = void;
 #endif
 
 export module casein:events;
