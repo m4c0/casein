@@ -125,6 +125,9 @@
 }
 @end
 
+extern "C" void casein_exit(int code) {
+  abort();
+}
 int main(int argc, char ** argv) {
   @autoreleasepool {
     return UIApplicationMain(argc, argv, nil, @"CASAppDelegate");
