@@ -47,6 +47,9 @@ namespace casein {
 
   extern "C" void casein_handle(const event & e) {
     switch (e.type()) {
+    case CREATE_WINDOW:
+      native_ptr = *e.as<events::create_window>();
+      break;
     case KEY_DOWN:
     case KEY_UP:
       call_k(e.type(), *e.as<events::key_down>());
