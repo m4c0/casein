@@ -79,6 +79,15 @@ namespace casein {
   }
 }
 
+export namespace casein {
+  void handle(event_type, void (*)());
+  void handle(event_type, keys, void (*)());
+  void handle(event_type, mouse_buttons, void (*)());
+  void handle(event_type, gestures, void (*)());
+}
+
+#pragma leco add_impl handler
+
 #ifdef LECO_TARGET_MACOSX
 #pragma leco add_impl CASView osx
 #pragma leco add_framework AppKit MetalKit Metal
