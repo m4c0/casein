@@ -1,6 +1,5 @@
 export module casein;
 export import :events;
-export import :handler;
 
 export namespace casein {
   class event_map {
