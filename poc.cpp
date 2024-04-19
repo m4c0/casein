@@ -2,75 +2,50 @@
 import casein;
 import silog;
 
-void on_window_created(auto /*handle*/) {
-  // If this was SDL, you could do SDL_Init+SDL_CreateWindowFrom using the native handle provided by the argument of
-  // the event. Vulkan can use it to initialise all its shenanigans, etc.
+static void on_window_created() {
+  silog::log(silog::info, "window created");
+}
+static void gesture() {
+  silog::log(silog::info, "gesture");
+}
+static void left() {
+  silog::log(silog::info, "<left> key down");
+}
+static void right() {
+  silog::log(silog::info, "<right> key down");
+}
+static void mouse_down() {
+  silog::log(silog::info, "mouse down");
+}
+static void resize_window() {
+  silog::log(silog::info, "resize window");
+}
+static void quit() {
+  silog::log(silog::info, "quit");
+}
+static void tap_1() {
+  silog::log(silog::info, "tap");
+}
+static void tap_2() {
+  silog::log(silog::info, "double tap");
+}
+static void touch_down() {
+  // TODO: read x/y/lp
+  silog::log(silog::info, "touch down");
 }
 
-struct key_handler {
-  void left() {
-    silog::log(silog::info, "<left> key down");
+static struct init {
+  init() {
+    using namespace casein;
+    handle(CREATE_WINDOW, &on_window_created);
+    handle(GESTURE, G_TAP_1, &tap_1);
+    handle(GESTURE, G_TAP_2, &tap_2);
+    handle(GESTURE, &gesture);
+    handle(KEY_DOWN, K_LEFT, &left);
+    handle(KEY_DOWN, K_RIGHT, &right);
+    handle(MOUSE_DOWN, &mouse_down);
+    handle(RESIZE_WINDOW, &resize_window);
+    handle(TOUCH_DOWN, &touch_down);
+    handle(QUIT, &quit);
   }
-  void right() {
-    silog::log(silog::info, "<right> key down");
-  }
-};
-
-struct me_handler : public casein::handler {
-  void key_down(const casein::events::key_down & e) override {
-    static key_handler h {};
-    static constexpr const auto map = [] {
-      casein::key_down_map res { &h };
-      res[casein::K_LEFT] = &key_handler::left;
-      res[casein::K_RIGHT] = &key_handler::right;
-      return res;
-    }();
-    map.handle(e);
-  }
-
-  void mouse_down(const casein::events::mouse_down &) override {
-    silog::log(silog::info, "mouse down");
-  }
-};
-
-extern "C" void casein_handle(const casein::event & e) {
-  static me_handler h {};
-  h.handle(e);
-
-  switch (e.type()) {
-  case casein::CREATE_WINDOW:
-    // You can fetch the native handle (HWND, NSWindow, etc) like this:
-    on_window_created(*e.as<casein::events::create_window>());
-    silog::log(silog::info, "window created");
-    break;
-  case casein::GESTURE:
-    switch (*e.as<casein::events::gesture>()) {
-    case casein::G_TAP_1:
-      silog::log(silog::info, "tap");
-      break;
-    case casein::G_TAP_2:
-      silog::log(silog::info, "double tap");
-      break;
-    default:
-      silog::log(silog::info, "gesture");
-      break;
-    }
-    break;
-  case casein::RESIZE_WINDOW: {
-    [[maybe_unused]] const auto & [w, h, scale, live] = *e.as<casein::events::resize_window>();
-    silog::log(silog::info, "resize window");
-    break;
-  }
-  case casein::QUIT:
-    // SDL_Quit, release shenanigans, etc
-    silog::log(silog::info, "quit");
-    break;
-  case casein::TOUCH_DOWN: {
-    const auto & [x, y, lp] = *e.as<casein::events::touch_down>();
-    silog::log(silog::info, lp ? "long press down" : "touch down");
-    break;
-  }
-  default:
-    break;
-  }
-}
+} i;

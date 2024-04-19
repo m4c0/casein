@@ -63,6 +63,7 @@ namespace casein {
   enum mouse_buttons {
     M_LEFT,
     M_RIGHT,
+    M_MAX,
   };
   enum gestures {
     G_TAP_1,
