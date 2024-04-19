@@ -21,6 +21,19 @@ namespace casein {
     emap_g[et][g] = fn;
   }
 
+  void reset_k(event_type et) {
+    for (auto & n : emap_k[et])
+      n = {};
+  }
+  void reset_m(event_type et) {
+    for (auto & n : emap_m[et])
+      n = {};
+  }
+  void reset_g(event_type et) {
+    for (auto & n : emap_g[et])
+      n = {};
+  }
+
   void call(event_type et) {
     if (auto fn = emap[et]) {
       fn();

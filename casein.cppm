@@ -84,6 +84,11 @@ export namespace casein {
   void handle(event_type, mouse_buttons, void (*)());
   void handle(event_type, gestures, void (*)());
 
+  // Resets a sub-map. Should be useful for context-aware input handling (ex: modals, etc)
+  void reset_k(event_type);
+  void reset_m(event_type);
+  void reset_g(event_type);
+
   extern native_handle_t native_ptr;
 }
 
