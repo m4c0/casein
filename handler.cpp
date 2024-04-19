@@ -49,6 +49,7 @@ namespace casein {
     switch (e.type()) {
     case CREATE_WINDOW:
       native_ptr = *e.as<events::create_window>();
+      call(e.type());
       break;
     case KEY_DOWN:
     case KEY_UP:
