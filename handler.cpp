@@ -1,4 +1,5 @@
 module casein;
+import silog;
 
 namespace casein {
   using fn_t = void (*)();
@@ -29,16 +30,19 @@ namespace casein {
     if (auto fn = emap_g[et][g]) {
       fn();
     }
+    call(et);
   }
   void call_k(event_type et, keys k) {
     if (auto fn = emap_k[et][k]) {
       fn();
     }
+    call(et);
   }
   void call_m(event_type et, mouse_buttons m) {
     if (auto fn = emap_m[et][m]) {
       fn();
     }
+    call(et);
   }
 
   extern "C" void casein_handle(const event & e) {
