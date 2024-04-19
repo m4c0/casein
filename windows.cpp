@@ -57,6 +57,8 @@ static void handle_raw_input(WPARAM wp, LPARAM lp) {
 
 static casein::keys wp2c(WPARAM wp) {
   switch (wp) {
+  case VK_ESCAPE:
+    return casein::K_ESCAPE;
   case VK_LEFT:
     return casein::K_LEFT;
   case VK_RIGHT:

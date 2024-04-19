@@ -32,6 +32,8 @@
       return casein::K_DOWN;
     case 13:
       return casein::K_ENTER;
+    case 27:
+      return casein::K_ESCAPE;
     default:
       if (c >= 32 && c <= 127) return static_cast<casein::keys>(c);
     }
