@@ -16,6 +16,8 @@ module;
 
 module casein;
 
+using namespace casein;
+
 static constexpr const auto window_class = "m4c0-window-class";
 static constexpr const auto timer_id = 0xb16b00b5;
 
@@ -31,13 +33,13 @@ static void handle_raw_mouse(RAWMOUSE & mouse) noexcept {
   }
 
   if (mouse.usButtonFlags & RI_MOUSE_LEFT_BUTTON_DOWN) {
-    casein_handle(casein::events::mouse_down { casein::M_LEFT });
+    call_m(MOUSE_DOWN, M_LEFT);
   } else if (mouse.usButtonFlags & RI_MOUSE_LEFT_BUTTON_UP) {
-    casein_handle(casein::events::mouse_up { casein::M_LEFT });
+    call_m(MOUSE_UP, M_LEFT);
   } else if (mouse.usButtonFlags & RI_MOUSE_RIGHT_BUTTON_DOWN) {
-    casein_handle(casein::events::mouse_down { casein::M_RIGHT });
+    call_m(MOUSE_DOWN, M_RIGHT);
   } else if (mouse.usButtonFlags & RI_MOUSE_RIGHT_BUTTON_UP) {
-    casein_handle(casein::events::mouse_up { casein::M_RIGHT });
+    call_m(MOUSE_UP, M_RIGHT);
   }
 }
 
@@ -88,7 +90,7 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     DestroyWindow(hwnd);
     return 0;
   case WM_DESTROY:
-    casein_handle(casein::events::quit {});
+    call(QUIT);
     PostQuitMessage(0);
     return 0;
   case WM_EXITSIZEMOVE: {
@@ -107,10 +109,10 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     handle_raw_input(w_param, l_param);
     return 0;
   case WM_KEYDOWN:
-    casein_handle(casein::events::key_down { wp2c(w_param) });
+    call_k(KEY_DOWN, wp2c(w_param));
     return 0;
   case WM_KEYUP:
-    casein_handle(casein::events::key_up { wp2c(w_param) });
+    call_k(KEY_UP, wp2c(w_param));
     return 0;
   case WM_MOUSEMOVE: {
     auto x = GET_X_LPARAM(l_param);
@@ -121,7 +123,7 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
   case WM_PAINT:
     // From ValidateRect docs: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-validaterect
     // "The system continues to generate WM_PAINT messages until the current update region is validated."
-    casein_handle(casein::events::repaint {});
+    call(REPAINT);
     return DefWindowProc(hwnd, msg, w_param, l_param);
   case WM_SIZE: {
     auto w = LOWORD(l_param);
@@ -130,7 +132,7 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     return 0;
   }
   case WM_TIMER:
-    if (w_param == timer_id) casein_handle(casein::events::timer {});
+    if (w_param == timer_id) call(TIMER);
     return 0;
   default:
     return DefWindowProc(hwnd, msg, w_param, l_param);
