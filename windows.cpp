@@ -83,7 +83,8 @@ static casein::keys wp2c(WPARAM wp) {
 static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param) {
   switch (msg) {
   case WM_CREATE:
-    casein_handle(casein::events::create_window { hwnd });
+    native_ptr = hwnd;
+    call(CREATE_WINDOW);
     return 0;
   case WM_CLOSE:
     // Required to enable another thread sending "plz exit" messages
