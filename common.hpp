@@ -28,6 +28,7 @@ namespace casein {
   enum keys : unsigned {
     K_NULL,
     K_SPACE = ' ',
+    K_DOT = '.',
     K_A = 'a',
     K_C = 'c',
     K_D = 'd',
@@ -53,6 +54,9 @@ namespace casein {
     K_X = 'x',
     K_Y = 'y',
     K_Z = 'z',
+    // Aliases
+    K_PERIOD = K_DOT,
+    // Non-ASCII
     K_DOWN = 0x100,
     K_ENTER,
     K_ESCAPE,
