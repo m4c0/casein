@@ -115,8 +115,6 @@ casein::native_handle_t casein::native_ptr;
 #elif LECO_TARGET_ANDROID
 #pragma leco add_impl android
 #pragma leco add_library android
-#elif LECO_TARGET_WASM
-#pragma leco add_impl externc wasm
 #elif LECO_TARGET_LINUX
 #pragma leco add_impl linux
 #pragma leco add_library X11
