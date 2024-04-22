@@ -30,6 +30,7 @@ namespace casein {
     K_SPACE = ' ',
     K_DOT = '.',
     K_A = 'a',
+    K_B = 'b',
     K_C = 'c',
     K_D = 'd',
     K_E = 'e',
