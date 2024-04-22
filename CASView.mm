@@ -1,5 +1,7 @@
 #include "CASView.h"
 
+extern void ** casein_native_ptr;
+
 @implementation CASView
 - (instancetype)init {
   self = [super init];
@@ -18,6 +20,7 @@
   if (self.prepared) {
     casein_handle(casein::events::repaint {});
   } else {
+    *casein_native_ptr = (__bridge void *)self.layer;
     void * l = (__bridge void *)self.layer;
     casein_handle(casein::events::create_window { (__bridge CAMetalLayer *)l });
 

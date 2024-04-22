@@ -1,6 +1,8 @@
 module casein;
 import silog;
 
+extern "C" casein::native_handle_t * casein_native_ptr = &casein::native_ptr;
+
 namespace casein {
   using fn_t = void (*)();
   static fn_t emap[MAX_EVENT_TYPE] {};
@@ -60,10 +62,6 @@ namespace casein {
 
   extern "C" void casein_handle(const event & e) {
     switch (e.type()) {
-    case CREATE_WINDOW:
-      native_ptr = *e.as<events::create_window>();
-      call(e.type());
-      break;
     case KEY_DOWN:
     case KEY_UP:
       call_k(e.type(), *e.as<events::key_down>());
