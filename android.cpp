@@ -9,7 +9,8 @@ extern "C" void casein_handle(const casein::event &);
 static void handle_command(android_app * app, int32_t cmd) {
   switch (cmd) {
   case APP_CMD_INIT_WINDOW:
-    casein_handle(casein::events::create_window { app->window });
+    *casein_native_ptr = app->window;
+    casein_handle(casein::events::create_window {});
     break;
   case APP_CMD_TERM_WINDOW:
     break;
