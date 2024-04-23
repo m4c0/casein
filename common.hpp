@@ -1,8 +1,6 @@
 #pragma once
 
 namespace casein {
-  using native_handle_t = ::casein_native_handle *;
-
   constexpr const auto base_width = 1280;
   constexpr const auto base_height = 720;
 
@@ -142,7 +140,7 @@ namespace casein::events {
     }
   };
 
-  using create_window = single_arg_event<CREATE_WINDOW, native_handle_t>;
+  using create_window = empty_event<CREATE_WINDOW>;
   using gesture = single_arg_event<GESTURE, gestures>;
   using key_down = single_arg_event<KEY_DOWN, keys>;
   using key_up = single_arg_event<KEY_UP, keys>;

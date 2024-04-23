@@ -21,8 +21,7 @@ extern void ** casein_native_ptr;
     casein_handle(casein::events::repaint {});
   } else {
     *casein_native_ptr = (__bridge void *)self.layer;
-    void * l = (__bridge void *)self.layer;
-    casein_handle(casein::events::create_window { (__bridge CAMetalLayer *)l });
+    casein_handle(casein::events::create_window {});
 
     float interval = 1.0 / 20.0;
     [NSTimer scheduledTimerWithTimeInterval:interval
