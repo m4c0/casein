@@ -1,4 +1,5 @@
 module casein;
+import :call;
 import silog;
 
 extern "C" casein::native_handle_t * casein_native_ptr = &casein::native_ptr;
@@ -36,30 +37,6 @@ namespace casein {
       n = {};
   }
 
-  void call(event_type et) {
-    if (auto fn = emap[et]) {
-      fn();
-    }
-  }
-  void call_g(event_type et, gestures g) {
-    if (auto fn = emap_g[et][g]) {
-      fn();
-    }
-    call(et);
-  }
-  void call_k(event_type et, keys k) {
-    if (auto fn = emap_k[et][k]) {
-      fn();
-    }
-    call(et);
-  }
-  void call_m(event_type et, mouse_buttons m) {
-    if (auto fn = emap_m[et][m]) {
-      fn();
-    }
-    call(et);
-  }
-
   extern "C" void casein_handle(const event & e) {
     switch (e.type()) {
     case KEY_DOWN:
@@ -78,4 +55,28 @@ namespace casein {
       break;
     }
   }
+}
+
+void casein::call(event_type et) {
+  if (auto fn = emap[et]) {
+    fn();
+  }
+}
+void casein::call_g(event_type et, gestures g) {
+  if (auto fn = emap_g[et][g]) {
+    fn();
+  }
+  call(et);
+}
+void casein::call_k(event_type et, keys k) {
+  if (auto fn = emap_k[et][k]) {
+    fn();
+  }
+  call(et);
+}
+void casein::call_m(event_type et, mouse_buttons m) {
+  if (auto fn = emap_m[et][m]) {
+    fn();
+  }
+  call(et);
 }
