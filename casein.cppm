@@ -18,13 +18,7 @@ export {
 #include "common.hpp"
 }
 
-extern "C" void casein_exit(int);
 namespace casein {
-  // Signal the app to eventually exit.
-  export void exit(int code) {
-    casein_exit(code);
-  }
-
   void call(event_type et);
   void call_g(event_type et, gestures g);
   void call_k(event_type et, keys k);
@@ -32,6 +26,9 @@ namespace casein {
 }
 
 export namespace casein {
+  // Signal the app to eventually exit.
+  void exit(int code);
+
   void handle(event_type, void (*)());
   void handle(event_type, keys, void (*)());
   void handle(event_type, mouse_buttons, void (*)());
@@ -47,6 +44,11 @@ export namespace casein {
 }
 
 module :private;
+
+extern "C" void casein_exit(int);
+void casein::exit(int code) {
+  casein_exit(code);
+}
 
 casein::native_handle_t casein::native_ptr;
 
