@@ -1,8 +1,8 @@
 #pragma once
 
 namespace casein {
-  constexpr const auto base_width = 1280;
-  constexpr const auto base_height = 720;
+  inline constexpr const auto base_width = 1280;
+  inline constexpr const auto base_height = 720;
 
   enum event_type {
     CREATE_WINDOW,
@@ -86,16 +86,16 @@ namespace casein {
     event_type t;
 
   protected:
-    constexpr event(event_type t) noexcept : t { t } {
+    inline constexpr event(event_type t) noexcept : t { t } {
     }
 
   public:
-    [[nodiscard]] constexpr event_type type() const noexcept {
+    [[nodiscard]] inline constexpr event_type type() const noexcept {
       return t;
     }
 
     template<typename Tp>
-    [[nodiscard]] constexpr const Tp & as() const noexcept {
+    [[nodiscard]] inline constexpr const Tp & as() const noexcept {
       return static_cast<const Tp &>(*this);
     }
   };
