@@ -1,16 +1,15 @@
 module casein;
-import :call;
 import silog;
 
 extern "C" casein::native_handle_t * casein_native_ptr = &casein::native_ptr;
 
-namespace casein {
-  using fn_t = void (*)();
-  static fn_t emap[MAX_EVENT_TYPE] {};
-  static fn_t emap_g[MAX_EVENT_TYPE][G_MAX] {};
-  static fn_t emap_k[MAX_EVENT_TYPE][K_MAX] {};
-  static fn_t emap_m[MAX_EVENT_TYPE][M_MAX] {};
+using fn_t = void (*)();
+static fn_t emap[casein::MAX_EVENT_TYPE] {};
+static fn_t emap_g[casein::MAX_EVENT_TYPE][casein::G_MAX] {};
+static fn_t emap_k[casein::MAX_EVENT_TYPE][casein::K_MAX] {};
+static fn_t emap_m[casein::MAX_EVENT_TYPE][casein::M_MAX] {};
 
+namespace casein {
   void handle(event_type et, void (*fn)()) {
     emap[et] = fn;
   }
@@ -41,42 +40,42 @@ namespace casein {
     switch (e.type()) {
     case KEY_DOWN:
     case KEY_UP:
-      call_k(e.type(), *e.as<events::key_down>());
+      casein_call_k(e.type(), *e.as<events::key_down>());
       break;
     case GESTURE:
-      call_g(e.type(), *e.as<events::gesture>());
+      casein_call_g(e.type(), *e.as<events::gesture>());
       break;
     case MOUSE_DOWN:
     case MOUSE_UP:
-      call_m(e.type(), *e.as<events::mouse_down>());
+      casein_call_m(e.type(), *e.as<events::mouse_down>());
       break;
     default:
-      call(e.type());
+      casein_call(e.type());
       break;
     }
   }
 }
 
-void casein::call(event_type et) {
+extern "C" void casein_call(casein::event_type et) {
   if (auto fn = emap[et]) {
     fn();
   }
 }
-void casein::call_g(event_type et, gestures g) {
+extern "C" void casein_call_g(casein::event_type et, casein::gestures g) {
   if (auto fn = emap_g[et][g]) {
     fn();
   }
-  call(et);
+  casein_call(et);
 }
-void casein::call_k(event_type et, keys k) {
+extern "C" void casein_call_k(casein::event_type et, casein::keys k) {
   if (auto fn = emap_k[et][k]) {
     fn();
   }
-  call(et);
+  casein_call(et);
 }
-void casein::call_m(event_type et, mouse_buttons m) {
+extern "C" void casein_call_m(casein::event_type et, casein::mouse_buttons m) {
   if (auto fn = emap_m[et][m]) {
     fn();
   }
-  call(et);
+  casein_call(et);
 }
