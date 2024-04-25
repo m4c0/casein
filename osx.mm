@@ -1,5 +1,6 @@
 @import AppKit;
 #import "CASView.h"
+#include "oldevents.hpp"
 
 @interface CASAppDelegate : NSObject<NSApplicationDelegate>
 @end
