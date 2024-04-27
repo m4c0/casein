@@ -35,25 +35,6 @@ namespace casein {
     for (auto & n : emap_g[et])
       n = {};
   }
-
-  extern "C" void casein_handle(const event & e) {
-    switch (e.type()) {
-    case KEY_DOWN:
-    case KEY_UP:
-      casein_call_k(e.type(), *e.as<events::key_down>());
-      break;
-    case GESTURE:
-      casein_call_g(e.type(), *e.as<events::gesture>());
-      break;
-    case MOUSE_DOWN:
-    case MOUSE_UP:
-      casein_call_m(e.type(), *e.as<events::mouse_down>());
-      break;
-    default:
-      casein_call(e.type());
-      break;
-    }
-  }
 }
 
 extern "C" void casein_call(casein::event_type et) {
