@@ -21,25 +21,24 @@ using namespace casein;
 static constexpr const auto window_class = "m4c0-window-class";
 static constexpr const auto timer_id = 0xb16b00b5;
 
-extern "C" void casein_handle(const casein::event & e);
-
 static void handle_raw_mouse(RAWMOUSE & mouse) noexcept {
   if ((mouse.usFlags & MOUSE_MOVE_ABSOLUTE) == 0) {
     auto x = mouse.lLastX;
     auto y = mouse.lLastY;
     if (x != 0 || y != 0) {
-      casein_handle(casein::events::mouse_move_rel { { x, y } });
+      // casein_handle(casein::events::mouse_move_rel { { x, y } });
+      casein_call(MOUSE_MOVE_REL);
     }
   }
 
   if (mouse.usButtonFlags & RI_MOUSE_LEFT_BUTTON_DOWN) {
-    call_m(MOUSE_DOWN, M_LEFT);
+    casein_call_m(MOUSE_DOWN, M_LEFT);
   } else if (mouse.usButtonFlags & RI_MOUSE_LEFT_BUTTON_UP) {
-    call_m(MOUSE_UP, M_LEFT);
+    casein_call_m(MOUSE_UP, M_LEFT);
   } else if (mouse.usButtonFlags & RI_MOUSE_RIGHT_BUTTON_DOWN) {
-    call_m(MOUSE_DOWN, M_RIGHT);
+    casein_call_m(MOUSE_DOWN, M_RIGHT);
   } else if (mouse.usButtonFlags & RI_MOUSE_RIGHT_BUTTON_UP) {
-    call_m(MOUSE_UP, M_RIGHT);
+    casein_call_m(MOUSE_UP, M_RIGHT);
   }
 }
 
@@ -84,56 +83,59 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
   switch (msg) {
   case WM_CREATE:
     native_ptr = hwnd;
-    call(CREATE_WINDOW);
+    casein_call(CREATE_WINDOW);
     return 0;
   case WM_CLOSE:
     // Required to enable another thread sending "plz exit" messages
     DestroyWindow(hwnd);
     return 0;
   case WM_DESTROY:
-    call(QUIT);
+    casein_call(QUIT);
     PostQuitMessage(0);
     return 0;
   case WM_EXITSIZEMOVE: {
-    WINDOWINFO wi {};
-    wi.cbSize = sizeof(WINDOWINFO);
-    GetWindowInfo(hwnd, &wi);
+    // WINDOWINFO wi {};
+    // wi.cbSize = sizeof(WINDOWINFO);
+    // GetWindowInfo(hwnd, &wi);
 
-    auto [l, t, r, b] = wi.rcClient;
-    auto w = r - l;
-    auto h = b - t;
+    // auto [l, t, r, b] = wi.rcClient;
+    // auto w = r - l;
+    // auto h = b - t;
 
-    casein_handle(casein::events::resize_window { { w, h, 1.0f, false } });
+    // casein_handle(casein::events::resize_window { { w, h, 1.0f, false } });
+    casein_call(RESIZE_WINDOW);
     return 0;
   }
   case WM_INPUT:
     handle_raw_input(w_param, l_param);
     return 0;
   case WM_KEYDOWN:
-    call_k(KEY_DOWN, wp2c(w_param));
+    casein_call_k(KEY_DOWN, wp2c(w_param));
     return 0;
   case WM_KEYUP:
-    call_k(KEY_UP, wp2c(w_param));
+    casein_call_k(KEY_UP, wp2c(w_param));
     return 0;
   case WM_MOUSEMOVE: {
-    auto x = GET_X_LPARAM(l_param);
-    auto y = GET_Y_LPARAM(l_param);
-    casein_handle(casein::events::mouse_move { { x, y } });
+    // auto x = GET_X_LPARAM(l_param);
+    // auto y = GET_Y_LPARAM(l_param);
+    // casein_handle(casein::events::mouse_move { { x, y } });
+    casein_call(MOUSE_MOVE);
     return 0;
   }
   case WM_PAINT:
     // From ValidateRect docs: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-validaterect
     // "The system continues to generate WM_PAINT messages until the current update region is validated."
-    call(REPAINT);
+    casein_call(REPAINT);
     return DefWindowProc(hwnd, msg, w_param, l_param);
   case WM_SIZE: {
-    auto w = LOWORD(l_param);
-    auto h = HIWORD(l_param);
-    casein_handle(casein::events::resize_window { { w, h, 1.0f, false } });
+    // auto w = LOWORD(l_param);
+    // auto h = HIWORD(l_param);
+    // casein_handle(casein::events::resize_window { { w, h, 1.0f, false } });
+    casein_call(RESIZE_WINDOW);
     return 0;
   }
   case WM_TIMER:
-    if (w_param == timer_id) call(TIMER);
+    if (w_param == timer_id) casein_call(TIMER);
     return 0;
   default:
     return DefWindowProc(hwnd, msg, w_param, l_param);
