@@ -19,6 +19,13 @@ export {
 }
 
 export namespace casein {
+  struct point {
+    int x;
+    int y;
+  };
+  extern point mouse_pos;
+  extern point mouse_rel;
+
   // Signal the app to eventually exit.
   void exit(int code);
 
@@ -44,6 +51,8 @@ void casein::exit(int code) {
 }
 
 casein::native_handle_t casein::native_ptr;
+casein::point casein::mouse_pos;
+casein::point casein::mouse_rel;
 
 #pragma leco add_impl handler
 
