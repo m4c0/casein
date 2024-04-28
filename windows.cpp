@@ -23,10 +23,9 @@ static constexpr const auto timer_id = 0xb16b00b5;
 
 static void handle_raw_mouse(RAWMOUSE & mouse) noexcept {
   if ((mouse.usFlags & MOUSE_MOVE_ABSOLUTE) == 0) {
-    auto x = mouse.lLastX;
-    auto y = mouse.lLastY;
+    auto x = casein::mouse_rel.x = mouse.lLastX;
+    auto y = casein::mouse_rel.y = mouse.lLastY;
     if (x != 0 || y != 0) {
-      // casein_handle(casein::events::mouse_move_rel { { x, y } });
       casein_call(MOUSE_MOVE_REL);
     }
   }
@@ -116,9 +115,8 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     casein_call_k(KEY_UP, wp2c(w_param));
     return 0;
   case WM_MOUSEMOVE: {
-    // auto x = GET_X_LPARAM(l_param);
-    // auto y = GET_Y_LPARAM(l_param);
-    // casein_handle(casein::events::mouse_move { { x, y } });
+    casein::mouse_pos.x = GET_X_LPARAM(l_param);
+    casein::mouse_pos.y = GET_Y_LPARAM(l_param);
     casein_call(MOUSE_MOVE);
     return 0;
   }
