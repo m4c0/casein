@@ -1,13 +1,12 @@
 @import AppKit;
 #import "CASView.h"
-#include "oldevents.hpp"
 
 @interface CASAppDelegate : NSObject<NSApplicationDelegate>
 @end
 
 @implementation CASAppDelegate
 - (void)applicationWillTerminate:(NSApplication *)app {
-  casein_handle(casein::events::quit {});
+  casein_call(casein::QUIT);
 }
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)app {
   return YES;
@@ -42,12 +41,12 @@
   return casein::K_NULL;
 }
 - (void)keyDown:(NSEvent *)event {
-  if (event.ARepeat) return;
-
-  casein_handle(casein::events::key_down { [self codeForEvent:event] });
+  // TODO: introduce "is repeating" in KEY_DOWN
+  // if (event.ARepeat) return;
+  casein_call_k(casein::KEY_DOWN, [self codeForEvent:event]);
 }
 - (void)keyUp:(NSEvent *)event {
-  casein_handle(casein::events::key_up { [self codeForEvent:event] });
+  casein_call_k(casein::KEY_UP, [self codeForEvent:event]);
 }
 - (NSPoint)translateMousePosition:(NSEvent *)event {
   NSPoint p = [self.contentView convertPoint:event.locationInWindow fromView:nil];
@@ -57,24 +56,25 @@
 
 - (void)mouseDown:(NSEvent *)event {
   [self mouseMoved:event];
-  casein_handle(casein::events::mouse_down { casein::M_LEFT });
+  casein_call_m(casein::MOUSE_DOWN, casein::M_LEFT);
 }
 - (void)mouseDragged:(NSEvent *)event {
   [self mouseMoved:event];
 }
 - (void)mouseMoved:(NSEvent *)event {
-  NSPoint p = [self translateMousePosition:event];
-  casein_handle(casein::events::mouse_move { { static_cast<int>(p.x), static_cast<int>(p.y) } });
-  casein_handle(casein::events::mouse_move_rel { { static_cast<int>(event.deltaX), static_cast<int>(event.deltaY) } });
+  // NSPoint p = [self translateMousePosition:event];
+  // casein_handle(casein::events::mouse_move { { static_cast<int>(p.x), static_cast<int>(p.y) } });
+  // casein_handle(casein::events::mouse_move_rel { { static_cast<int>(event.deltaX), static_cast<int>(event.deltaY) }
+  // });
 }
 - (void)mouseUp:(NSEvent *)event {
   [self mouseMoved:event];
-  casein_handle(casein::events::mouse_up { casein::M_LEFT });
+  casein_call_m(casein::MOUSE_UP, casein::M_LEFT);
 }
 
 - (void)rightMouseDown:(NSEvent *)event {
   [self mouseMoved:event];
-  casein_handle(casein::events::mouse_down { casein::M_RIGHT });
+  casein_call_m(casein::MOUSE_DOWN, casein::M_RIGHT);
 }
 - (void)rightMouseDragged:(NSEvent *)event {
   [self mouseMoved:event];
@@ -84,7 +84,7 @@
 }
 - (void)rightMouseUp:(NSEvent *)event {
   [self mouseMoved:event];
-  casein_handle(casein::events::mouse_up { casein::M_RIGHT });
+  casein_call_m(casein::MOUSE_UP, casein::M_RIGHT);
 }
 @end
 

@@ -18,16 +18,16 @@ extern void ** casein_native_ptr;
 
 - (void)drawInMTKView:(MTKView *)view {
   if (self.prepared) {
-    casein_handle(casein::events::repaint {});
+    casein_call(casein::REPAINT);
   } else {
     *casein_native_ptr = (__bridge void *)self.layer;
-    casein_handle(casein::events::create_window {});
+    casein_call(casein::CREATE_WINDOW);
 
     float interval = 1.0 / 20.0;
     [NSTimer scheduledTimerWithTimeInterval:interval
                                     repeats:YES
                                       block:^(NSTimer * t) {
-                                        casein_handle(casein::events::timer {});
+                                        casein_call(casein::TIMER);
                                       }];
 
     [self sendResizeEvent];
@@ -53,12 +53,11 @@ extern void ** casein_native_ptr;
 #endif
 
 - (void)sendResizeEvent {
-  casein_handle(casein::events::resize_window { {
-      static_cast<int>(self.frame.size.width),
-      static_cast<int>(self.frame.size.height),
-      [self backingScaleFactor],
-      [self inLiveResize] == YES,
-  } });
+  // static_cast<int>(self.frame.size.width),
+  // static_cast<int>(self.frame.size.height),
+  // [self backingScaleFactor],
+  // [self inLiveResize] == YES,
+  casein_call(casein::RESIZE_WINDOW);
 }
 
 - (void)mtkView:(MTKView *)view drawableSizeWillChange:(CGSize)size {
