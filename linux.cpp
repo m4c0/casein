@@ -23,6 +23,11 @@ extern "C" void casein_set_title(const char * title) {
   XStoreName(nptr.display, nptr.window, title);
 }
 
+static void key(casein::event_type evt, XEvent * e) {
+  auto ke = reinterpret_cast<XKeyEvent *>(e);
+  silog::log(silog::info, "%d", ke->keycode);
+}
+
 extern "C" int main() {
   auto dpy = XOpenDisplay(nullptr);
   if (!dpy) {
@@ -36,7 +41,7 @@ extern "C" int main() {
   auto win = XCreateSimpleWindow(dpy, rootwin, 1, 1, 800, 450, 0, BlackPixel(dpy, scr), BlackPixel(dpy, scr));
   XStoreName(dpy, win, "app");
 
-  XSelectInput(dpy, win, ExposureMask | ButtonPressMask);
+  XSelectInput(dpy, win, ExposureMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask);
 
   XMapWindow(dpy, win);
 
@@ -50,7 +55,18 @@ extern "C" int main() {
   while (!should_quit) {
     XEvent e {};
     XNextEvent(dpy, &e);
-    // if (e.type == ButtonPress) break;
+    switch (e.type) {
+    case ButtonPress:
+      break;
+    case ButtonRelease:
+      break;
+    case KeyPress:
+      key(casein::KEY_DOWN, &e);
+      break;
+    case KeyRelease:
+      key(casein::KEY_UP, &e);
+      break;
+    }
   }
 
   casein_call(casein::QUIT);
