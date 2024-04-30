@@ -2,6 +2,12 @@ module;
 #pragma leco add_library X11
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
+#include <errno.h>
+#include <signal.h>
+#include <string.h>
+#include <time.h>
+
+// TODO: resize event
 
 struct casein_native_handle {
   Display * display;
@@ -47,6 +53,10 @@ static void key(casein::event_type evt, XEvent * e) {
   casein_call_k(evt, key_of(&e->xkey));
 }
 
+static void call_timer(sigval) {
+  casein_call(casein::TIMER);
+}
+
 extern "C" int main() {
   auto dpy = XOpenDisplay(nullptr);
   if (!dpy) {
@@ -70,6 +80,15 @@ extern "C" int main() {
   };
   casein::native_ptr = &nptr;
   casein_call(casein::CREATE_WINDOW);
+
+  sigevent sevp {};
+  sevp.sigev_notify = SIGEV_THREAD;
+  sevp.sigev_notify_function = &call_timer;
+
+  timer_t timer {};
+  if (0 != timer_create(CLOCK_REALTIME, &sevp, &timer)) {
+    silog::log(silog::error, "Failed to create timer: %s", strerror(errno));
+  }
 
   while (!should_quit) {
     XEvent e {};
