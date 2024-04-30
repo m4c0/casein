@@ -7,15 +7,12 @@ struct casein_native_handle {
   Window window;
 };
 
-export module casein:linux;
-
-import :events;
+module casein;
 import silog;
 
 static volatile bool should_quit = false;
 static volatile int exit_code = 0;
 
-extern "C" void casein_handle(const casein::event &);
 extern "C" void casein_exit(int code) {
   exit_code = code;
   should_quit = true;
@@ -41,7 +38,8 @@ extern "C" int main() {
     .display = dpy,
     .window = win,
   };
-  casein_handle(casein::events::create_window { &nptr });
+  casein::native_ptr = &nptr;
+  casein_call(casein::CREATE_WINDOW);
 
   while (!should_quit) {
     XEvent e {};
@@ -49,7 +47,7 @@ extern "C" int main() {
     // if (e.type == ButtonPress) break;
   }
 
-  casein_handle(casein::events::quit {});
+  casein_call(casein::QUIT);
   XCloseDisplay(dpy);
   return exit_code;
 }
