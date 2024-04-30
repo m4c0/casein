@@ -102,8 +102,12 @@ static NSMenu * setup_apple_menu(NSString * title) {
   return bar;
 }
 
+static NSWindow * g_window;
+extern "C" void casein_set_title(const char * title) {
+  g_window.title = [NSString stringWithUTF8String:title];
+}
 static NSWindow * create_key_window(NSString * title) {
-  NSWindow * wnd = [CASWindow new];
+  NSWindow * wnd = g_window = [CASWindow new];
   wnd.acceptsMouseMovedEvents = true;
   wnd.collectionBehavior = NSWindowCollectionBehaviorFullScreenPrimary;
   wnd.contentView = [CASView new];
