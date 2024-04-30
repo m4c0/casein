@@ -94,6 +94,9 @@ extern "C" int main() {
     XEvent e {};
     XNextEvent(dpy, &e);
     switch (e.type) {
+    case Expose:
+      casein_call(casein::RESIZE_WINDOW);
+      break;
     case ButtonPress:
       break;
     case ButtonRelease:
