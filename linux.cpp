@@ -1,6 +1,7 @@
 module;
 #pragma leco add_library X11
 #include <X11/Xlib.h>
+#include <X11/keysym.h>
 
 struct casein_native_handle {
   Display * display;
@@ -23,9 +24,28 @@ extern "C" void casein_set_title(const char * title) {
   XStoreName(nptr.display, nptr.window, title);
 }
 
+static casein::keys key_of(XKeyEvent * ke) {
+  switch (XLookupKeysym(ke, 0)) {
+  case XK_Down:
+    return casein::K_DOWN;
+  case XK_Return:
+    return casein::K_ENTER;
+  case XK_Escape:
+    return casein::K_ESCAPE;
+  case XK_Left:
+    return casein::K_LEFT;
+  case XK_Right:
+    return casein::K_RIGHT;
+  case XK_space:
+    return casein::K_SPACE;
+  case XK_Up:
+    return casein::K_UP;
+  default:
+    return casein::K_NULL;
+  }
+}
 static void key(casein::event_type evt, XEvent * e) {
-  auto ke = reinterpret_cast<XKeyEvent *>(e);
-  silog::log(silog::info, "%d", ke->keycode);
+  casein_call_k(evt, key_of(&e->xkey));
 }
 
 extern "C" int main() {
