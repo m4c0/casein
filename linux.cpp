@@ -90,6 +90,15 @@ extern "C" int main() {
     silog::log(silog::error, "Failed to create timer: %s", strerror(errno));
   }
 
+  static constexpr const auto ms_per_tick = 1000 / 20;
+  static constexpr const auto us_per_tick = ms_per_tick * 1000;
+  static constexpr const auto ns_per_tick = us_per_tick * 1000;
+
+  itimerspec its {};
+  its.it_interval.tv_nsec = ns_per_tick;
+  its.it_value = its.it_interval;
+  timer_settime(timer, 0, &its, nullptr);
+
   while (!should_quit) {
     XEvent e {};
     XNextEvent(dpy, &e);
