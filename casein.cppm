@@ -26,6 +26,8 @@ export namespace casein {
   extern point mouse_pos;
   extern point mouse_rel;
 
+  void set_title(const char * title);
+
   // Signal the app to eventually exit.
   void exit(int code);
 
@@ -48,6 +50,11 @@ module :private;
 extern "C" void casein_exit(int);
 void casein::exit(int code) {
   casein_exit(code);
+}
+
+extern "C" void casein_set_title(const char *);
+void casein::set_title(const char * title) {
+  casein_set_title(title);
 }
 
 casein::native_handle_t casein::native_ptr;

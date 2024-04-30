@@ -34,6 +34,14 @@ static void touch_down() {
   silog::log(silog::info, "touch down");
 }
 
+static void title() {
+  static char buf[1024] = "title 0";
+  if (++buf[6] > '9') {
+    buf[6] = '0';
+  }
+  casein::set_title(buf);
+}
+
 static struct init {
   init() {
     using namespace casein;
@@ -43,6 +51,7 @@ static struct init {
     handle(GESTURE, &gesture);
     handle(KEY_DOWN, K_LEFT, &left);
     handle(KEY_DOWN, K_RIGHT, &right);
+    handle(KEY_DOWN, K_X, &title);
     handle(MOUSE_DOWN, &mouse_down);
     handle(RESIZE_WINDOW, &resize_window);
     handle(TOUCH_DOWN, &touch_down);
