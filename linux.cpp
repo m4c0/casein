@@ -13,10 +13,16 @@ import silog;
 static volatile bool should_quit = false;
 static volatile int exit_code = 0;
 
+static casein_native_handle nptr {};
+
 extern "C" void casein_exit(int code) {
   exit_code = code;
   should_quit = true;
 }
+extern "C" void casein_set_title(const char * title) {
+  XStoreName(nptr.display, nptr.window, title);
+}
+
 extern "C" int main() {
   auto dpy = XOpenDisplay(nullptr);
   if (!dpy) {
@@ -34,7 +40,7 @@ extern "C" int main() {
 
   XMapWindow(dpy, win);
 
-  casein_native_handle nptr {
+  nptr = {
     .display = dpy,
     .window = win,
   };
