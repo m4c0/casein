@@ -25,7 +25,7 @@ extern "C" void casein_set_title(const char * title) {
 }
 
 static casein::keys key_of(XKeyEvent * ke) {
-  switch (XLookupKeysym(ke, 0)) {
+  switch (auto c = XLookupKeysym(ke, 0)) {
   case XK_Down:
     return casein::K_DOWN;
   case XK_Return:
@@ -36,11 +36,10 @@ static casein::keys key_of(XKeyEvent * ke) {
     return casein::K_LEFT;
   case XK_Right:
     return casein::K_RIGHT;
-  case XK_space:
-    return casein::K_SPACE;
   case XK_Up:
     return casein::K_UP;
   default:
+    if (c >= 32 && c <= 127) return static_cast<casein::keys>(c);
     return casein::K_NULL;
   }
 }
