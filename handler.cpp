@@ -2,6 +2,8 @@ module casein;
 import silog;
 
 extern "C" casein::native_handle_t * casein_native_ptr = &casein::native_ptr;
+extern "C" casein::point * casein_mouse_pos = &casein::mouse_pos;
+extern "C" casein::point * casein_mouse_rel = &casein::mouse_rel;
 
 using fn_t = void (*)();
 static fn_t emap[casein::MAX_EVENT_TYPE] {};

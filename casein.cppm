@@ -19,10 +19,6 @@ export {
 }
 
 export namespace casein {
-  struct point {
-    int x;
-    int y;
-  };
   extern point mouse_pos;
   extern point mouse_rel;
 

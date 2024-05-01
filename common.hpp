@@ -79,6 +79,10 @@ namespace casein {
     G_SWIPE_UP,
     G_MAX,
   };
+  struct point {
+    int x;
+    int y;
+  };
 }
 
 extern "C" void casein_call(casein::event_type et);
