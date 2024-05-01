@@ -16,6 +16,9 @@
 @interface CASWindow : NSWindow
 @end
 
+extern casein::point * casein_mouse_pos;
+extern casein::point * casein_mouse_rel;
+
 @implementation CASWindow
 - (casein::keys)codeForEvent:(NSEvent *)event {
   NSString * arrow = event.charactersIgnoringModifiers;
@@ -62,10 +65,13 @@
   [self mouseMoved:event];
 }
 - (void)mouseMoved:(NSEvent *)event {
-  // NSPoint p = [self translateMousePosition:event];
-  // casein_handle(casein::events::mouse_move { { static_cast<int>(p.x), static_cast<int>(p.y) } });
-  // casein_handle(casein::events::mouse_move_rel { { static_cast<int>(event.deltaX), static_cast<int>(event.deltaY) }
-  // });
+  NSPoint p = [self translateMousePosition:event];
+  casein_mouse_pos->x = p.x;
+  casein_mouse_pos->y = p.y;
+  casein_mouse_rel->x = event.deltaX;
+  casein_mouse_rel->y = event.deltaY;
+  casein_call(casein::MOUSE_MOVE);
+  casein_call(casein::MOUSE_MOVE_REL);
 }
 - (void)mouseUp:(NSEvent *)event {
   [self mouseMoved:event];
