@@ -21,6 +21,7 @@ export {
 export namespace casein {
   extern point mouse_pos;
   extern point mouse_rel;
+  extern bool keydown_repeating;
 
   void set_title(const char * title);
 
@@ -56,6 +57,7 @@ void casein::set_title(const char * title) {
 casein::native_handle_t casein::native_ptr;
 casein::point casein::mouse_pos;
 casein::point casein::mouse_rel;
+bool casein::keydown_repeating;
 
 #pragma leco add_impl handler
 

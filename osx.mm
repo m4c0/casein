@@ -18,6 +18,7 @@
 
 extern casein::point * casein_mouse_pos;
 extern casein::point * casein_mouse_rel;
+extern bool * casein_keydown_repeating;
 
 @implementation CASWindow
 - (casein::keys)codeForEvent:(NSEvent *)event {
@@ -44,8 +45,7 @@ extern casein::point * casein_mouse_rel;
   return casein::K_NULL;
 }
 - (void)keyDown:(NSEvent *)event {
-  // TODO: introduce "is repeating" in KEY_DOWN
-  // if (event.ARepeat) return;
+  *casein_keydown_repeating = event.ARepeat;
   casein_call_k(casein::KEY_DOWN, [self codeForEvent:event]);
 }
 - (void)keyUp:(NSEvent *)event {
