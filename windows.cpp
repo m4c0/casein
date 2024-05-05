@@ -14,6 +14,7 @@ module;
 // https://msdn.microsoft.com/en-us/library/windows/desktop/ms645565(v=vs.85).aspx
 // https://docs.microsoft.com/en-us/windows/win32/inputdev/using-raw-input
 // https://stackoverflow.com/questions/2382464/win32-full-screen-and-hiding-taskbar
+// https://devblogs.microsoft.com/oldnewthing/20050505-04/?p=35703
 
 module casein;
 
@@ -205,7 +206,14 @@ extern "C" void casein_exit(int code) {
 }
 
 extern "C" void casein_enter_fullscreen() {
+  HMONITOR hmon = MonitorFromWindow(g_hwnd, MONITOR_DEFAULTTONEAREST);
+  MONITORINFO mi { sizeof(mi) };
+  if (!GetMonitorInfo(hmon, &mi)) return;
+
+  auto [l, t, r, b] = mi.rcMonitor;
+
   SetWindowLongPtr(g_hwnd, GWL_STYLE, WS_POPUP | WS_VISIBLE);
+  SetWindowPos(g_hwnd, nullptr, l, t, r - l, b - t, 0);
 }
 extern "C" void casein_leave_fullscreen() {
   SetWindowLongPtr(g_hwnd, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
