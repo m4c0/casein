@@ -55,6 +55,7 @@ void casein::exit(int code) {
 extern "C" void casein_set_title(const char *);
 void casein::set_title(const char * title) {
   casein_set_title(title);
+}
 
 extern "C" void casein_enter_fullscreen();
 extern "C" void casein_leave_fullscreen();
