@@ -205,18 +205,23 @@ extern "C" void casein_exit(int code) {
   SendMessage(g_hwnd, WM_CLOSE, 0, 0);
 }
 
+static RECT g_old_hwnd_rect;
+static void set_window_rect(RECT rect) {
+  auto [l, t, r, b] = rect;
+  SetWindowPos(g_hwnd, nullptr, l, t, r - l, b - t, 0);
+}
 extern "C" void casein_enter_fullscreen() {
   HMONITOR hmon = MonitorFromWindow(g_hwnd, MONITOR_DEFAULTTONEAREST);
   MONITORINFO mi { sizeof(mi) };
   if (!GetMonitorInfo(hmon, &mi)) return;
-
-  auto [l, t, r, b] = mi.rcMonitor;
+  if (!GetWindowRect(g_hwnd, &g_old_hwnd_rect)) return;
 
   SetWindowLongPtr(g_hwnd, GWL_STYLE, WS_POPUP | WS_VISIBLE);
-  SetWindowPos(g_hwnd, nullptr, l, t, r - l, b - t, 0);
+  set_window_rect(mi.rcMonitor);
 }
 extern "C" void casein_leave_fullscreen() {
   SetWindowLongPtr(g_hwnd, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
+  set_window_rect(g_old_hwnd_rect);
 }
 
 static int main_loop(HWND hwnd) {
