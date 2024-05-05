@@ -205,8 +205,10 @@ extern "C" void casein_exit(int code) {
 }
 
 extern "C" void casein_enter_fullscreen() {
+  SetWindowLongPtr(g_hwnd, GWL_STYLE, WS_POPUP | WS_VISIBLE);
 }
 extern "C" void casein_leave_fullscreen() {
+  SetWindowLongPtr(g_hwnd, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
 }
 
 static int main_loop(HWND hwnd) {
