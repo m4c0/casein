@@ -28,6 +28,9 @@ export namespace casein {
   // Signal the app to eventually exit.
   void exit(int code);
 
+  bool is_fullscreen();
+  void set_fullscreen(bool);
+
   void handle(event_type, void (*)());
   void handle(event_type, keys, void (*)());
   void handle(event_type, mouse_buttons, void (*)());
@@ -52,6 +55,21 @@ void casein::exit(int code) {
 extern "C" void casein_set_title(const char *);
 void casein::set_title(const char * title) {
   casein_set_title(title);
+
+extern "C" void casein_enter_fullscreen();
+extern "C" void casein_leave_fullscreen();
+bool in_fullscreen {};
+bool casein::is_fullscreen() {
+  return in_fullscreen;
+}
+void casein::set_fullscreen(bool f) {
+  if (in_fullscreen == f) return;
+  in_fullscreen = f;
+  if (f) {
+    casein_enter_fullscreen();
+  } else {
+    casein_leave_fullscreen();
+  }
 }
 
 casein::native_handle_t casein::native_ptr;

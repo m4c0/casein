@@ -13,6 +13,7 @@ module;
 // https://handmade.network/forums/t/2011-keyboard_inputs_-_scancodes,_raw_input,_text_input,_key_names
 // https://msdn.microsoft.com/en-us/library/windows/desktop/ms645565(v=vs.85).aspx
 // https://docs.microsoft.com/en-us/windows/win32/inputdev/using-raw-input
+// https://stackoverflow.com/questions/2382464/win32-full-screen-and-hiding-taskbar
 
 module casein;
 
@@ -201,6 +202,11 @@ extern "C" void casein_exit(int code) {
   // This is the only way to properly programatically exit an app from any thread. Other attempts froze the app or kept
   // it as a "background app".
   SendMessage(g_hwnd, WM_CLOSE, 0, 0);
+}
+
+extern "C" void casein_enter_fullscreen() {
+}
+extern "C" void casein_leave_fullscreen() {
 }
 
 static int main_loop(HWND hwnd) {

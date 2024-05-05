@@ -33,6 +33,9 @@ static void touch_down() {
   // TODO: read x/y/lp
   silog::log(silog::info, "touch down");
 }
+static void flip_fullscreen() {
+  casein::set_fullscreen(!casein::is_fullscreen());
+}
 
 static void title() {
   static char buf[1024] = "title 0";
@@ -51,6 +54,7 @@ static struct init {
     handle(GESTURE, &gesture);
     handle(KEY_DOWN, K_LEFT, &left);
     handle(KEY_DOWN, K_RIGHT, &right);
+    handle(KEY_DOWN, K_F, &flip_fullscreen);
     handle(KEY_DOWN, K_X, &title);
     handle(MOUSE_DOWN, &mouse_down);
     handle(RESIZE_WINDOW, &resize_window);
