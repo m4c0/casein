@@ -206,6 +206,10 @@ extern "C" void casein_exit(int code) {
   SendMessage(g_hwnd, WM_CLOSE, 0, 0);
 }
 
+extern "C" void casein_set_title(const char * title) {
+  SetWindowText(g_hwnd, title);
+}
+
 static RECT g_old_hwnd_rect;
 static void set_window_rect(RECT rect) {
   auto [l, t, r, b] = rect;
