@@ -15,6 +15,7 @@ module;
 // https://docs.microsoft.com/en-us/windows/win32/inputdev/using-raw-input
 // https://stackoverflow.com/questions/2382464/win32-full-screen-and-hiding-taskbar
 // https://devblogs.microsoft.com/oldnewthing/20050505-04/?p=35703
+// https://gamedev.net/forums/topic/418397-problems-with-changedisplaysettingsex-solved/
 
 module casein;
 
@@ -211,17 +212,34 @@ static void set_window_rect(RECT rect) {
   SetWindowPos(g_hwnd, nullptr, l, t, r - l, b - t, 0);
 }
 extern "C" void casein_enter_fullscreen() {
-  HMONITOR hmon = MonitorFromWindow(g_hwnd, MONITOR_DEFAULTTONEAREST);
-  MONITORINFO mi { sizeof(mi) };
-  if (!GetMonitorInfo(hmon, &mi)) return;
   if (!GetWindowRect(g_hwnd, &g_old_hwnd_rect)) return;
 
+  HMONITOR hmon = MonitorFromWindow(g_hwnd, MONITOR_DEFAULTTONEAREST);
+  MONITORINFOEX mi {};
+  mi.cbSize = sizeof(mi);
+  if (!GetMonitorInfo(hmon, &mi)) return;
+
   SetWindowLongPtr(g_hwnd, GWL_STYLE, WS_POPUP | WS_VISIBLE);
+
+  // TODO: provide data about display w/h/refresh using EnumDisplaySettings
+
+  DEVMODE dm {};
+  EnumDisplaySettings(mi.szDevice, 0, &dm);
+  dm.dmPelsWidth = casein::base_width;
+  dm.dmPelsHeight = casein::base_height;
+  dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT;
+  if (ChangeDisplaySettingsEx(mi.szDevice, &dm, nullptr, CDS_FULLSCREEN, nullptr) == DISP_CHANGE_SUCCESSFUL) {
+    ShowWindow(g_hwnd, SW_MAXIMIZE);
+    return;
+  }
+
+  // Fallback to maximize
   set_window_rect(mi.rcMonitor);
 }
 extern "C" void casein_leave_fullscreen() {
   SetWindowLongPtr(g_hwnd, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
   set_window_rect(g_old_hwnd_rect);
+  ChangeDisplaySettings(nullptr, CDS_RESET);
 }
 
 static int main_loop(HWND hwnd) {
