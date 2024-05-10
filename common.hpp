@@ -62,6 +62,18 @@ namespace casein {
     K_LEFT,
     K_RIGHT,
     K_UP,
+    K_F1 = 0x110,
+    K_F2,
+    K_F3,
+    K_F4,
+    K_F5,
+    K_F6,
+    K_F7,
+    K_F8,
+    K_F9,
+    K_F10,
+    K_F11,
+    K_F12,
     K_MAX,
   };
   enum mouse_buttons {
