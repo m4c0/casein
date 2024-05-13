@@ -112,6 +112,13 @@ static NSWindow * g_window;
 extern "C" void casein_set_title(const char * title) {
   g_window.title = [NSString stringWithUTF8String:title];
 }
+extern "C" void casein_enter_fullscreen() {
+  if (g_window.styleMask & NSWindowStyleMaskFullScreen) return;
+  [g_window toggleFullScreen:nil];
+}
+extern "C" void casein_leave_fullscreen() {
+  if (g_window.styleMask & NSWindowStyleMaskFullScreen) [g_window toggleFullScreen:nil];
+}
 static NSWindow * create_key_window(NSString * title) {
   NSWindow * wnd = g_window = [CASWindow new];
   wnd.acceptsMouseMovedEvents = true;
