@@ -101,4 +101,4 @@ extern "C" void casein_call(casein::event_type et);
 extern "C" void casein_call_g(casein::event_type et, casein::gestures g);
 extern "C" void casein_call_k(casein::event_type et, casein::keys k);
 extern "C" void casein_call_m(casein::event_type et, casein::mouse_buttons m);
-extern "C" float casein_screen_scale_factor;
+extern "C" float * casein_screen_scale_factor;
