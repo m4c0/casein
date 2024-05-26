@@ -21,6 +21,7 @@ export {
 export namespace casein {
   extern point mouse_pos;
   extern point mouse_rel;
+  extern float screen_scale_factor;
   extern bool keydown_repeating;
 
   void set_title(const char * title);
@@ -76,6 +77,7 @@ void casein::set_fullscreen(bool f) {
 casein::native_handle_t casein::native_ptr;
 casein::point casein::mouse_pos;
 casein::point casein::mouse_rel;
+float casein::screen_scale_factor = 1.0;
 bool casein::keydown_repeating;
 
 #pragma leco add_impl handler

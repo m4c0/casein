@@ -4,6 +4,7 @@ import silog;
 extern "C" casein::native_handle_t * casein_native_ptr = &casein::native_ptr;
 extern "C" casein::point * casein_mouse_pos = &casein::mouse_pos;
 extern "C" casein::point * casein_mouse_rel = &casein::mouse_rel;
+extern "C" float * casein_screen_scale_factor = &casein::screen_scale_factor;
 extern "C" bool * casein_keydown_repeating = &casein::keydown_repeating;
 
 using fn_t = void (*)();
