@@ -55,7 +55,7 @@ extern void ** casein_native_ptr;
 - (void)sendResizeEvent {
   // static_cast<int>(self.frame.size.width),
   // static_cast<int>(self.frame.size.height),
-  // [self backingScaleFactor],
+  casein_screen_scale_factor = [self backingScaleFactor];
   // [self inLiveResize] == YES,
   casein_call(casein::RESIZE_WINDOW);
 }
