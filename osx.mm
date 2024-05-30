@@ -110,6 +110,8 @@ static NSMenu * setup_apple_menu(NSString * title) {
 
 static NSWindow * g_window;
 extern "C" void casein_set_title(const char * title) {
+  // TODO: this is not working
+  // TODO: check if we can rename on apple menu as well
   g_window.title = [NSString stringWithUTF8String:title];
 }
 extern "C" void casein_enter_fullscreen() {
