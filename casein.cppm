@@ -19,6 +19,7 @@ export {
 }
 
 export namespace casein {
+  extern point window_size;
   extern point mouse_pos;
   extern point mouse_rel;
   extern float screen_scale_factor;
@@ -79,6 +80,7 @@ casein::point casein::mouse_pos;
 casein::point casein::mouse_rel;
 float casein::screen_scale_factor = 1.0;
 bool casein::keydown_repeating;
+casein::point casein::window_size;
 
 #pragma leco add_impl handler
 

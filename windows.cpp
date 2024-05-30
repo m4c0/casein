@@ -133,9 +133,9 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     casein_call(REPAINT);
     return DefWindowProc(hwnd, msg, w_param, l_param);
   case WM_SIZE: {
-    // auto w = LOWORD(l_param);
-    // auto h = HIWORD(l_param);
-    // casein_handle(casein::events::resize_window { { w, h, 1.0f, false } });
+    auto w = LOWORD(l_param);
+    auto h = HIWORD(l_param);
+    casein::window_size = { w, h };
     casein_call(RESIZE_WINDOW);
     return 0;
   }

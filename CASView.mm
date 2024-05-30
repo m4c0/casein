@@ -1,6 +1,7 @@
 #include "CASView.h"
 
 extern void ** casein_native_ptr;
+extern casein::point * casein_window_size;
 
 @implementation CASView
 - (instancetype)init {
@@ -53,8 +54,10 @@ extern void ** casein_native_ptr;
 #endif
 
 - (void)sendResizeEvent {
-  // static_cast<int>(self.frame.size.width),
-  // static_cast<int>(self.frame.size.height),
+  *casein_window_size = {
+    static_cast<int>(self.frame.size.width),
+    static_cast<int>(self.frame.size.height),
+  };
   casein_screen_scale_factor = [self backingScaleFactor];
   // [self inLiveResize] == YES,
   casein_call(casein::RESIZE_WINDOW);

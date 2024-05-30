@@ -6,6 +6,7 @@ extern "C" casein::point * casein_mouse_pos = &casein::mouse_pos;
 extern "C" casein::point * casein_mouse_rel = &casein::mouse_rel;
 extern "C" float * casein_screen_scale_factor = &casein::screen_scale_factor;
 extern "C" bool * casein_keydown_repeating = &casein::keydown_repeating;
+extern "C" casein::point * casein_window_size = &casein::window_size;
 
 using fn_t = void (*)();
 static fn_t emap[casein::MAX_EVENT_TYPE] {};
