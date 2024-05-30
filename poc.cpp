@@ -18,7 +18,12 @@ static void mouse_down() {
   silog::log(silog::info, "mouse down");
 }
 static void resize_window() {
-  silog::log(silog::info, "resize window");
+  silog::log(
+      silog::info,
+      "resize window - %dx%d @%.0fx",
+      casein::window_size.x,
+      casein::window_size.y,
+      casein::screen_scale_factor);
 }
 static void quit() {
   silog::log(silog::info, "quit");
