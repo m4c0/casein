@@ -92,8 +92,8 @@ namespace casein {
     G_MAX,
   };
   struct point {
-    int x;
-    int y;
+    float x;
+    float y;
   };
 }
 

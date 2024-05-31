@@ -55,8 +55,8 @@ extern casein::point * casein_window_size;
 
 - (void)sendResizeEvent {
   *casein_window_size = {
-    static_cast<int>(self.frame.size.width),
-    static_cast<int>(self.frame.size.height),
+    static_cast<float>(self.frame.size.width),
+    static_cast<float>(self.frame.size.height),
   };
   *casein_screen_scale_factor = [self backingScaleFactor];
   // [self inLiveResize] == YES,
