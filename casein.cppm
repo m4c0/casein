@@ -13,15 +13,16 @@ struct casein_native_handle;
 #endif
 
 export module casein;
+import dotz;
 
 export {
 #include "common.hpp"
 }
 
 export namespace casein {
-  extern point window_size;
-  extern point mouse_pos;
-  extern point mouse_rel;
+  extern dotz::vec2 window_size;
+  extern dotz::vec2 mouse_pos;
+  extern dotz::vec2 mouse_rel;
   extern float screen_scale_factor;
   extern bool keydown_repeating;
 
@@ -76,11 +77,11 @@ void casein::set_fullscreen(bool f) {
 }
 
 casein::native_handle_t casein::native_ptr;
-casein::point casein::mouse_pos;
-casein::point casein::mouse_rel;
+dotz::vec2 casein::mouse_pos;
+dotz::vec2 casein::mouse_rel;
 float casein::screen_scale_factor = 1.0;
 bool casein::keydown_repeating;
-casein::point casein::window_size;
+dotz::vec2 casein::window_size;
 
 #pragma leco add_impl handler
 

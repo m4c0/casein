@@ -15,12 +15,12 @@ static void right() {
   silog::log(silog::info, "<right> key down");
 }
 static void mouse_down() {
-  silog::log(silog::info, "mouse down - %dx%d", casein::mouse_pos.x, casein::mouse_pos.y);
+  silog::log(silog::info, "mouse down - %fx%f", casein::mouse_pos.x, casein::mouse_pos.y);
 }
 static void resize_window() {
   silog::log(
       silog::info,
-      "resize window - %dx%d @%.0fx",
+      "resize window - %fx%f @%.0fx",
       casein::window_size.x,
       casein::window_size.y,
       casein::screen_scale_factor);
