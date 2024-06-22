@@ -118,7 +118,8 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     handle_raw_input(w_param, l_param);
     return 0;
   case WM_KEYDOWN:
-    casein::keydown_repeating = (l_param & 0xFFFF) != 0;
+    // The "repeat count" (bits 0-15) is always "1". So we use the "last status" (bit 30) instead.
+    casein::keydown_repeating = (l_param & (1 << 30)) != 0;
     casein_call_k(KEY_DOWN, wp2c(w_param));
     return 0;
   case WM_KEYUP:
