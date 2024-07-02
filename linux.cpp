@@ -30,6 +30,11 @@ extern "C" void casein_set_title(const char * title) {
   XStoreName(nptr.display, nptr.window, title);
 }
 
+extern "C" void casein_enter_fullscreen() {
+}
+extern "C" void casein_leave_fullscreen() {
+}
+
 static casein::keys key_of(XKeyEvent * ke) {
   switch (auto c = XLookupKeysym(ke, 0)) {
   case XK_Down:
