@@ -26,6 +26,7 @@ namespace casein {
   enum keys : unsigned {
     K_NULL,
     K_SPACE = ' ',
+    K_MINUS = '-',
     K_DOT = '.',
     K_0 = '0',
     K_1 = '1',
@@ -37,6 +38,9 @@ namespace casein {
     K_7 = '7',
     K_8 = '8',
     K_9 = '9',
+    K_EQUAL = '=',
+    K_LBRACKET = '[',
+    K_RBRACKET = ']',
     K_A = 'a',
     K_B = 'b',
     K_C = 'c',
