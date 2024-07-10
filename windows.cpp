@@ -101,6 +101,18 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     casein_call(QUIT);
     PostQuitMessage(0);
     return 0;
+  case WM_DROPFILES: {
+    casein_clear_drops();
+
+    auto count = DragQueryFile(w_param, 0xFFFFFFFF, nullptr, 0);
+    for (auto i = 0; i < count; i++) {
+      char buffer[PATH_MAX];
+      auto sz = DragQueryFile(w_param, i, buffer, sizeof(buffer));
+      casein_add_drop(buffer, sz);
+    }
+    DragFinish(w_param);
+    return 0;
+  }
   case WM_EXITSIZEMOVE: {
     // WINDOWINFO wi {};
     // wi.cbSize = sizeof(WINDOWINFO);
@@ -217,6 +229,14 @@ extern "C" void casein_set_title(const char * title) {
   SetWindowText(g_hwnd, title);
 }
 
+static bool g_drop_enabled;
+extern "C" void casein_enable_filedrop(bool en) {
+  g_drop_enabled = en;
+  if (!g_wnd) return;
+
+  DragAcceptFiles(g_hwnd, en);
+}
+
 static RECT g_old_hwnd_rect;
 static void set_window_rect(RECT rect) {
   auto [l, t, r, b] = rect;
@@ -246,6 +266,8 @@ extern "C" void casein_enter_fullscreen() {
 
   // Fallback to maximize
   set_window_rect(mi.rcMonitor);
+
+  casein_enable_filedrop(g_drop_enabled);
 }
 extern "C" void casein_leave_fullscreen() {
   SetWindowLongPtr(g_hwnd, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
