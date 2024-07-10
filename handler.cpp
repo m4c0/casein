@@ -8,6 +8,15 @@ extern "C" float * casein_screen_scale_factor = &casein::screen_scale_factor;
 extern "C" bool * casein_keydown_repeating = &casein::keydown_repeating;
 extern "C" dotz::vec2 * casein_window_size = &casein::window_size;
 
+extern "C" void casein_enable_filedrop(bool);
+extern "C" void casein_add_drop(const char * str, unsigned len) {
+  jute::view v { str, len };
+  casein::dropped_files.push_back_doubling(v.cstr());
+}
+extern "C" void casein_clear_drops() {
+  casein::dropped_files.truncate(0);
+}
+
 using fn_t = void (*)();
 static fn_t emap[casein::MAX_EVENT_TYPE] {};
 static fn_t emap_g[casein::MAX_EVENT_TYPE][casein::G_MAX] {};
@@ -17,6 +26,10 @@ static fn_t emap_m[casein::MAX_EVENT_TYPE][casein::M_MAX] {};
 namespace casein {
   void handle(event_type et, void (*fn)()) {
     emap[et] = fn;
+
+    if (et == FILES_DROP) {
+      casein_enable_filedrop(fn != nullptr);
+    }
   }
   void handle(event_type et, keys k, void (*fn)()) {
     emap_k[et][k] = fn;
