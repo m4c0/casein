@@ -113,10 +113,12 @@ extern bool * casein_keydown_repeating;
     if (mask & NSDragOperationCopy) {
       NSArray * files = [pboard readObjectsForClasses:@[ [NSURL class] ] options:@{}];
 
+      casein_clear_drops();
       for (NSURL * url in files) {
         NSString * str = [url path];
-        NSLog(@"%@", str);
+        casein_add_drop([str UTF8String], [str length]);
       }
+      casein_call(casein::FILES_DROP);
       return YES;
     }
   }

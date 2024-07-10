@@ -15,6 +15,7 @@ struct casein_native_handle;
 export module casein;
 import dotz;
 import hai;
+import jute;
 
 export {
 #include "common.hpp"
@@ -83,6 +84,14 @@ void casein::set_fullscreen(bool f) {
 extern "C" void casein_enable_filedrop(bool);
 void casein::enable_file_drop(bool e) {
   casein_enable_filedrop(e);
+}
+
+extern "C" void casein_add_drop(const char * str, unsigned len) {
+  jute::view v { str, len };
+  casein::dropped_files.push_back_doubling(v.cstr());
+}
+extern "C" void casein_clear_drops() {
+  casein::dropped_files.truncate(0);
 }
 
 casein::native_handle_t casein::native_ptr;
