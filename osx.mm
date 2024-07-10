@@ -92,6 +92,36 @@ extern bool * casein_keydown_repeating;
   [self mouseMoved:event];
   casein_call_m(casein::MOUSE_UP, casein::M_RIGHT);
 }
+
+- (NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender {
+  NSDragOperation mask = [sender draggingSourceOperationMask];
+  NSPasteboard * pboard = [sender draggingPasteboard];
+
+  if ([[pboard types] containsObject:NSPasteboardTypeFileURL]) {
+    // "Copy" gives a better visual feedback
+    if (mask & NSDragOperationCopy) {
+      return NSDragOperationCopy;
+    }
+  }
+  return NSDragOperationNone;
+}
+- (BOOL)performDragOperation:(id<NSDraggingInfo>)sender {
+  NSDragOperation mask = [sender draggingSourceOperationMask];
+  NSPasteboard * pboard = [sender draggingPasteboard];
+
+  if ([[pboard types] containsObject:NSPasteboardTypeFileURL]) {
+    if (mask & NSDragOperationCopy) {
+      NSArray * files = [pboard readObjectsForClasses:@[ [NSURL class] ] options:@{}];
+
+      for (NSURL * url in files) {
+        NSString * str = [url path];
+        NSLog(@"%@", str);
+      }
+      return YES;
+    }
+  }
+  return NO;
+}
 @end
 
 static NSMenu * setup_apple_menu(NSString * title) {
@@ -109,6 +139,20 @@ static NSMenu * setup_apple_menu(NSString * title) {
 }
 
 static NSWindow * g_window;
+static bool g_drop_enabled;
+
+extern "C" void casein_enable_filedrop(bool en) {
+  g_drop_enabled = en;
+  if (!g_window) return;
+
+  if (en) {
+    NSArray * types = [NSArray arrayWithObjects:NSPasteboardTypeFileURL, nil];
+    [g_window registerForDraggedTypes:types];
+  } else {
+    [g_window unregisterDraggedTypes];
+  }
+}
+
 extern "C" void casein_set_title(const char * title) {
   // TODO: this is not working
   // TODO: check if we can rename on apple menu as well
@@ -135,6 +179,8 @@ static NSWindow * create_key_window(NSString * title) {
   [wnd setFrame:NSMakeRect(0, 0, w, h) display:YES];
   [wnd center];
   [wnd makeKeyAndOrderFront:wnd];
+
+  casein_enable_filedrop(g_drop_enabled);
   return wnd;
 }
 
