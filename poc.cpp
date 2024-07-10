@@ -5,6 +5,11 @@ import silog;
 static void on_window_created() {
   silog::log(silog::info, "window created");
 }
+static void file_dropped() {
+  for (const auto & f : casein::dropped_files) {
+    silog::log(silog::info, "file dropped: %s", f.begin());
+  }
+}
 static void gesture() {
   silog::log(silog::info, "gesture");
 }
@@ -53,7 +58,10 @@ static void title() {
 static struct init {
   init() {
     using namespace casein;
+    enable_file_drop(true);
+
     handle(CREATE_WINDOW, &on_window_created);
+    handle(FILES_DROP, &file_dropped);
     handle(GESTURE, G_TAP_1, &tap_1);
     handle(GESTURE, G_TAP_2, &tap_2);
     handle(GESTURE, &gesture);
