@@ -6,6 +6,7 @@ namespace casein {
 
   enum event_type {
     CREATE_WINDOW,
+    FILES_DROP,
     GESTURE,
     KEY_DOWN,
     KEY_UP,

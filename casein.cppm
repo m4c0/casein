@@ -14,6 +14,7 @@ struct casein_native_handle;
 
 export module casein;
 import dotz;
+import hai;
 
 export {
 #include "common.hpp"
@@ -25,6 +26,7 @@ export namespace casein {
   extern dotz::vec2 mouse_rel;
   extern float screen_scale_factor;
   extern bool keydown_repeating;
+  extern hai::varray<hai::cstr> dropped_files;
 
   void set_title(const char * title);
 
@@ -33,6 +35,8 @@ export namespace casein {
 
   bool is_fullscreen();
   void set_fullscreen(bool);
+
+  void enable_file_drop(bool);
 
   void handle(event_type, void (*)());
   void handle(event_type, keys, void (*)());
@@ -76,12 +80,18 @@ void casein::set_fullscreen(bool f) {
   }
 }
 
+extern "C" void casein_enable_filedrop(bool);
+void casein::enable_file_drop(bool e) {
+  casein_enable_filedrop(e);
+}
+
 casein::native_handle_t casein::native_ptr;
 dotz::vec2 casein::mouse_pos;
 dotz::vec2 casein::mouse_rel;
 float casein::screen_scale_factor = 1.0;
 bool casein::keydown_repeating;
 dotz::vec2 casein::window_size;
+hai::varray<hai::cstr> casein::dropped_files {};
 
 #pragma leco add_impl handler
 
