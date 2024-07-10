@@ -58,7 +58,6 @@ static void title() {
 static struct init {
   init() {
     using namespace casein;
-    enable_file_drop(true);
 
     handle(CREATE_WINDOW, &on_window_created);
     handle(FILES_DROP, &file_dropped);

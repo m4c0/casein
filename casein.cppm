@@ -37,8 +37,6 @@ export namespace casein {
   bool is_fullscreen();
   void set_fullscreen(bool);
 
-  void enable_file_drop(bool);
-
   void handle(event_type, void (*)());
   void handle(event_type, keys, void (*)());
   void handle(event_type, mouse_buttons, void (*)());
@@ -79,19 +77,6 @@ void casein::set_fullscreen(bool f) {
   } else {
     casein_leave_fullscreen();
   }
-}
-
-extern "C" void casein_enable_filedrop(bool);
-void casein::enable_file_drop(bool e) {
-  casein_enable_filedrop(e);
-}
-
-extern "C" void casein_add_drop(const char * str, unsigned len) {
-  jute::view v { str, len };
-  casein::dropped_files.push_back_doubling(v.cstr());
-}
-extern "C" void casein_clear_drops() {
-  casein::dropped_files.truncate(0);
 }
 
 casein::native_handle_t casein::native_ptr;
