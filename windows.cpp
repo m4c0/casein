@@ -1,3 +1,4 @@
+#pragma leco add_library shell32
 module;
 #include "casein.windows.hpp"
 
@@ -102,15 +103,16 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     PostQuitMessage(0);
     return 0;
   case WM_DROPFILES: {
+    auto h_drop = reinterpret_cast<HDROP>(w_param);
     casein_clear_drops();
 
-    auto count = DragQueryFile(w_param, 0xFFFFFFFF, nullptr, 0);
+    auto count = DragQueryFile(h_drop, 0xFFFFFFFF, nullptr, 0);
     for (auto i = 0; i < count; i++) {
-      char buffer[PATH_MAX];
-      auto sz = DragQueryFile(w_param, i, buffer, sizeof(buffer));
+      char buffer[10240];
+      auto sz = DragQueryFile(h_drop, i, buffer, sizeof(buffer));
       casein_add_drop(buffer, sz);
     }
-    DragFinish(w_param);
+    DragFinish(h_drop);
     return 0;
   }
   case WM_EXITSIZEMOVE: {
@@ -232,7 +234,7 @@ extern "C" void casein_set_title(const char * title) {
 static bool g_drop_enabled;
 extern "C" void casein_enable_filedrop(bool en) {
   g_drop_enabled = en;
-  if (!g_wnd) return;
+  if (!g_hwnd) return;
 
   DragAcceptFiles(g_hwnd, en);
 }
