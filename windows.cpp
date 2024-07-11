@@ -113,6 +113,7 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
       casein_add_drop(buffer, sz);
     }
     DragFinish(h_drop);
+    casein_call(FILES_DROP);
     return 0;
   }
   case WM_EXITSIZEMOVE: {
@@ -268,8 +269,6 @@ extern "C" void casein_enter_fullscreen() {
 
   // Fallback to maximize
   set_window_rect(mi.rcMonitor);
-
-  casein_enable_filedrop(g_drop_enabled);
 }
 extern "C" void casein_leave_fullscreen() {
   SetWindowLongPtr(g_hwnd, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
@@ -298,6 +297,7 @@ extern "C" int CALLBACK WinMain(
     _In_ int cmd_show) try {
   register_class(h_instance);
   auto hwnd = g_hwnd = create_window(h_instance, cmd_show);
+  casein_enable_filedrop(g_drop_enabled);
   setup_raw_input();
   return main_loop(hwnd);
 } catch (const std::exception & e) {
