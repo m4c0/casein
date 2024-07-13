@@ -75,6 +75,12 @@ static casein::keys wp2c(WPARAM wp) {
     return casein::K_ENTER;
   case VK_SPACE:
     return casein::K_SPACE;
+  case VK_OEM_COMMA:
+    return casein::K_COMMA;
+  case VK_OEM_PERIOD:
+    return casein::K_DOT;
+  case VK_OEM_2: // TODO: deal with these internationally
+    return casein::K_SLASH;
   default:
     if (wp >= VK_F1 && wp <= VK_F12) {
       return static_cast<casein::keys>(casein::K_F1 + (wp - VK_F1));

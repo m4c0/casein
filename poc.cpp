@@ -68,6 +68,9 @@ static struct init {
     handle(KEY_DOWN, K_RIGHT, &right);
     handle(KEY_DOWN, K_F, &flip_fullscreen);
     handle(KEY_DOWN, K_X, &title);
+    handle(KEY_DOWN, K_COMMA, &title);
+    handle(KEY_DOWN, K_DOT, &title);
+    handle(KEY_DOWN, K_SLASH, &title);
     handle(MOUSE_DOWN, &mouse_down);
     handle(RESIZE_WINDOW, &resize_window);
     handle(TOUCH_DOWN, &touch_down);
