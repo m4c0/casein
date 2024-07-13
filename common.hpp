@@ -29,6 +29,8 @@ namespace casein {
     K_SPACE = ' ',
     K_MINUS = '-',
     K_DOT = '.',
+    K_COMMA = ',',
+    K_SLASH = '/',
     K_0 = '0',
     K_1 = '1',
     K_2 = '2',
