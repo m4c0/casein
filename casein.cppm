@@ -54,10 +54,10 @@ export namespace casein {
 #pragma leco add_impl handler
 
 #ifdef LECO_TARGET_MACOSX
-#pragma leco add_impl CASView osx
+#pragma leco add_impl CASView osx apple
 #pragma leco add_framework AppKit MetalKit Metal
 #elif LECO_TARGET_IOS
-#pragma leco add_impl CASView ios
+#pragma leco add_impl CASView ios apple
 #pragma leco add_framework MetalKit Metal UIKit
 #elif LECO_TARGET_WINDOWS
 #pragma leco add_impl windows

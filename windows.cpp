@@ -235,7 +235,7 @@ extern "C" void casein_exit(int code) {
   SendMessage(g_hwnd, WM_CLOSE, 0, 0);
 }
 
-extern "C" void casein_set_title(const char * title) {
+void casein::set_title(const char * title) {
   SetWindowText(g_hwnd, title);
 }
 
