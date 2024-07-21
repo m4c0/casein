@@ -20,6 +20,7 @@ module;
 // https://gamedev.net/forums/topic/418397-problems-with-changedisplaysettingsex-solved/
 
 module casein;
+import :internal;
 
 using namespace casein;
 
@@ -229,7 +230,7 @@ static void setup_raw_input() {
 }
 
 static HWND g_hwnd;
-extern "C" void casein_exit(int code) {
+void casein::exit(int code) {
   // This is the only way to properly programatically exit an app from any thread. Other attempts froze the app or kept
   // it as a "background app".
   SendMessage(g_hwnd, WM_CLOSE, 0, 0);
@@ -252,7 +253,7 @@ static void set_window_rect(RECT rect) {
   auto [l, t, r, b] = rect;
   SetWindowPos(g_hwnd, nullptr, l, t, r - l, b - t, 0);
 }
-extern "C" void casein_enter_fullscreen() {
+void casein::enter_fullscreen() {
   if (!GetWindowRect(g_hwnd, &g_old_hwnd_rect)) return;
 
   HMONITOR hmon = MonitorFromWindow(g_hwnd, MONITOR_DEFAULTTONEAREST);
@@ -277,7 +278,7 @@ extern "C" void casein_enter_fullscreen() {
   // Fallback to maximize
   set_window_rect(mi.rcMonitor);
 }
-extern "C" void casein_leave_fullscreen() {
+void casein::leave_fullscreen() {
   SetWindowLongPtr(g_hwnd, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
   set_window_rect(g_old_hwnd_rect);
   ChangeDisplaySettings(nullptr, CDS_RESET);
