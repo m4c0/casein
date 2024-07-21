@@ -50,6 +50,7 @@ export namespace casein {
   extern native_handle_t native_ptr;
 }
 
+#pragma leco add_impl externc
 #pragma leco add_impl handler
 
 #ifdef LECO_TARGET_MACOSX
