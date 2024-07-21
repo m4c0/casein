@@ -109,4 +109,10 @@ namespace casein {
     float x;
     float y;
   };
+
+  enum interrupts {
+    IRQ_FULLSCREEN,
+    IRQ_WINDOW_TITLE,
+    IRQ_WINDOW_SIZE,
+  };
 }

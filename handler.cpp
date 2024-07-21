@@ -3,12 +3,14 @@ import :internal;
 
 extern "C" void casein_enable_filedrop(bool);
 
-casein::native_handle_t casein::native_ptr;
-dotz::vec2 casein::mouse_pos;
-dotz::vec2 casein::mouse_rel;
+bool casein::fullscreen {};
+casein::native_handle_t casein::native_ptr {};
+dotz::vec2 casein::mouse_pos {};
+dotz::vec2 casein::mouse_rel {};
 float casein::screen_scale_factor = 1.0;
-bool casein::keydown_repeating;
-dotz::vec2 casein::window_size;
+bool casein::keydown_repeating {};
+jute::view casein::window_title {};
+dotz::vec2 casein::window_size { 1280, 720 };
 hai::varray<hai::cstr> casein::dropped_files {};
 
 using fn_t = void (*)();
@@ -17,21 +19,7 @@ static fn_t emap_g[casein::MAX_EVENT_TYPE][casein::G_MAX] {};
 static fn_t emap_k[casein::MAX_EVENT_TYPE][casein::K_MAX] {};
 static fn_t emap_m[casein::MAX_EVENT_TYPE][casein::M_MAX] {};
 
-static bool g_in_fullscreen {};
 namespace casein {
-  bool is_fullscreen() {
-    return g_in_fullscreen;
-  }
-  void set_fullscreen(bool f) {
-    if (g_in_fullscreen == f) return;
-    g_in_fullscreen = f;
-    if (f) {
-      enter_fullscreen();
-    } else {
-      leave_fullscreen();
-    }
-  }
-
   void handle(event_type et, void (*fn)()) {
     emap[et] = fn;
 
