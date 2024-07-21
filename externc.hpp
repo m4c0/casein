@@ -1,9 +1,6 @@
 #pragma once
 #include "common.hpp"
 
-inline constexpr const auto casein_base_width = 1280;
-inline constexpr const auto casein_base_height = 720;
-
 extern "C" void casein_clear_drops();
 extern "C" void casein_add_drop(const char * name, unsigned cch);
 
