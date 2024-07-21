@@ -27,6 +27,8 @@ using namespace casein;
 static constexpr const auto window_class = "m4c0-window-class";
 static constexpr const auto timer_id = 0xb16b00b5;
 
+static constexpr const auto dw_style = WS_OVERLAPPEDWINDOW;
+
 static void handle_raw_mouse(RAWMOUSE & mouse) noexcept {
   if ((mouse.usFlags & MOUSE_MOVE_ABSOLUTE) == 0) {
     auto x = casein::mouse_rel.x = mouse.lLastX;
@@ -194,23 +196,33 @@ static void register_class(HINSTANCE h_instance) {
   }
 }
 
+static auto get_client_size() {
+  struct {
+    int x, y;
+  } res;
+
+  RECT cli_rect { 0, 0, static_cast<long>(casein::window_size.x), static_cast<long>(casein::window_size.y) };
+  AdjustWindowRect(&cli_rect, dw_style, false);
+
+  res.x = cli_rect.right - cli_rect.left;
+  res.y = cli_rect.bottom - cli_rect.top;
+  return res;
+}
+
 static auto create_window(HINSTANCE h_instance, int show) {
   constexpr const auto title_max_len = 256;
   TCHAR title[title_max_len];
   int size = LoadString(h_instance, IDS_CASEIN_APP_TITLE, title, title_max_len);
 
-  constexpr const auto dw_style = WS_OVERLAPPEDWINDOW;
-  RECT cli_rect { 0, 0, static_cast<long>(casein::window_size.x), static_cast<long>(casein::window_size.y) };
-  AdjustWindowRect(&cli_rect, dw_style, false);
-
+  auto [w, h] = get_client_size();
   auto hwnd = CreateWindow(
       _T(window_class),
       size > 0 ? static_cast<LPCTSTR>(title) : _T(casein::window_title.cstr().begin()),
-      WS_OVERLAPPEDWINDOW,
+      dw_style,
       CW_USEDEFAULT,
       CW_USEDEFAULT,
-      cli_rect.right - cli_rect.left,
-      cli_rect.bottom - cli_rect.top,
+      w,
+      h,
       NULL,
       NULL,
       h_instance,
@@ -285,6 +297,14 @@ static void leave_fullscreen() {
   ChangeDisplaySettings(nullptr, CDS_RESET);
 }
 
+static void resize_window() {
+  RECT rect {};
+  GetWindowRect(g_hwnd, &rect);
+
+  auto [w, h] = get_client_size();
+  MoveWindow(g_hwnd, rect.left, rect.top, w, h, true);
+}
+
 void casein::interrupt(casein::interrupts irq) {
   if (!g_hwnd) return;
 
@@ -296,6 +316,10 @@ void casein::interrupt(casein::interrupts irq) {
     SetWindowText(g_hwnd, casein::window_title.cstr().begin());
     break;
   case IRQ_WINDOW_SIZE:
+    // TODO: set fullscreen resolution
+    if (casein::fullscreen) return;
+
+    resize_window();
     break;
   }
 }

@@ -59,6 +59,13 @@ static void title() {
   window_title = buf;
   interrupt(IRQ_WINDOW_TITLE);
 }
+static void resize() {
+  using namespace casein;
+
+  window_size.x = window_size.x == 300 ? 600 : 300;
+  window_size.y = window_size.y == 300 ? 600 : 300;
+  interrupt(IRQ_WINDOW_SIZE);
+}
 
 static struct init {
   init() {
@@ -73,6 +80,7 @@ static struct init {
     handle(KEY_DOWN, K_RIGHT, &right);
     handle(KEY_DOWN, K_F, &flip_fullscreen);
     handle(KEY_DOWN, K_X, &title);
+    handle(KEY_DOWN, K_Z, &resize);
     handle(KEY_DOWN, K_COMMA, &title);
     handle(KEY_DOWN, K_DOT, &title);
     handle(KEY_DOWN, K_SLASH, &title);
