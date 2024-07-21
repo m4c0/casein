@@ -26,7 +26,7 @@ extern "C" void casein_exit(int code) {
   exit_code = code;
   should_quit = true;
 }
-extern "C" void casein_set_title(const char * title) {
+void casein::set_title(const char * title) {
   XStoreName(nptr.display, nptr.window, title);
 }
 
