@@ -15,7 +15,6 @@ struct casein_native_handle;
 export module casein;
 import dotz;
 import hai;
-import jute;
 
 export {
 #include "common.hpp"
@@ -50,42 +49,6 @@ export namespace casein {
   using native_handle_t = ::casein_native_handle *;
   extern native_handle_t native_ptr;
 }
-
-module :private;
-
-extern "C" void casein_exit(int);
-void casein::exit(int code) {
-  casein_exit(code);
-}
-
-extern "C" void casein_set_title(const char *);
-void casein::set_title(const char * title) {
-  casein_set_title(title);
-}
-
-extern "C" void casein_enter_fullscreen();
-extern "C" void casein_leave_fullscreen();
-bool in_fullscreen {};
-bool casein::is_fullscreen() {
-  return in_fullscreen;
-}
-void casein::set_fullscreen(bool f) {
-  if (in_fullscreen == f) return;
-  in_fullscreen = f;
-  if (f) {
-    casein_enter_fullscreen();
-  } else {
-    casein_leave_fullscreen();
-  }
-}
-
-casein::native_handle_t casein::native_ptr;
-dotz::vec2 casein::mouse_pos;
-dotz::vec2 casein::mouse_rel;
-float casein::screen_scale_factor = 1.0;
-bool casein::keydown_repeating;
-dotz::vec2 casein::window_size;
-hai::varray<hai::cstr> casein::dropped_files {};
 
 #pragma leco add_impl handler
 
