@@ -44,7 +44,9 @@ static void touch_down() {
   silog::log(silog::info, "touch down");
 }
 static void flip_fullscreen() {
-  casein::set_fullscreen(!casein::is_fullscreen());
+  using namespace casein;
+  fullscreen = !fullscreen;
+  interrupt(IRQ_FULLSCREEN);
 }
 
 static void title() {
@@ -52,7 +54,10 @@ static void title() {
   if (++buf[6] > '9') {
     buf[6] = '0';
   }
-  casein::set_title(buf);
+
+  using namespace casein;
+  window_title = buf;
+  interrupt(IRQ_WINDOW_TITLE);
 }
 
 static struct init {

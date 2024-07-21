@@ -15,12 +15,15 @@ struct casein_native_handle;
 export module casein;
 import dotz;
 import hai;
+import jute;
 
 export {
 #include "common.hpp"
 }
 
 export namespace casein {
+  extern bool fullscreen;
+  extern jute::view window_title;
   extern dotz::vec2 window_size;
   extern dotz::vec2 mouse_pos;
   extern dotz::vec2 mouse_rel;
@@ -28,13 +31,10 @@ export namespace casein {
   extern bool keydown_repeating;
   extern hai::varray<hai::cstr> dropped_files;
 
-  void set_title(const char * title);
-
   // Signal the app to eventually exit.
   void exit(int code);
 
-  bool is_fullscreen();
-  void set_fullscreen(bool);
+  void interrupt(interrupts);
 
   void handle(event_type, void (*)());
   void handle(event_type, keys, void (*)());

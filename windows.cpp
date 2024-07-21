@@ -236,9 +236,6 @@ void casein::exit(int code) {
   SendMessage(g_hwnd, WM_CLOSE, 0, 0);
 }
 
-void casein::set_title(const char * title) {
-  SetWindowText(g_hwnd, title);
-}
 
 static bool g_drop_enabled;
 extern "C" void casein_enable_filedrop(bool en) {
@@ -253,7 +250,7 @@ static void set_window_rect(RECT rect) {
   auto [l, t, r, b] = rect;
   SetWindowPos(g_hwnd, nullptr, l, t, r - l, b - t, 0);
 }
-void casein::enter_fullscreen() {
+static void enter_fullscreen() {
   if (!GetWindowRect(g_hwnd, &g_old_hwnd_rect)) return;
 
   HMONITOR hmon = MonitorFromWindow(g_hwnd, MONITOR_DEFAULTTONEAREST);
@@ -278,10 +275,25 @@ void casein::enter_fullscreen() {
   // Fallback to maximize
   set_window_rect(mi.rcMonitor);
 }
-void casein::leave_fullscreen() {
+static void leave_fullscreen() {
   SetWindowLongPtr(g_hwnd, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
   set_window_rect(g_old_hwnd_rect);
   ChangeDisplaySettings(nullptr, CDS_RESET);
+}
+
+void casein::interrupt(casein::interrupts irq) {
+  if (!g_hwnd) return;
+
+  switch (irq) {
+  case IRQ_FULLSCREEN:
+    casein::fullscreen ? enter_fullscreen() : leave_fullscreen();
+    break;
+  case IRQ_WINDOW_TITLE:
+    SetWindowText(g_hwnd, casein::window_title.cstr().begin());
+    break;
+  case IRQ_WINDOW_SIZE:
+    break;
+  }
 }
 
 static int main_loop(HWND hwnd) {
