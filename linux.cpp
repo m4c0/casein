@@ -74,7 +74,7 @@ extern "C" int main() {
   auto rootwin = RootWindow(dpy, scr);
 
   auto win = XCreateSimpleWindow(dpy, rootwin, 1, 1, 800, 450, 0, BlackPixel(dpy, scr), BlackPixel(dpy, scr));
-  XStoreName(dpy, win, "app");
+  XStoreName(dpy, win, casein::window_title.cstr().begin());
 
   XSelectInput(dpy, win, ExposureMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask);
 

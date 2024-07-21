@@ -9,7 +9,7 @@ dotz::vec2 casein::mouse_pos {};
 dotz::vec2 casein::mouse_rel {};
 float casein::screen_scale_factor = 1.0;
 bool casein::keydown_repeating {};
-jute::view casein::window_title {};
+jute::view casein::window_title { "App" };
 dotz::vec2 casein::window_size { 1280, 720 };
 hai::varray<hai::cstr> casein::dropped_files {};
 
