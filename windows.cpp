@@ -1,6 +1,7 @@
 #pragma leco add_library shell32
 module;
 #include "casein.windows.hpp"
+#include "externc.hpp"
 
 #include <exception>
 #include <stdexcept>
@@ -203,8 +204,8 @@ static auto create_window(HINSTANCE h_instance, int show) {
       WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT,
       CW_USEDEFAULT,
-      casein::base_width,
-      casein::base_height,
+      casein_base_width,
+      casein_base_height,
       NULL,
       NULL,
       h_instance,
@@ -265,8 +266,8 @@ extern "C" void casein_enter_fullscreen() {
 
   DEVMODE dm {};
   EnumDisplaySettings(mi.szDevice, 0, &dm);
-  dm.dmPelsWidth = casein::base_width;
-  dm.dmPelsHeight = casein::base_height;
+  dm.dmPelsWidth = casein_base_width;
+  dm.dmPelsHeight = casein_base_height;
   dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT;
   if (ChangeDisplaySettingsEx(mi.szDevice, &dm, nullptr, CDS_FULLSCREEN, nullptr) == DISP_CHANGE_SUCCESSFUL) {
     ShowWindow(g_hwnd, SW_MAXIMIZE);
