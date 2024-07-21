@@ -176,8 +176,8 @@ static NSWindow * create_key_window(NSString * title) {
                 | NSWindowStyleMaskResizable;
   wnd.title = title;
 
-  int w = casein::base_width;
-  int h = casein::base_height;
+  int w = casein_base_width;
+  int h = casein_base_height;
   [wnd setFrame:NSMakeRect(0, 0, w, h) display:YES];
   [wnd center];
   [wnd makeKeyAndOrderFront:wnd];
