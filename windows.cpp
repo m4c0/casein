@@ -199,14 +199,18 @@ static auto create_window(HINSTANCE h_instance, int show) {
   TCHAR title[title_max_len];
   int size = LoadString(h_instance, IDS_CASEIN_APP_TITLE, title, title_max_len);
 
+  constexpr const auto dw_style = WS_OVERLAPPEDWINDOW;
+  RECT cli_rect { 0, 0, static_cast<long>(casein::window_size.x), static_cast<long>(casein::window_size.y) };
+  AdjustWindowRect(&cli_rect, dw_style, false);
+
   auto hwnd = CreateWindow(
       _T(window_class),
       size > 0 ? static_cast<LPCTSTR>(title) : _T(casein::window_title.cstr().begin()),
       WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT,
       CW_USEDEFAULT,
-      casein_base_width,
-      casein_base_height,
+      cli_rect.right - cli_rect.left,
+      cli_rect.bottom - cli_rect.top,
       NULL,
       NULL,
       h_instance,
@@ -264,8 +268,8 @@ static void enter_fullscreen() {
 
   DEVMODE dm {};
   EnumDisplaySettings(mi.szDevice, 0, &dm);
-  dm.dmPelsWidth = casein_base_width;
-  dm.dmPelsHeight = casein_base_height;
+  dm.dmPelsWidth = casein::window_size.x;
+  dm.dmPelsHeight = casein::window_size.y;
   dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT;
   if (ChangeDisplaySettingsEx(mi.szDevice, &dm, nullptr, CDS_FULLSCREEN, nullptr) == DISP_CHANGE_SUCCESSFUL) {
     ShowWindow(g_hwnd, SW_MAXIMIZE);
