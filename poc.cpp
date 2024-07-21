@@ -80,5 +80,8 @@ static struct init {
     handle(RESIZE_WINDOW, &resize_window);
     handle(TOUCH_DOWN, &touch_down);
     handle(QUIT, &quit);
+
+    window_title = "Casein Proof-of-Concept";
+    window_size = { 300, 300 };
   }
 } i;

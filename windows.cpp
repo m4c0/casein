@@ -201,7 +201,7 @@ static auto create_window(HINSTANCE h_instance, int show) {
 
   auto hwnd = CreateWindow(
       _T(window_class),
-      size > 0 ? static_cast<LPCTSTR>(title) : _T("App"),
+      size > 0 ? static_cast<LPCTSTR>(title) : _T(casein::window_title.cstr().begin()),
       WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT,
       CW_USEDEFAULT,
