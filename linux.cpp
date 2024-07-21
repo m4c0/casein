@@ -15,6 +15,7 @@ struct casein_native_handle {
 };
 
 module casein;
+import :internal;
 import silog;
 
 static volatile bool should_quit = false;
@@ -22,7 +23,7 @@ static volatile int exit_code = 0;
 
 static casein_native_handle nptr {};
 
-extern "C" void casein_exit(int code) {
+void casein::exit(int code) {
   exit_code = code;
   should_quit = true;
 }
@@ -30,9 +31,9 @@ void casein::set_title(const char * title) {
   XStoreName(nptr.display, nptr.window, title);
 }
 
-extern "C" void casein_enter_fullscreen() {
+void casein::enter_fullscreen() {
 }
-extern "C" void casein_leave_fullscreen() {
+void casein::leave_fullscreen() {
 }
 
 static casein::keys key_of(XKeyEvent * ke) {
