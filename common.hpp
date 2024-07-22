@@ -110,6 +110,7 @@ namespace casein {
     float y;
   };
 
+  // TODO: "EXIT" interrupt (windows and osx stores code and delays it)
   enum interrupts {
     IRQ_FULLSCREEN,
     IRQ_WINDOW_TITLE,

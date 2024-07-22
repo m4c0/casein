@@ -1,7 +1,8 @@
 #include "CASView.h"
 
+#include "externc.hpp"
+
 extern void ** casein_native_ptr;
-extern casein::point * casein_window_size;
 
 @implementation CASView
 - (instancetype)init {
