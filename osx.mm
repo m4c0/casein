@@ -165,6 +165,16 @@ static void set_window_title() {
   casein_window_title(&chars, &len);
   g_window.title = [[NSString alloc] initWithBytes:chars length:len encoding:NSUTF8StringEncoding];
 }
+
+static void resize_window() {
+  NSRect crect = [g_window contentRectForFrameRect:g_window.frame];
+  crect.size = NSMakeSize(casein_window_size->x, casein_window_size->y);
+
+  // TODO: align this shite from top-left
+  NSRect frect = [g_window frameRectForContentRect:crect];
+  [g_window setFrame:frect display:YES animate:YES];
+}
+
 static void enter_fullscreen() {
   if (g_window.styleMask & NSWindowStyleMaskFullScreen) return;
   [g_window toggleFullScreen:nil];
@@ -183,7 +193,9 @@ static NSWindow * create_key_window() {
 
   int w = casein_window_size->x;
   int h = casein_window_size->y;
-  [wnd setFrame:NSMakeRect(0, 0, w, h) display:YES];
+  NSRect crect = NSMakeRect(0, 0, w, h);
+  NSRect frect = [g_window frameRectForContentRect:crect];
+  [wnd setFrame:frect display:YES];
   [wnd center];
   [wnd makeKeyAndOrderFront:wnd];
 
@@ -203,6 +215,7 @@ extern "C" void casein_interrupt(casein::interrupts irq) {
     *casein_fullscreen ? enter_fullscreen() : leave_fullscreen();
     break;
   case casein::IRQ_WINDOW_SIZE:
+    resize_window();
     break;
   case casein::IRQ_WINDOW_TITLE:
     set_window_title();
