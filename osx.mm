@@ -1,5 +1,6 @@
 @import AppKit;
 #import "CASView.h"
+#import "externc.hpp"
 
 @interface CASAppDelegate : NSObject<NSApplicationDelegate>
 @end
@@ -160,11 +161,11 @@ extern "C" void casein_set_title(const char * title) {
   // TODO: check if we can rename on apple menu as well
   g_window.title = [NSString stringWithUTF8String:title];
 }
-extern "C" void casein_enter_fullscreen() {
+static void enter_fullscreen() {
   if (g_window.styleMask & NSWindowStyleMaskFullScreen) return;
   [g_window toggleFullScreen:nil];
 }
-extern "C" void casein_leave_fullscreen() {
+static void leave_fullscreen() {
   if (g_window.styleMask & NSWindowStyleMaskFullScreen) [g_window toggleFullScreen:nil];
 }
 static NSWindow * create_key_window(NSString * title) {
@@ -176,8 +177,8 @@ static NSWindow * create_key_window(NSString * title) {
                 | NSWindowStyleMaskResizable;
   wnd.title = title;
 
-  int w = casein_base_width;
-  int h = casein_base_height;
+  int w = casein_window_size->x;
+  int h = casein_window_size->y;
   [wnd setFrame:NSMakeRect(0, 0, w, h) display:YES];
   [wnd center];
   [wnd makeKeyAndOrderFront:wnd];
@@ -190,6 +191,18 @@ int exit_code { 0 };
 extern "C" void casein_exit(int code) {
   exit_code = code;
   [NSApp terminate:nil];
+}
+
+extern "C" void casein_interrupt(casein::interrupts irq) {
+  switch (irq) {
+  case casein::IRQ_FULLSCREEN:
+    *casein_fullscreen ? enter_fullscreen() : leave_fullscreen();
+    break;
+  case casein::IRQ_WINDOW_SIZE:
+    break;
+  case casein::IRQ_WINDOW_TITLE:
+    break;
+  }
 }
 
 int main(int argc, char ** argv) {
