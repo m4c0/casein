@@ -17,3 +17,8 @@ extern "C" void casein_add_drop(const char * str, unsigned len) {
 extern "C" void casein_clear_drops() {
   casein::dropped_files.truncate(0);
 }
+
+extern "C" void casein_window_title(const char ** ptr, unsigned * len) {
+  *ptr = casein::window_title.begin();
+  *len = casein::window_title.size();
+}

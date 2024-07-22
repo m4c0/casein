@@ -127,12 +127,13 @@ extern bool * casein_keydown_repeating;
 }
 @end
 
-static NSMenu * setup_apple_menu(NSString * title) {
+static NSMenu * setup_apple_menu() {
   NSMenu * bar = [NSMenu new];
   NSMenuItem * app_item = [NSMenuItem new];
   NSMenu * app_menu = [NSMenu new];
 
-  [app_menu addItem:[[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"Quit %@", title]
+  // TODO: remove exe name from top menu
+  [app_menu addItem:[[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"Quit %@", @"App"]
                                                action:@selector(terminate:)
                                         keyEquivalent:@"q"]];
 
@@ -156,10 +157,13 @@ extern "C" void casein_enable_filedrop(bool en) {
   }
 }
 
-extern "C" void casein_set_title(const char * title) {
+static void set_window_title() {
   // TODO: this is not working
   // TODO: check if we can rename on apple menu as well
-  g_window.title = [NSString stringWithUTF8String:title];
+  const char * chars;
+  unsigned len;
+  casein_window_title(&chars, &len);
+  g_window.title = [[NSString alloc] initWithBytes:chars length:len encoding:NSUTF8StringEncoding];
 }
 static void enter_fullscreen() {
   if (g_window.styleMask & NSWindowStyleMaskFullScreen) return;
@@ -168,14 +172,14 @@ static void enter_fullscreen() {
 static void leave_fullscreen() {
   if (g_window.styleMask & NSWindowStyleMaskFullScreen) [g_window toggleFullScreen:nil];
 }
-static NSWindow * create_key_window(NSString * title) {
+static NSWindow * create_key_window() {
   NSWindow * wnd = g_window = [CASWindow new];
   wnd.acceptsMouseMovedEvents = true;
   wnd.collectionBehavior = NSWindowCollectionBehaviorFullScreenPrimary;
   wnd.contentView = [CASView new];
   wnd.styleMask = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable
                 | NSWindowStyleMaskResizable;
-  wnd.title = title;
+  set_window_title();
 
   int w = casein_window_size->x;
   int h = casein_window_size->y;
@@ -201,23 +205,19 @@ extern "C" void casein_interrupt(casein::interrupts irq) {
   case casein::IRQ_WINDOW_SIZE:
     break;
   case casein::IRQ_WINDOW_TITLE:
+    set_window_title();
     break;
   }
 }
 
 int main(int argc, char ** argv) {
   @autoreleasepool {
-    NSString * title = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
-    if (title == nil) {
-      title = @"App";
-    }
-
     CASAppDelegate * app_d = [CASAppDelegate new];
 
     NSApplication * app = [NSApplication sharedApplication];
     app.delegate = app_d;
-    app.mainMenu = setup_apple_menu(title);
-    create_key_window(title);
+    create_key_window();
+    app.mainMenu = setup_apple_menu();
     [app activateIgnoringOtherApps:YES];
     [app run];
     return exit_code;
