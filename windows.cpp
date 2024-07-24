@@ -252,7 +252,6 @@ void casein::exit(int code) {
   SendMessage(g_hwnd, WM_CLOSE, 0, 0);
 }
 
-
 static bool g_drop_enabled;
 extern "C" void casein_enable_filedrop(bool en) {
   g_drop_enabled = en;
@@ -346,6 +345,7 @@ extern "C" int CALLBACK WinMain(
   register_class(h_instance);
   auto hwnd = g_hwnd = create_window(h_instance, cmd_show);
   casein_enable_filedrop(g_drop_enabled);
+  if (casein::fullscreen) enter_fullscreen();
   setup_raw_input();
   return main_loop(hwnd);
 } catch (const std::exception & e) {

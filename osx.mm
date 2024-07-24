@@ -200,6 +200,7 @@ static NSWindow * create_key_window() {
   [wnd makeKeyAndOrderFront:wnd];
 
   casein_enable_filedrop(g_drop_enabled);
+  if (*casein_fullscreen) enter_fullscreen();
   return wnd;
 }
 
