@@ -31,9 +31,6 @@ export namespace casein {
   extern bool keydown_repeating;
   extern hai::varray<hai::cstr> dropped_files;
 
-  // Signal the app to eventually exit.
-  void exit(int code);
-
   void interrupt(interrupts);
 
   void handle(event_type, void (*)());
