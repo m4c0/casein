@@ -246,11 +246,6 @@ static void setup_raw_input() {
 }
 
 static HWND g_hwnd;
-void casein::exit(int code) {
-  // This is the only way to properly programatically exit an app from any thread. Other attempts froze the app or kept
-  // it as a "background app".
-  SendMessage(g_hwnd, WM_CLOSE, 0, 0);
-}
 
 static bool g_drop_enabled;
 extern "C" void casein_enable_filedrop(bool en) {
@@ -310,6 +305,11 @@ void casein::interrupt(casein::interrupts irq) {
   switch (irq) {
   case IRQ_FULLSCREEN:
     casein::fullscreen ? enter_fullscreen() : leave_fullscreen();
+    break;
+  case IRQ_QUIT:
+    // This is the only way to properly programatically exit an app from any thread. Other attempts froze the app or
+    // kept it as a "background app".
+    SendMessage(g_hwnd, WM_CLOSE, 0, 0);
     break;
   case IRQ_WINDOW_TITLE:
     SetWindowText(g_hwnd, casein::window_title.cstr().begin());

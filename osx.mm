@@ -205,15 +205,14 @@ static NSWindow * create_key_window() {
 }
 
 int exit_code { 0 };
-extern "C" void casein_exit(int code) {
-  exit_code = code;
-  [NSApp terminate:nil];
-}
-
 extern "C" void casein_interrupt(casein::interrupts irq) {
   switch (irq) {
   case casein::IRQ_FULLSCREEN:
     *casein_fullscreen ? enter_fullscreen() : leave_fullscreen();
+    break;
+  case casein::IRQ_EXIT:
+    exit_code = code;
+    [NSApp terminate:nil];
     break;
   case casein::IRQ_WINDOW_SIZE:
     resize_window();

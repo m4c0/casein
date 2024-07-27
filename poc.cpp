@@ -66,6 +66,10 @@ static void resize() {
   window_size.y = window_size.y == 300 ? 600 : 300;
   interrupt(IRQ_WINDOW_SIZE);
 }
+static void exit() {
+  using namespace casein;
+  interrupt(IRQ_QUIT);
+}
 
 static struct init {
   init() {
@@ -79,6 +83,7 @@ static struct init {
     handle(KEY_DOWN, K_LEFT, &left);
     handle(KEY_DOWN, K_RIGHT, &right);
     handle(KEY_DOWN, K_F, &flip_fullscreen);
+    handle(KEY_DOWN, K_Q, &exit);
     handle(KEY_DOWN, K_X, &title);
     handle(KEY_DOWN, K_Z, &resize);
     handle(KEY_DOWN, K_COMMA, &title);
