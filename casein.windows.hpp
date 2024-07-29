@@ -1,6 +1,5 @@
-#pragma once
-
-#define IDS_CASEIN_APP_TITLE 9930000
+#define IDS_CASEIN_APP_TITLE 9930
+#define IDI_CASEIN_ICON      9931
 
 // Example RC:
 // STRINGTABLE { IDS_CASEIN_APP_TITLE "My App" }
