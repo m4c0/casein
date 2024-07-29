@@ -5,6 +5,17 @@
 extern "C" void casein_enable_filedrop(bool) {
 }
 
+extern "C" void casein_interrupt(casein::interrupts irq) {
+  // These are here as a reminder, if we ever got an IRQ tha makes sense in iOS
+  switch (irq) {
+  case casein::IRQ_FULLSCREEN:
+  case casein::IRQ_QUIT:
+  case casein::IRQ_WINDOW_SIZE:
+  case casein::IRQ_WINDOW_TITLE:
+    break;
+  }
+}
+
 @interface CASViewController : UIViewController
 @end
 
