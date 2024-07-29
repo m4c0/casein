@@ -204,14 +204,12 @@ static NSWindow * create_key_window() {
   return wnd;
 }
 
-int exit_code { 0 };
 extern "C" void casein_interrupt(casein::interrupts irq) {
   switch (irq) {
   case casein::IRQ_FULLSCREEN:
     *casein_fullscreen ? enter_fullscreen() : leave_fullscreen();
     break;
-  case casein::IRQ_EXIT:
-    exit_code = code;
+  case casein::IRQ_QUIT:
     [NSApp terminate:nil];
     break;
   case casein::IRQ_WINDOW_SIZE:
@@ -233,6 +231,6 @@ int main(int argc, char ** argv) {
     app.mainMenu = setup_apple_menu();
     [app activateIgnoringOtherApps:YES];
     [app run];
-    return exit_code;
+    return 0;
   }
 }
