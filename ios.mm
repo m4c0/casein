@@ -2,6 +2,9 @@
 #import "CASView.h"
 #import "externc.hpp"
 
+extern "C" void casein_enable_filedrop(bool) {
+}
+
 @interface CASViewController : UIViewController
 @end
 
