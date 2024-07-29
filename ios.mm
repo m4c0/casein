@@ -1,5 +1,6 @@
 @import UIKit;
-#include "CASView.h"
+#import "CASView.h"
+#import "externc.hpp"
 
 @interface CASViewController : UIViewController
 @end
@@ -10,44 +11,49 @@
 }
 
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
-  casein_handle(casein::events::gesture { casein::G_SHAKE });
+  casein_call_g(casein::GESTURE, casein::G_SHAKE);
 }
 
-- (casein::touch)touchOfLocatable:(id)t loong:(bool)l {
-  CGPoint p = [t locationInView:[self view]];
-  return casein::touch { static_cast<int>(p.x), static_cast<int>(p.y), l };
-}
-- (casein::touch)touchOfTouches:(NSSet *)touches {
-  UITouch * t = [touches anyObject];
-  return [self touchOfLocatable:t loong:false];
-}
+// - (casein::touch)touchOfLocatable:(id)t loong:(bool)l {
+//   CGPoint p = [t locationInView:[self view]];
+//   return casein::touch { static_cast<int>(p.x), static_cast<int>(p.y), l };
+// }
+// - (casein::touch)touchOfTouches:(NSSet *)touches {
+//   UITouch * t = [touches anyObject];
+//   return [self touchOfLocatable:t loong:false];
+// }
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-  casein_handle(casein::events::touch_down { [self touchOfTouches:touches] });
+  // casein_handle(casein::events::touch_down { [self touchOfTouches:touches] });
+  casein_call(casein::TOUCH_DOWN);
 }
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-  casein_handle(casein::events::touch_cancel { [self touchOfTouches:touches] });
+  // casein_handle(casein::events::touch_cancel { [self touchOfTouches:touches] });
+  casein_call(casein::TOUCH_CANCEL);
 }
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-  casein_handle(casein::events::touch_move { [self touchOfTouches:touches] });
+  // casein_handle(casein::events::touch_move { [self touchOfTouches:touches] });
+  casein_call(casein::TOUCH_MOVE);
 }
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-  casein_handle(casein::events::touch_up { [self touchOfTouches:touches] });
+  // casein_handle(casein::events::touch_up { [self touchOfTouches:touches] });
+  casein_call(casein::TOUCH_UP);
 }
 - (void)press:(UIGestureRecognizer *)gr {
-  casein::touch t = [self touchOfLocatable:gr loong:true];
+  // TODO: store "T" into a register
+  // casein::touch t = [self touchOfLocatable:gr loong:true];
 
   switch (gr.state) {
   case UIGestureRecognizerStateBegan:
-    casein_handle(casein::events::touch_down { t });
+    casein_call(casein::TOUCH_DOWN);
     break;
   case UIGestureRecognizerStateChanged:
-    casein_handle(casein::events::touch_move { t });
+    casein_call(casein::TOUCH_MOVE);
     break;
   case UIGestureRecognizerStateCancelled:
-    casein_handle(casein::events::touch_cancel { t });
+    casein_call(casein::TOUCH_CANCEL);
     break;
   case UIGestureRecognizerStateEnded:
-    casein_handle(casein::events::touch_up { t });
+    casein_call(casein::TOUCH_UP);
     break;
   default:
     break;
@@ -61,20 +67,20 @@
 
 @implementation CASAppDelegate
 - (void)swipeLeft {
-  casein_handle(casein::events::gesture { casein::G_SWIPE_LEFT });
+  casein_call_g(casein::GESTURE, casein::G_SWIPE_LEFT);
 }
 - (void)swipeRight {
-  casein_handle(casein::events::gesture { casein::G_SWIPE_RIGHT });
+  casein_call_g(casein::GESTURE, casein::G_SWIPE_RIGHT);
 }
 - (void)swipeTop {
-  casein_handle(casein::events::gesture { casein::G_SWIPE_UP });
+  casein_call_g(casein::GESTURE, casein::G_SWIPE_UP);
 }
 - (void)swipeBottom {
-  casein_handle(casein::events::gesture { casein::G_SWIPE_DOWN });
+  casein_call_g(casein::GESTURE, casein::G_SWIPE_DOWN);
 }
 
 - (void)tap {
-  casein_handle(casein::events::gesture { casein::G_TAP_1 });
+  casein_call_g(casein::GESTURE, casein::G_TAP_1);
 }
 
 - (BOOL)application:(UIApplication *)app didFinishLaunchingWithOptions:(id)options {
@@ -121,7 +127,7 @@
   return YES;
 }
 - (void)applicationWillTerminate:(UIApplication *)app {
-  casein_handle(casein::events::quit {});
+  casein_call(casein::QUIT);
 }
 @end
 
