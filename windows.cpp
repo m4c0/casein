@@ -184,12 +184,12 @@ static void register_class(HINSTANCE h_instance) {
   wcex.cbClsExtra = 0;
   wcex.cbWndExtra = 0;
   wcex.hInstance = h_instance;
-  wcex.hIcon = LoadIcon(h_instance, IDI_APPLICATION);
+  wcex.hIcon = LoadIcon(h_instance, "IDI_CASEIN_ICON");
   wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
   wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
   wcex.lpszMenuName = NULL;
   wcex.lpszClassName = _T(window_class);
-  wcex.hIconSm = LoadIcon(h_instance, IDI_APPLICATION);
+  wcex.hIconSm = LoadIcon(h_instance, "IDI_CASEIN_ICON");
 
   if (!RegisterClassEx(&wcex)) {
     throw std::runtime_error("Failed to register class");
