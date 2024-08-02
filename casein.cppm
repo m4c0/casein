@@ -65,4 +65,6 @@ export namespace casein {
 #elif LECO_TARGET_LINUX
 #pragma leco add_impl linux
 #pragma leco add_library X11
+#elif LECO_TARGET_WASM
+#pragma leco add_impl wasm
 #endif
