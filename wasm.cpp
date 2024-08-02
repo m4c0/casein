@@ -9,6 +9,20 @@ extern "C" void casein_enable_filedrop(bool en) {
 }
 
 void casein::interrupt(casein::interrupts irq) {
+  switch (irq) {
+  case IRQ_FULLSCREEN:
+    silog::log(silog::warning, "Fullscreen not supported");
+    break;
+  case IRQ_QUIT:
+    silog::log(silog::warning, "Quit not supported");
+    break;
+  case IRQ_WINDOW_SIZE:
+    silog::log(silog::warning, "Changing window size TBD");
+    break;
+  case IRQ_WINDOW_TITLE:
+    silog::log(silog::warning, "Changing window title TBD");
+    break;
+  }
 }
 
 int main() {
