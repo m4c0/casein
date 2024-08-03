@@ -19,6 +19,12 @@ module;
 // https://devblogs.microsoft.com/oldnewthing/20050505-04/?p=35703
 // https://gamedev.net/forums/topic/418397-problems-with-changedisplaysettingsex-solved/
 
+// See Remarks of this link for how to get the name of a key
+// https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-rawkeyboard
+
+// TODO: consider use Windows scan codes to give an experience based on keyboard position
+// https://learn.microsoft.com/en-us/windows/win32/inputdev/about-keyboard-input#scan-codes
+
 module casein;
 import :internal;
 
@@ -142,13 +148,14 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
   case WM_INPUT:
     handle_raw_input(w_param, l_param);
     return 0;
-  case WM_KEYDOWN:
-    // The "repeat count" (bits 0-15) is always "1". So we use the "last status" (bit 30) instead.
-    casein::keydown_repeating = (l_param & (1 << 30)) != 0;
-    casein_call_k(KEY_DOWN, wp2c(w_param));
+  case WM_KEYDOWN: {
+    auto key_flags = HIWORD(l_param);
+    casein::keydown_repeating = (key_flags & KF_REPEAT) == KF_REPEAT;
+    casein_call_k(KEY_DOWN, wp2c(LOWORD(w_param)));
     return 0;
+  }
   case WM_KEYUP:
-    casein_call_k(KEY_UP, wp2c(w_param));
+    casein_call_k(KEY_UP, wp2c(LOWORD(w_param)));
     return 0;
   case WM_MOUSEMOVE: {
     casein::mouse_pos.x = GET_X_LPARAM(l_param);
