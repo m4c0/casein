@@ -5,6 +5,8 @@ extern "C" __attribute__((import_module("leco"), import_name("set_timeout"))) vo
 module casein;
 import silog;
 
+extern "C" void casein_call(casein::event_type et);
+
 extern "C" void casein_enable_filedrop(bool en) {
 }
 
@@ -25,10 +27,13 @@ void casein::interrupt(casein::interrupts irq) {
   }
 }
 
-int main() {
+struct init {
+  init();
+} i;
+init::init() {
   set_timeout(
       [] {
-        silog::log(silog::debug, "ohh");
+        casein_call(casein::CREATE_WINDOW);
       },
       0);
 }
