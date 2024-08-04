@@ -31,7 +31,6 @@ import :internal;
 using namespace casein;
 
 static constexpr const auto window_class = "m4c0-window-class";
-static constexpr const auto timer_id = 0xb16b00b5;
 
 static constexpr const auto dw_style = WS_OVERLAPPEDWINDOW;
 
@@ -175,9 +174,6 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     casein_call(RESIZE_WINDOW);
     return 0;
   }
-  case WM_TIMER:
-    if (w_param == timer_id) casein_call(TIMER);
-    return 0;
   default:
     return DefWindowProc(hwnd, msg, w_param, l_param);
   }
@@ -330,17 +326,26 @@ void casein::interrupt(casein::interrupts irq) {
   }
 }
 
+static void timer_fired(void *, BOOLEAN) {
+  casein_call(casein::TIMER);
+}
+
 static int main_loop(HWND hwnd) {
   static constexpr const auto ms_per_tick = 1000 / 20;
 
   MSG msg;
+  HANDLE timer;
 
-  SetTimer(hwnd, timer_id, ms_per_tick, nullptr);
+  // We can't rely on WM_TIMER because it is a low-priority message
+  auto tq = CreateTimerQueue();
+  CreateTimerQueueTimer(&timer, tq, timer_fired, nullptr, ms_per_tick, ms_per_tick, 0);
+
   while (GetMessage(&msg, 0, 0, 0)) {
     TranslateMessage(&msg);
     DispatchMessage(&msg);
   }
-  KillTimer(hwnd, timer_id);
+
+  DeleteTimerQueueEx(tq, nullptr);
   return static_cast<int>(msg.wParam);
 }
 
