@@ -1,5 +1,5 @@
 #include "casein.windows.hpp"
 
-IDI_CASEIN_ICON ICON "icon.ico"
+// IDI_CASEIN_ICON ICON "icon.ico"
 
 STRINGTABLE { IDS_CASEIN_APP_TITLE "Casein POC" }
