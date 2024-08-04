@@ -1,6 +1,8 @@
 module;
 
 extern "C" __attribute__((import_module("leco"), import_name("set_timeout"))) void set_timeout(void (*)(), unsigned);
+extern "C" __attribute__((import_module("leco"), import_name("request_animation_frame"))) void request_animation_frame(
+    void (*)());
 
 module casein;
 import silog;
@@ -27,6 +29,11 @@ void casein::interrupt(casein::interrupts irq) {
   }
 }
 
+static void repaint() {
+  casein_call(casein::REPAINT);
+  request_animation_frame(repaint);
+}
+
 struct init {
   init();
 } i;
@@ -34,6 +41,7 @@ init::init() {
   set_timeout(
       [] {
         casein_call(casein::CREATE_WINDOW);
+        request_animation_frame(repaint);
       },
       0);
 }
