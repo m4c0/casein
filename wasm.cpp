@@ -60,10 +60,6 @@ void EXPORT(casein_key)(bool down, unsigned key_code) {
 }
 
 int main() {
-  set_timeout(
-      [] {
-        casein_call(casein::CREATE_WINDOW);
-        request_animation_frame(repaint);
-      },
-      0);
+  casein_call(casein::CREATE_WINDOW);
+  request_animation_frame(repaint);
 }
