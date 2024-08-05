@@ -59,10 +59,7 @@ void EXPORT(casein_key)(bool down, unsigned key_code) {
   casein_call_k(code, key);
 }
 
-struct init {
-  init();
-} i;
-init::init() {
+int main() {
   set_timeout(
       [] {
         casein_call(casein::CREATE_WINDOW);
