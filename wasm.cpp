@@ -2,12 +2,9 @@ module;
 
 #define EXPORT(X) __attribute__((export_name(#X))) X
 
-extern "C" __attribute__((import_module("leco"), import_name("set_timeout"))) void set_timeout(void (*)(), unsigned);
-extern "C" __attribute__((import_module("leco"), import_name("request_animation_frame"))) void request_animation_frame(
-    void (*)());
-
 module casein;
 import silog;
+import vaselin;
 
 extern "C" void casein_call(casein::event_type et);
 extern "C" void casein_call_k(casein::event_type et, casein::keys);
@@ -34,7 +31,7 @@ void casein::interrupt(casein::interrupts irq) {
 
 static void repaint() {
   casein_call(casein::REPAINT);
-  request_animation_frame(repaint);
+  vaselin::request_animation_frame(repaint);
 }
 
 static constexpr auto key_for_code(int code) {
@@ -61,5 +58,5 @@ void EXPORT(casein_key)(bool down, unsigned key_code) {
 
 int main() {
   casein_call(casein::CREATE_WINDOW);
-  request_animation_frame(repaint);
+  vaselin::request_animation_frame(repaint);
 }
