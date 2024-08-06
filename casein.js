@@ -11,6 +11,6 @@
       canvas.style.width = x;
       canvas.style.height = y;
     },
-    window_title : (x, y) => console.log(x, y),
+    window_title : (ptr, size) => document.title = vaselin_tostr(ptr, size),
   };
 })();
