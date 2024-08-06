@@ -1,10 +1,14 @@
 module;
 
 #define EXPORT(X) __attribute__((export_name(#X))) X
+#define IMPORT(R, X) extern "C" __attribute__((import_module("casein"), import_name(#X))) R X
 
 module casein;
 import silog;
 import vaselin;
+
+IMPORT(void, window_size)(int x, int y);
+IMPORT(void, window_title)(const char *, int);
 
 extern "C" void casein_call(casein::event_type et);
 extern "C" void casein_call_k(casein::event_type et, casein::keys);
@@ -21,10 +25,10 @@ void casein::interrupt(casein::interrupts irq) {
     silog::log(silog::warning, "Quit not supported");
     break;
   case IRQ_WINDOW_SIZE:
-    silog::log(silog::warning, "Changing window size TBD");
+    ::window_size(casein::window_size.x, casein::window_size.y);
     break;
   case IRQ_WINDOW_TITLE:
-    silog::log(silog::warning, "Changing window title TBD");
+    ::window_title(casein::window_title.begin(), casein::window_title.size());
     break;
   }
 }
@@ -57,6 +61,9 @@ void EXPORT(casein_key)(bool down, unsigned key_code) {
 }
 
 int main() {
+  casein::interrupt(casein::IRQ_WINDOW_SIZE);
+  casein::interrupt(casein::IRQ_WINDOW_TITLE);
+
   casein_call(casein::CREATE_WINDOW);
   vaselin::request_animation_frame(repaint);
 }
