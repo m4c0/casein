@@ -10,6 +10,10 @@ import vaselin;
 IMPORT(void, window_size)(int x, int y);
 IMPORT(void, window_title)(const char *, int);
 
+// TODO: more keyboard keys
+// TODO: mouse support
+// TODO: centralise canvas (maybe a border too?)
+
 extern "C" void casein_call(casein::event_type et);
 extern "C" void casein_call_k(casein::event_type et, casein::keys);
 
