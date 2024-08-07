@@ -45,7 +45,7 @@ export namespace casein {
 
   using native_handle_t = ::casein_native_handle *;
   extern native_handle_t native_ptr;
-}
+} // namespace casein
 
 #pragma leco add_impl externc
 #pragma leco add_impl handler
