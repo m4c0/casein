@@ -33,10 +33,10 @@ export namespace casein {
 
   void interrupt(interrupts);
 
-  void handle(event_type, void (*)());
-  void handle(event_type, keys, void (*)());
-  void handle(event_type, mouse_buttons, void (*)());
-  void handle(event_type, gestures, void (*)());
+  void handle(event_type, hai::fn<void>);
+  void handle(event_type, keys, hai::fn<void>);
+  void handle(event_type, mouse_buttons, hai::fn<void>);
+  void handle(event_type, gestures, hai::fn<void>);
 
   // Resets a sub-map. Should be useful for context-aware input handling (ex: modals, etc)
   void reset_k(event_type);
