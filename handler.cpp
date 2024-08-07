@@ -52,6 +52,6 @@ extern "C" void casein_call_k(casein::event_type et, casein::keys k) {
   casein_call(et);
 }
 extern "C" void casein_call_m(casein::event_type et, casein::mouse_buttons m) {
-  if (auto fn = emap_m[et][m]) fn();
+  if (auto &fn = emap_m[et][m]) fn();
   casein_call(et);
 }
