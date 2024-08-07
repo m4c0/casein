@@ -27,21 +27,16 @@ extern bool * casein_keydown_repeating;
   switch (arrow.length) {
   case 1:
     switch (unichar c = [arrow characterAtIndex:0]) {
-    case NSLeftArrowFunctionKey:
-      return casein::K_LEFT;
-    case NSRightArrowFunctionKey:
-      return casein::K_RIGHT;
-    case NSUpArrowFunctionKey:
-      return casein::K_UP;
-    case NSDownArrowFunctionKey:
-      return casein::K_DOWN;
-    case 13:
-      return casein::K_ENTER;
-    case 27:
-      return casein::K_ESCAPE;
+    case NSLeftArrowFunctionKey: return casein::K_LEFT;
+    case NSRightArrowFunctionKey: return casein::K_RIGHT;
+    case NSUpArrowFunctionKey: return casein::K_UP;
+    case NSDownArrowFunctionKey: return casein::K_DOWN;
+    case 13: return casein::K_ENTER;
+    case 27: return casein::K_ESCAPE;
     default:
       if (c >= 32 && c <= 127) return static_cast<casein::keys>(c);
     }
+    break;
   }
   return casein::K_NULL;
 }
@@ -206,18 +201,10 @@ static NSWindow * create_key_window() {
 
 extern "C" void casein_interrupt(casein::interrupts irq) {
   switch (irq) {
-  case casein::IRQ_FULLSCREEN:
-    *casein_fullscreen ? enter_fullscreen() : leave_fullscreen();
-    break;
-  case casein::IRQ_QUIT:
-    [NSApp terminate:nil];
-    break;
-  case casein::IRQ_WINDOW_SIZE:
-    resize_window();
-    break;
-  case casein::IRQ_WINDOW_TITLE:
-    set_window_title();
-    break;
+  case casein::IRQ_FULLSCREEN: *casein_fullscreen ? enter_fullscreen() : leave_fullscreen(); break;
+  case casein::IRQ_QUIT: [NSApp terminate:nil]; break;
+  case casein::IRQ_WINDOW_SIZE: resize_window(); break;
+  case casein::IRQ_WINDOW_TITLE: set_window_title(); break;
   }
 }
 
