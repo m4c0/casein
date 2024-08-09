@@ -25,7 +25,8 @@ static void mouse_down() {
 static void resize_window() {
   silog::log(
       silog::info,
-      "resize window - %fx%f @%.0fx",
+      "resize window - %s %fx%f @%.0fx",
+      casein::window_live_resize? "[L]" : "[ ]",
       casein::window_size.x,
       casein::window_size.y,
       casein::screen_scale_factor);

@@ -120,20 +120,14 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     casein_call(FILES_DROP);
     return 0;
   }
-  case WM_EXITSIZEMOVE: {
-    WINDOWINFO wi {};
-    wi.cbSize = sizeof(WINDOWINFO);
-    GetWindowInfo(hwnd, &wi);
-
-    auto [l, t, r, b] = wi.rcClient;
-    int w = r - l;
-    int h = b - t;
-    casein::window_size = { w, h };
-
-    // casein_handle(casein::events::resize_window { { w, h, 1.0f, false } });
+  case WM_ENTERSIZEMOVE:
+    casein::window_live_resize = true;
     casein_call(RESIZE_WINDOW);
     return 0;
-  }
+  case WM_EXITSIZEMOVE:
+    casein::window_live_resize = false;
+    casein_call(RESIZE_WINDOW);
+    return 0;
   case WM_INPUT: handle_raw_input(w_param, l_param); return 0;
   case WM_KEYDOWN: {
     auto key_flags = HIWORD(l_param);
@@ -157,7 +151,7 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     auto w = LOWORD(l_param);
     auto h = HIWORD(l_param);
     casein::window_size = { w, h };
-    // casein_call(RESIZE_WINDOW);
+    casein_call(RESIZE_WINDOW);
     return 0;
   }
   default: return DefWindowProc(hwnd, msg, w_param, l_param);

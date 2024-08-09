@@ -25,6 +25,7 @@ export namespace casein {
   extern bool fullscreen;
   extern jute::view window_title;
   extern dotz::vec2 window_size;
+  extern bool window_live_resize;
   extern dotz::vec2 mouse_pos;
   extern dotz::vec2 mouse_rel;
   extern float screen_scale_factor;
