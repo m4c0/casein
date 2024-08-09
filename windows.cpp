@@ -132,13 +132,14 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     return 0;
   }
   case WM_EXITSIZEMOVE: {
-    // WINDOWINFO wi {};
-    // wi.cbSize = sizeof(WINDOWINFO);
-    // GetWindowInfo(hwnd, &wi);
+    WINDOWINFO wi {};
+    wi.cbSize = sizeof(WINDOWINFO);
+    GetWindowInfo(hwnd, &wi);
 
-    // auto [l, t, r, b] = wi.rcClient;
-    // auto w = r - l;
-    // auto h = b - t;
+    auto [l, t, r, b] = wi.rcClient;
+    auto w = r - l;
+    auto h = b - t;
+    casein::window_size = { w, h };
 
     // casein_handle(casein::events::resize_window { { w, h, 1.0f, false } });
     casein_call(RESIZE_WINDOW);
@@ -171,7 +172,7 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     auto w = LOWORD(l_param);
     auto h = HIWORD(l_param);
     casein::window_size = { w, h };
-    casein_call(RESIZE_WINDOW);
+    // casein_call(RESIZE_WINDOW);
     return 0;
   }
   default:
