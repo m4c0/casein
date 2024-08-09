@@ -126,8 +126,8 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     GetWindowInfo(hwnd, &wi);
 
     auto [l, t, r, b] = wi.rcClient;
-    auto w = r - l;
-    auto h = b - t;
+    int w = r - l;
+    int h = b - t;
     casein::window_size = { w, h };
 
     // casein_handle(casein::events::resize_window { { w, h, 1.0f, false } });
