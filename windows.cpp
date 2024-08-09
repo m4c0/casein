@@ -62,32 +62,21 @@ static void handle_raw_input(WPARAM wp, LPARAM lp) {
     return;
 
   switch (raw.header.dwType) {
-  case RIM_TYPEMOUSE:
-    handle_raw_mouse(raw.data.mouse);
-    break;
+  case RIM_TYPEMOUSE: handle_raw_mouse(raw.data.mouse); break;
   }
 }
 
 static casein::keys wp2c(WPARAM wp) {
   switch (wp) {
-  case VK_ESCAPE:
-    return casein::K_ESCAPE;
-  case VK_LEFT:
-    return casein::K_LEFT;
-  case VK_RIGHT:
-    return casein::K_RIGHT;
-  case VK_UP:
-    return casein::K_UP;
-  case VK_DOWN:
-    return casein::K_DOWN;
-  case VK_RETURN:
-    return casein::K_ENTER;
-  case VK_SPACE:
-    return casein::K_SPACE;
-  case VK_OEM_COMMA:
-    return casein::K_COMMA;
-  case VK_OEM_PERIOD:
-    return casein::K_DOT;
+  case VK_ESCAPE: return casein::K_ESCAPE;
+  case VK_LEFT: return casein::K_LEFT;
+  case VK_RIGHT: return casein::K_RIGHT;
+  case VK_UP: return casein::K_UP;
+  case VK_DOWN: return casein::K_DOWN;
+  case VK_RETURN: return casein::K_ENTER;
+  case VK_SPACE: return casein::K_SPACE;
+  case VK_OEM_COMMA: return casein::K_COMMA;
+  case VK_OEM_PERIOD: return casein::K_DOT;
   case VK_OEM_2: // TODO: deal with these internationally
     return casein::K_SLASH;
   default:
@@ -145,18 +134,14 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     casein_call(RESIZE_WINDOW);
     return 0;
   }
-  case WM_INPUT:
-    handle_raw_input(w_param, l_param);
-    return 0;
+  case WM_INPUT: handle_raw_input(w_param, l_param); return 0;
   case WM_KEYDOWN: {
     auto key_flags = HIWORD(l_param);
     casein::keydown_repeating = (key_flags & KF_REPEAT) == KF_REPEAT;
     casein_call_k(KEY_DOWN, wp2c(LOWORD(w_param)));
     return 0;
   }
-  case WM_KEYUP:
-    casein_call_k(KEY_UP, wp2c(LOWORD(w_param)));
-    return 0;
+  case WM_KEYUP: casein_call_k(KEY_UP, wp2c(LOWORD(w_param))); return 0;
   case WM_MOUSEMOVE: {
     casein::mouse_pos.x = GET_X_LPARAM(l_param);
     casein::mouse_pos.y = GET_Y_LPARAM(l_param);
@@ -175,8 +160,7 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     // casein_call(RESIZE_WINDOW);
     return 0;
   }
-  default:
-    return DefWindowProc(hwnd, msg, w_param, l_param);
+  default: return DefWindowProc(hwnd, msg, w_param, l_param);
   }
 }
 
@@ -219,18 +203,9 @@ static auto create_window(HINSTANCE h_instance, int show) {
   int size = LoadString(h_instance, IDS_CASEIN_APP_TITLE, title, title_max_len);
 
   auto [w, h] = get_client_size();
-  auto hwnd = CreateWindow(
-      _T(window_class),
-      size > 0 ? static_cast<LPCTSTR>(title) : _T(casein::window_title.cstr().begin()),
-      dw_style,
-      CW_USEDEFAULT,
-      CW_USEDEFAULT,
-      w,
-      h,
-      NULL,
-      NULL,
-      h_instance,
-      NULL);
+  auto hwnd =
+      CreateWindow(_T(window_class), size > 0 ? static_cast<LPCTSTR>(title) : _T(casein::window_title.cstr().begin()),
+                   dw_style, CW_USEDEFAULT, CW_USEDEFAULT, w, h, NULL, NULL, h_instance, NULL);
   if (!hwnd) throw std::runtime_error("Failed to create window");
 
   ShowWindow(hwnd, show);
@@ -307,17 +282,13 @@ void casein::interrupt(casein::interrupts irq) {
   if (!g_hwnd) return;
 
   switch (irq) {
-  case IRQ_FULLSCREEN:
-    casein::fullscreen ? enter_fullscreen() : leave_fullscreen();
-    break;
+  case IRQ_FULLSCREEN: casein::fullscreen ? enter_fullscreen() : leave_fullscreen(); break;
   case IRQ_QUIT:
     // This is the only way to properly programatically exit an app from any thread. Other attempts froze the app or
     // kept it as a "background app".
     SendMessage(g_hwnd, WM_CLOSE, 0, 0);
     break;
-  case IRQ_WINDOW_TITLE:
-    SetWindowText(g_hwnd, casein::window_title.cstr().begin());
-    break;
+  case IRQ_WINDOW_TITLE: SetWindowText(g_hwnd, casein::window_title.cstr().begin()); break;
   case IRQ_WINDOW_SIZE:
     // TODO: set fullscreen resolution
     if (casein::fullscreen) return;
@@ -327,9 +298,7 @@ void casein::interrupt(casein::interrupts irq) {
   }
 }
 
-static void timer_fired(void *, BOOLEAN) {
-  casein_call(casein::TIMER);
-}
+static void timer_fired(void *, BOOLEAN) { casein_call(casein::TIMER); }
 
 static int main_loop(HWND hwnd) {
   static constexpr const auto ms_per_tick = 1000 / 20;
@@ -350,11 +319,8 @@ static int main_loop(HWND hwnd) {
   return static_cast<int>(msg.wParam);
 }
 
-extern "C" int CALLBACK WinMain(
-    _In_ HINSTANCE h_instance,
-    _In_opt_ HINSTANCE /* unused */,
-    _In_ LPSTR /* command line */,
-    _In_ int cmd_show) try {
+extern "C" int CALLBACK WinMain(_In_ HINSTANCE h_instance, _In_opt_ HINSTANCE /* unused */,
+                                _In_ LPSTR /* command line */, _In_ int cmd_show) try {
   register_class(h_instance);
   auto hwnd = g_hwnd = create_window(h_instance, cmd_show);
   casein_enable_filedrop(g_drop_enabled);
