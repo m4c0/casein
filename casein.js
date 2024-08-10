@@ -1,6 +1,7 @@
 (function() {
   const canvas = document.createElement("canvas");
   canvas.id = "casein-canvas";
+  canvas.style.border = "1px solid black";
   document.body.appendChild(canvas);
 
   document.addEventListener('keydown', (e) => leco_exports.casein_key(1, e.keyCode));
