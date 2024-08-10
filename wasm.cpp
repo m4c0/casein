@@ -21,23 +21,14 @@ extern "C" void casein_call(casein::event_type et);
 extern "C" void casein_call_k(casein::event_type et, casein::keys);
 extern "C" void casein_call_m(casein::event_type et, casein::mouse_buttons);
 
-extern "C" void casein_enable_filedrop(bool en) {
-}
+extern "C" void casein_enable_filedrop(bool en) {}
 
 void casein::interrupt(casein::interrupts irq) {
   switch (irq) {
-  case IRQ_FULLSCREEN:
-    silog::log(silog::warning, "Fullscreen not supported");
-    break;
-  case IRQ_QUIT:
-    silog::log(silog::warning, "Quit not supported");
-    break;
-  case IRQ_WINDOW_SIZE:
-    ::window_size(casein::window_size.x, casein::window_size.y);
-    break;
-  case IRQ_WINDOW_TITLE:
-    ::window_title(casein::window_title.begin(), casein::window_title.size());
-    break;
+  case IRQ_FULLSCREEN: silog::log(silog::warning, "Fullscreen not supported"); break;
+  case IRQ_QUIT: silog::log(silog::warning, "Quit not supported"); break;
+  case IRQ_WINDOW_SIZE: ::window_size(casein::window_size.x, casein::window_size.y); break;
+  case IRQ_WINDOW_TITLE: ::window_title(casein::window_title.begin(), casein::window_title.size()); break;
   }
 }
 
@@ -48,18 +39,12 @@ static void repaint() {
 
 static constexpr auto key_for_code(int code) {
   switch (code) {
-  case 32:
-    return casein::K_SPACE;
-  case 37:
-    return casein::K_LEFT;
-  case 38:
-    return casein::K_UP;
-  case 39:
-    return casein::K_RIGHT;
-  case 40:
-    return casein::K_DOWN;
-  default:
-    return casein::K_NULL;
+  case 32: return casein::K_SPACE;
+  case 37: return casein::K_LEFT;
+  case 38: return casein::K_UP;
+  case 39: return casein::K_RIGHT;
+  case 40: return casein::K_DOWN;
+  default: return casein::K_NULL;
   }
 }
 void EXPORT(casein_key)(bool down, unsigned key_code) {
