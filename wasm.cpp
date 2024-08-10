@@ -7,15 +7,19 @@ module casein;
 import silog;
 import vaselin;
 
+namespace {
+  enum js_mouse_event { jsme_down = 0, jsme_move, jsme_up };
+}
+
 IMPORT(void, window_size)(int x, int y);
 IMPORT(void, window_title)(const char *, int);
 
 // TODO: more keyboard keys
-// TODO: mouse support
-// TODO: centralise canvas (maybe a border too?)
 
+// TODO: centralise these in "externc"
 extern "C" void casein_call(casein::event_type et);
 extern "C" void casein_call_k(casein::event_type et, casein::keys);
+extern "C" void casein_call_m(casein::event_type et, casein::mouse_buttons);
 
 extern "C" void casein_enable_filedrop(bool en) {
 }
@@ -62,6 +66,25 @@ void EXPORT(casein_key)(bool down, unsigned key_code) {
   auto key = key_for_code(key_code);
   auto code = down ? casein::KEY_DOWN : casein::KEY_UP;
   casein_call_k(code, key);
+}
+
+static auto js_button(int button) {
+  switch (button) {
+  case 0: return casein::M_LEFT;
+  case 2: return casein::M_RIGHT;
+  default: return casein::M_MAX;
+  }
+}
+void EXPORT(casein_mouse)(int e, int button, int ofsx, int ofsy) {
+  auto b = js_button(button);
+  if (b == casein::M_MAX) return;
+
+  casein::mouse_pos = { ofsx, ofsy };
+  switch (e) {
+  case jsme_down: casein_call_m(casein::MOUSE_DOWN, b);
+  case jsme_move: casein_call(casein::MOUSE_MOVE);
+  case jsme_up: casein_call_m(casein::MOUSE_UP, b);
+  }
 }
 
 int main() {
