@@ -44,7 +44,10 @@ static constexpr auto key_for_code(int code) {
     case 38: return casein::K_UP;
     case 39: return casein::K_RIGHT;
     case 40: return casein::K_DOWN;
-    default: return casein::K_NULL;
+    default:
+      if (code >= 'A' && code <= 'Z') return static_cast<casein::keys>(code - 'A' + 'a');
+      if (code >= '0' && code <= '9') return static_cast<casein::keys>(code);
+      return casein::K_NULL;
   }
 }
 void EXPORT(casein_key)(bool down, unsigned key_code) {
