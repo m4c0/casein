@@ -40,6 +40,7 @@ static void repaint(void *) {
 static constexpr auto key_for_code(int code) {
   switch (code) {
     case 13: return casein::K_ENTER;
+    case 27: return casein::K_ESCAPE;
     case 32: return casein::K_SPACE;
     case 37: return casein::K_LEFT;
     case 38: return casein::K_UP;
