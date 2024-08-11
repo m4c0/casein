@@ -32,9 +32,9 @@ void casein::interrupt(casein::interrupts irq) {
   }
 }
 
-static void repaint() {
+static void repaint(void *) {
   casein_call(casein::REPAINT);
-  vaselin::request_animation_frame(repaint);
+  vaselin::request_animation_frame(repaint, nullptr);
 }
 
 static constexpr auto key_for_code(int code) {
@@ -77,5 +77,5 @@ int main() {
   casein::interrupt(casein::IRQ_WINDOW_TITLE);
 
   casein_call(casein::CREATE_WINDOW);
-  vaselin::request_animation_frame(repaint);
+  vaselin::request_animation_frame(repaint, nullptr);
 }
