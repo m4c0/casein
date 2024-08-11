@@ -25,10 +25,10 @@ extern "C" void casein_enable_filedrop(bool en) {}
 
 void casein::interrupt(casein::interrupts irq) {
   switch (irq) {
-  case IRQ_FULLSCREEN: silog::log(silog::warning, "Fullscreen not supported"); break;
-  case IRQ_QUIT: silog::log(silog::warning, "Quit not supported"); break;
-  case IRQ_WINDOW_SIZE: ::window_size(casein::window_size.x, casein::window_size.y); break;
-  case IRQ_WINDOW_TITLE: ::window_title(casein::window_title.begin(), casein::window_title.size()); break;
+    case IRQ_FULLSCREEN: silog::log(silog::warning, "Fullscreen not supported"); break;
+    case IRQ_QUIT: silog::log(silog::warning, "Quit not supported"); break;
+    case IRQ_WINDOW_SIZE: ::window_size(casein::window_size.x, casein::window_size.y); break;
+    case IRQ_WINDOW_TITLE: ::window_title(casein::window_title.begin(), casein::window_title.size()); break;
   }
 }
 
@@ -39,12 +39,12 @@ static void repaint(void *) {
 
 static constexpr auto key_for_code(int code) {
   switch (code) {
-  case 32: return casein::K_SPACE;
-  case 37: return casein::K_LEFT;
-  case 38: return casein::K_UP;
-  case 39: return casein::K_RIGHT;
-  case 40: return casein::K_DOWN;
-  default: return casein::K_NULL;
+    case 32: return casein::K_SPACE;
+    case 37: return casein::K_LEFT;
+    case 38: return casein::K_UP;
+    case 39: return casein::K_RIGHT;
+    case 40: return casein::K_DOWN;
+    default: return casein::K_NULL;
   }
 }
 void EXPORT(casein_key)(bool down, unsigned key_code) {
@@ -55,9 +55,9 @@ void EXPORT(casein_key)(bool down, unsigned key_code) {
 
 static auto js_button(int button) {
   switch (button) {
-  case 0: return casein::M_LEFT;
-  case 2: return casein::M_RIGHT;
-  default: return casein::M_MAX;
+    case 0: return casein::M_LEFT;
+    case 2: return casein::M_RIGHT;
+    default: return casein::M_MAX;
   }
 }
 void EXPORT(casein_mouse)(int e, int button, int ofsx, int ofsy) {
@@ -66,9 +66,9 @@ void EXPORT(casein_mouse)(int e, int button, int ofsx, int ofsy) {
 
   casein::mouse_pos = { ofsx, ofsy };
   switch (e) {
-  case jsme_down: casein_call_m(casein::MOUSE_DOWN, b);
-  case jsme_move: casein_call(casein::MOUSE_MOVE);
-  case jsme_up: casein_call_m(casein::MOUSE_UP, b);
+    case jsme_down: casein_call_m(casein::MOUSE_DOWN, b);
+    case jsme_move: casein_call(casein::MOUSE_MOVE);
+    case jsme_up: casein_call_m(casein::MOUSE_UP, b);
   }
 }
 
