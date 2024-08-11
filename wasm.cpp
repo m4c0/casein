@@ -75,10 +75,16 @@ void EXPORT(casein_mouse)(int e, int button, int ofsx, int ofsy) {
   }
 }
 
+static void timer(void *) {
+  casein_call(casein::TIMER);
+  vaselin::set_timeout(timer, nullptr, 50);
+}
+
 int main() {
   casein::interrupt(casein::IRQ_WINDOW_SIZE);
   casein::interrupt(casein::IRQ_WINDOW_TITLE);
 
   casein_call(casein::CREATE_WINDOW);
   vaselin::request_animation_frame(repaint, nullptr);
+  vaselin::set_timeout(timer, nullptr, 0);
 }
