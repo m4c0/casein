@@ -20,8 +20,8 @@
 
   leco_imports.casein = {
     window_size : (x, y) => {
-      canvas.style.width = x;
-      canvas.style.height = y;
+      canvas.width = x;
+      canvas.height = y;
     },
     window_title : (ptr, size) => document.title = vaselin_tostr(ptr, size),
   };
