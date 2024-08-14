@@ -58,22 +58,19 @@ void EXPORT(casein_key)(bool down, unsigned key_code) {
   casein_call_k(code, key);
 }
 
-static auto js_button(int button) {
+static void call_mouse_evt(casein::event_type e, int button) {
   switch (button) {
-    case 0: return casein::M_LEFT;
-    case 2: return casein::M_RIGHT;
-    default: return casein::M_MAX;
+    case 0: casein_call_m(e, casein::M_LEFT);
+    case 2: casein_call_m(e, casein::M_RIGHT);
+    default: return;
   }
 }
 void EXPORT(casein_mouse)(int e, int button, int ofsx, int ofsy) {
-  auto b = js_button(button);
-  if (b == casein::M_MAX) return;
-
   casein::mouse_pos = { ofsx, ofsy };
   switch (e) {
-    case jsme_down: casein_call_m(casein::MOUSE_DOWN, b);
+    case jsme_down: call_mouse_evt(casein::MOUSE_DOWN, button);
     case jsme_move: casein_call(casein::MOUSE_MOVE);
-    case jsme_up: casein_call_m(casein::MOUSE_UP, b);
+    case jsme_up: call_mouse_evt(casein::MOUSE_UP, button);
   }
 }
 
