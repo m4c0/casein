@@ -31,28 +31,28 @@ namespace casein {
   void handle(event_type et, gestures g, hai::fn<void> fn) { emap_g[et][g] = traits::move(fn); }
 
   void reset_k(event_type et) {
-    for (auto &n : emap_k[et]) n = {};
+    for (auto & n : emap_k[et]) n = {};
   }
   void reset_m(event_type et) {
-    for (auto &n : emap_m[et]) n = {};
+    for (auto & n : emap_m[et]) n = {};
   }
   void reset_g(event_type et) {
-    for (auto &n : emap_g[et]) n = {};
+    for (auto & n : emap_g[et]) n = {};
   }
 } // namespace casein
 
 extern "C" void casein_call(casein::event_type et) {
-  if (auto &fn = emap[et]) fn();
+  if (auto & fn = emap[et]) fn();
 }
 extern "C" void casein_call_g(casein::event_type et, casein::gestures g) {
-  if (auto &fn = emap_g[et][g]) fn();
+  if (auto & fn = emap_g[et][g]) fn();
   casein_call(et);
 }
 extern "C" void casein_call_k(casein::event_type et, casein::keys k) {
-  if (auto &fn = emap_k[et][k]) fn();
+  if (auto & fn = emap_k[et][k]) fn();
   casein_call(et);
 }
 extern "C" void casein_call_m(casein::event_type et, casein::mouse_buttons m) {
-  if (auto &fn = emap_m[et][m]) fn();
+  if (auto & fn = emap_m[et][m]) fn();
   casein_call(et);
 }
