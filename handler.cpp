@@ -24,7 +24,7 @@ namespace casein {
   void handle(event_type et, hai::fn<void> fn) {
     emap[et] = traits::move(fn);
 
-    if (et == FILES_DROP) casein_enable_filedrop(!!fn);
+    if (et == FILES_DROP) casein_enable_filedrop(!!emap[et]);
   }
   void handle(event_type et, keys k, hai::fn<void> fn) { emap_k[et][k] = traits::move(fn); }
   void handle(event_type et, mouse_buttons m, hai::fn<void> fn) { emap_m[et][m] = traits::move(fn); }
