@@ -60,7 +60,7 @@ extern void ** casein_native_ptr;
     static_cast<float>(self.frame.size.height),
   };
   *casein_screen_scale_factor = [self backingScaleFactor];
-  // [self inLiveResize] == YES,
+  *casein_window_live_resize = [self inLiveResize] == YES;
   casein_call(casein::RESIZE_WINDOW);
 }
 

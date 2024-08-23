@@ -11,5 +11,6 @@ extern "C" void casein_call_m(casein::event_type et, casein::mouse_buttons m);
 extern "C" float * casein_screen_scale_factor;
 extern "C" casein::point * casein_window_size;
 extern "C" bool * casein_fullscreen;
+extern "C" bool * casein_window_live_resize;
 
 extern "C" void casein_window_title(const char ** ptr, unsigned * len);
