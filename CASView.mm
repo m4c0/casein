@@ -52,6 +52,10 @@ extern void ** casein_native_ptr;
 - (bool)inLiveResize {
   return NO;
 }
+#else
+- (void)viewDidEndLiveResize {
+  [self sendResizeEvent];
+}
 #endif
 
 - (void)sendResizeEvent {
