@@ -97,6 +97,13 @@ extern "C" void casein_interrupt(casein::interrupts irq) {
   casein_call_g(casein::GESTURE, casein::G_TAP_1);
 }
 
+- (void)applicationWillResignActive:(UIApplication *)application {
+  casein_call(casein::ENTER_BACKGROUND);
+}
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+  casein_call(casein::LEAVE_BACKGROUND);
+}
+
 - (BOOL)application:(UIApplication *)app didFinishLaunchingWithOptions:(id)options {
   app.applicationSupportsShakeToEdit = YES;
 

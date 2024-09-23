@@ -3,10 +3,12 @@
 namespace casein {
   enum event_type {
     CREATE_WINDOW,
+    ENTER_BACKGROUND,
     FILES_DROP,
     GESTURE,
     KEY_DOWN,
     KEY_UP,
+    LEAVE_BACKGROUND,
     MOUSE_DOWN,
     MOUSE_MOVE,
     MOUSE_MOVE_REL,
