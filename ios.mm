@@ -2,17 +2,15 @@
 #import "CASView.h"
 #import "externc.hpp"
 
-extern "C" void casein_enable_filedrop(bool) {
-}
+extern "C" void casein_enable_filedrop(bool) {}
 
 extern "C" void casein_interrupt(casein::interrupts irq) {
   // These are here as a reminder, if we ever got an IRQ tha makes sense in iOS
   switch (irq) {
-  case casein::IRQ_FULLSCREEN:
-  case casein::IRQ_QUIT:
-  case casein::IRQ_WINDOW_SIZE:
-  case casein::IRQ_WINDOW_TITLE:
-    break;
+    case casein::IRQ_FULLSCREEN:
+    case casein::IRQ_QUIT:
+    case casein::IRQ_WINDOW_SIZE:
+    case casein::IRQ_WINDOW_TITLE: break;
   }
 }
 
@@ -57,26 +55,17 @@ extern "C" void casein_interrupt(casein::interrupts irq) {
   // casein::touch t = [self touchOfLocatable:gr loong:true];
 
   switch (gr.state) {
-  case UIGestureRecognizerStateBegan:
-    casein_call(casein::TOUCH_DOWN);
-    break;
-  case UIGestureRecognizerStateChanged:
-    casein_call(casein::TOUCH_MOVE);
-    break;
-  case UIGestureRecognizerStateCancelled:
-    casein_call(casein::TOUCH_CANCEL);
-    break;
-  case UIGestureRecognizerStateEnded:
-    casein_call(casein::TOUCH_UP);
-    break;
-  default:
-    break;
+    case UIGestureRecognizerStateBegan: casein_call(casein::TOUCH_DOWN); break;
+    case UIGestureRecognizerStateChanged: casein_call(casein::TOUCH_MOVE); break;
+    case UIGestureRecognizerStateCancelled: casein_call(casein::TOUCH_CANCEL); break;
+    case UIGestureRecognizerStateEnded: casein_call(casein::TOUCH_UP); break;
+    default: break;
   }
 }
 @end
 
 @interface CASAppDelegate : NSObject<UIApplicationDelegate>
-@property (nonatomic, strong) UIWindow * window;
+@property(nonatomic, strong) UIWindow * window;
 @end
 
 @implementation CASAppDelegate
@@ -152,9 +141,7 @@ extern "C" void casein_interrupt(casein::interrupts irq) {
 }
 @end
 
-extern "C" void casein_exit(int code) {
-  abort();
-}
+extern "C" void casein_exit(int code) { abort(); }
 int main(int argc, char ** argv) {
   @autoreleasepool {
     return UIApplicationMain(argc, argv, nil, @"CASAppDelegate");
