@@ -292,24 +292,16 @@ void casein::interrupt(casein::interrupts irq) {
   }
 }
 
-static void timer_fired(void *, BOOLEAN) { casein_call(casein::TIMER); }
-
 static int main_loop(HWND hwnd) {
   static constexpr const auto ms_per_tick = 1000 / 20;
 
   MSG msg;
   HANDLE timer;
 
-  // We can't rely on WM_TIMER because it is a low-priority message
-  auto tq = CreateTimerQueue();
-  CreateTimerQueueTimer(&timer, tq, timer_fired, nullptr, ms_per_tick, ms_per_tick, 0);
-
   while (GetMessage(&msg, 0, 0, 0)) {
     TranslateMessage(&msg);
     DispatchMessage(&msg);
   }
-
-  DeleteTimerQueueEx(tq, nullptr);
   return static_cast<int>(msg.wParam);
 }
 

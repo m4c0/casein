@@ -59,10 +59,6 @@ static void key(casein::event_type evt, XEvent * e) {
   casein_call_k(evt, key_of(&e->xkey));
 }
 
-static void call_timer(sigval) {
-  casein_call(casein::TIMER);
-}
-
 extern "C" int main() {
   auto dpy = XOpenDisplay(nullptr);
   if (!dpy) {
@@ -86,24 +82,6 @@ extern "C" int main() {
   };
   casein::native_ptr = &nptr;
   casein_call(casein::CREATE_WINDOW);
-
-  sigevent sevp {};
-  sevp.sigev_notify = SIGEV_THREAD;
-  sevp.sigev_notify_function = &call_timer;
-
-  timer_t timer {};
-  if (0 != timer_create(CLOCK_REALTIME, &sevp, &timer)) {
-    silog::log(silog::error, "Failed to create timer: %s", strerror(errno));
-  }
-
-  static constexpr const auto ms_per_tick = 1000 / 20;
-  static constexpr const auto us_per_tick = ms_per_tick * 1000;
-  static constexpr const auto ns_per_tick = us_per_tick * 1000;
-
-  itimerspec its {};
-  its.it_interval.tv_nsec = ns_per_tick;
-  its.it_value = its.it_interval;
-  timer_settime(timer, 0, &its, nullptr);
 
   while (!should_quit) {
     XEvent e {};

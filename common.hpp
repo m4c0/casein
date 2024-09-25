@@ -16,7 +16,6 @@ namespace casein {
     REPAINT,
     RESIZE_WINDOW,
     QUIT,
-    TIMER,
     TOUCH_CANCEL,
     TOUCH_DOWN,
     TOUCH_MOVE,
