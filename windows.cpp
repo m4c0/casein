@@ -293,10 +293,7 @@ void casein::interrupt(casein::interrupts irq) {
 }
 
 static int main_loop(HWND hwnd) {
-  static constexpr const auto ms_per_tick = 1000 / 20;
-
   MSG msg;
-  HANDLE timer;
 
   while (GetMessage(&msg, 0, 0, 0)) {
     TranslateMessage(&msg);
