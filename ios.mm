@@ -26,28 +26,25 @@ extern "C" void casein_interrupt(casein::interrupts irq) {
   casein_call_g(casein::GESTURE, casein::G_SHAKE);
 }
 
-// - (casein::touch)touchOfLocatable:(id)t loong:(bool)l {
-//   CGPoint p = [t locationInView:[self view]];
-//   return casein::touch { static_cast<int>(p.x), static_cast<int>(p.y), l };
-// }
-// - (casein::touch)touchOfTouches:(NSSet *)touches {
-//   UITouch * t = [touches anyObject];
-//   return [self touchOfLocatable:t loong:false];
-// }
+- (void)updateMousePos:(NSSet *)touches {
+  UITouch * t = [touches anyObject];
+  CGPoint p = [t locationInView:[self view]];
+  *casein_mouse_pos = { static_cast<float>(p.x), static_cast<float>(p.y) };
+}
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-  // casein_handle(casein::events::touch_down { [self touchOfTouches:touches] });
+  [self updateMousePos:touches];
   casein_call(casein::TOUCH_DOWN);
 }
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-  // casein_handle(casein::events::touch_cancel { [self touchOfTouches:touches] });
+  [self updateMousePos:touches];
   casein_call(casein::TOUCH_CANCEL);
 }
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-  // casein_handle(casein::events::touch_move { [self touchOfTouches:touches] });
+  [self updateMousePos:touches];
   casein_call(casein::TOUCH_MOVE);
 }
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-  // casein_handle(casein::events::touch_up { [self touchOfTouches:touches] });
+  [self updateMousePos:touches];
   casein_call(casein::TOUCH_UP);
 }
 - (void)press:(UIGestureRecognizer *)gr {
