@@ -32,12 +32,18 @@ namespace casein {
 
   void reset_k(event_type et) {
     for (auto & n : emap_k[et]) n = {};
+    reset(et);
   }
   void reset_m(event_type et) {
     for (auto & n : emap_m[et]) n = {};
+    reset(et);
   }
   void reset_g(event_type et) {
     for (auto & n : emap_g[et]) n = {};
+    reset(et);
+  }
+  void reset(event_type et) {
+    emap[et] = {};
   }
 } // namespace casein
 

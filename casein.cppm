@@ -43,6 +43,7 @@ export namespace casein {
   void reset_k(event_type);
   void reset_m(event_type);
   void reset_g(event_type);
+  void reset(event_type);
 
   using native_handle_t = ::casein_native_handle *;
   extern native_handle_t native_ptr;
