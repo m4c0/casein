@@ -48,8 +48,8 @@ extern "C" void casein_interrupt(casein::interrupts irq) {
   casein_call(casein::TOUCH_UP);
 }
 - (void)press:(UIGestureRecognizer *)gr {
-  // TODO: store "T" into a register
-  // casein::touch t = [self touchOfLocatable:gr loong:true];
+  // TODO: mark "long press"
+  [self updateMousePos:touches];
 
   switch (gr.state) {
     case UIGestureRecognizerStateBegan: casein_call(casein::TOUCH_DOWN); break;
