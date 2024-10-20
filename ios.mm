@@ -26,30 +26,29 @@ extern "C" void casein_interrupt(casein::interrupts irq) {
   casein_call_g(casein::GESTURE, casein::G_SHAKE);
 }
 
-- (void)updateMousePos:(NSSet *)touches {
-  UITouch * t = [touches anyObject];
+- (void)updateMousePosFromLocatable:(id)t {
   CGPoint p = [t locationInView:[self view]];
   *casein_mouse_pos = { static_cast<float>(p.x), static_cast<float>(p.y) };
 }
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-  [self updateMousePos:touches];
+  [self updateMousePosFromLocatable:[touches anyObject]];
   casein_call(casein::TOUCH_DOWN);
 }
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-  [self updateMousePos:touches];
+  [self updateMousePosFromLocatable:[touches anyObject]];
   casein_call(casein::TOUCH_CANCEL);
 }
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-  [self updateMousePos:touches];
+  [self updateMousePosFromLocatable:[touches anyObject]];
   casein_call(casein::TOUCH_MOVE);
 }
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-  [self updateMousePos:touches];
+  [self updateMousePosFromLocatable:[touches anyObject]];
   casein_call(casein::TOUCH_UP);
 }
 - (void)press:(UIGestureRecognizer *)gr {
   // TODO: mark "long press"
-  [self updateMousePos:touches];
+  [self updateMousePosFromLocatable:gr];
 
   switch (gr.state) {
     case UIGestureRecognizerStateBegan: casein_call(casein::TOUCH_DOWN); break;
