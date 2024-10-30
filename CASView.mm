@@ -37,7 +37,7 @@ extern void ** casein_native_ptr;
   if (!window) return 1.0f;
   return window.backingScaleFactor;
 #else
-  return self.window.contentScaleFactor;
+  return self.contentScaleFactor;
 #endif
 }
 
