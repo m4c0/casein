@@ -87,31 +87,37 @@ extern "C" void casein_interrupt(casein::interrupts irq) {
 
   UISwipeGestureRecognizer * left = [UISwipeGestureRecognizer new];
   left.direction = UISwipeGestureRecognizerDirectionLeft;
+  left.cancelsTouchesInView = NO;
   [left addTarget:self action:@selector(swipeLeft)];
   [vc.view addGestureRecognizer:left];
 
   UISwipeGestureRecognizer * right = [UISwipeGestureRecognizer new];
   right.direction = UISwipeGestureRecognizerDirectionRight;
+  right.cancelsTouchesInView = NO;
   [right addTarget:self action:@selector(swipeRight)];
   [vc.view addGestureRecognizer:right];
 
   UISwipeGestureRecognizer * top = [UISwipeGestureRecognizer new];
   top.direction = UISwipeGestureRecognizerDirectionUp;
+  top.cancelsTouchesInView = NO;
   [top addTarget:self action:@selector(swipeTop)];
   [vc.view addGestureRecognizer:top];
 
   UISwipeGestureRecognizer * bottom = [UISwipeGestureRecognizer new];
   bottom.direction = UISwipeGestureRecognizerDirectionDown;
+  bottom.cancelsTouchesInView = NO;
   [bottom addTarget:self action:@selector(swipeBottom)];
   [vc.view addGestureRecognizer:bottom];
 
   UITapGestureRecognizer * tap = [UITapGestureRecognizer new];
   tap.numberOfTapsRequired = 1;
   tap.numberOfTouchesRequired = 1;
+  tap.cancelsTouchesInView = NO;
   [tap addTarget:self action:@selector(tap)];
   [vc.view addGestureRecognizer:tap];
 
   UILongPressGestureRecognizer * press = [UILongPressGestureRecognizer new];
+  press.cancelsTouchesInView = NO;
   [press requireGestureRecognizerToFail:tap];
   [press addTarget:self action:@selector(press)];
   [vc.view addGestureRecognizer:press];
