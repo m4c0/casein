@@ -46,18 +46,6 @@ extern "C" void casein_interrupt(casein::interrupts irq) {
   [self updateMousePosFromLocatable:[touches anyObject]];
   casein_call(casein::TOUCH_UP);
 }
-- (void)press:(UIGestureRecognizer *)gr {
-  // TODO: mark "long press"
-  [self updateMousePosFromLocatable:gr];
-
-  switch (gr.state) {
-    case UIGestureRecognizerStateBegan: casein_call(casein::TOUCH_DOWN); break;
-    case UIGestureRecognizerStateChanged: casein_call(casein::TOUCH_MOVE); break;
-    case UIGestureRecognizerStateCancelled: casein_call(casein::TOUCH_CANCEL); break;
-    case UIGestureRecognizerStateEnded: casein_call(casein::TOUCH_UP); break;
-    default: break;
-  }
-}
 @end
 
 @interface CASAppDelegate : NSObject<UIApplicationDelegate>
@@ -77,7 +65,9 @@ extern "C" void casein_interrupt(casein::interrupts irq) {
 - (void)swipeBottom {
   casein_call_g(casein::GESTURE, casein::G_SWIPE_DOWN);
 }
-
+- (void)press {
+  casein_call_g(casein::GESTURE, casein::G_LONG_PRESS);
+}
 - (void)tap {
   casein_call_g(casein::GESTURE, casein::G_TAP_1);
 }
@@ -123,7 +113,7 @@ extern "C" void casein_interrupt(casein::interrupts irq) {
 
   UILongPressGestureRecognizer * press = [UILongPressGestureRecognizer new];
   [press requireGestureRecognizerToFail:tap];
-  [press addTarget:vc action:@selector(press:)];
+  [press addTarget:self action:@selector(press)];
   [vc.view addGestureRecognizer:press];
 
   self.window = [UIWindow new];

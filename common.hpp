@@ -97,6 +97,7 @@ namespace casein {
     M_MAX,
   };
   enum gestures {
+    G_LONG_PRESS,
     G_TAP_1,
     G_TAP_2,
     G_SHAKE,
