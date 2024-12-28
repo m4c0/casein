@@ -67,6 +67,16 @@ extern void ** casein_native_ptr;
   }
 }
 
+#if TARGET_OS_OSX
+- (void)scrollWheel:(NSEvent *)e {
+  *casein_mouse_rel = {
+    static_cast<float>(e.deltaX),
+    static_cast<float>(e.deltaY),
+  };
+  casein_call_m(casein::MOUSE_MOVE, casein::M_WHEEL);
+}
+#endif
+
 // http://smokyonion.github.io/blog/2012/11/11/how-to-make-your-mac-apps-retina-ready/
 - (void)scaleDidChange:(NSNotification *)n {
   if ([self.layer respondsToSelector:@selector(contentsScale)]) {
