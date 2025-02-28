@@ -114,6 +114,7 @@ namespace casein {
   };
 
   enum interrupts {
+    IRQ_CURSOR,
     IRQ_FULLSCREEN,
     IRQ_QUIT,
     IRQ_WINDOW_SIZE,

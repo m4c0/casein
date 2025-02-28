@@ -22,6 +22,7 @@ export {
 }
 
 export namespace casein {
+  extern bool cursor_visible;
   extern bool fullscreen;
   extern jute::view window_title;
   extern dotz::vec2 window_size;

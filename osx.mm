@@ -201,6 +201,7 @@ static NSWindow * create_key_window() {
 
 extern "C" void casein_interrupt(casein::interrupts irq) {
   switch (irq) {
+  case casein::IRQ_CURSOR: *casein_cursor_visible ? [NSCursor unhide] : [NSCursor hide]; break;
   case casein::IRQ_FULLSCREEN: *casein_fullscreen ? enter_fullscreen() : leave_fullscreen(); break;
   case casein::IRQ_QUIT: [NSApp terminate:nil]; break;
   case casein::IRQ_WINDOW_SIZE: resize_window(); break;

@@ -7,6 +7,7 @@ extern "C" dotz::vec2 * casein_mouse_rel = &casein::mouse_rel;
 extern "C" float * casein_screen_scale_factor = &casein::screen_scale_factor;
 extern "C" bool * casein_keydown_repeating = &casein::keydown_repeating;
 extern "C" dotz::vec2 * casein_window_size = &casein::window_size;
+extern "C" bool * casein_cursor_visible = &casein::cursor_visible;
 extern "C" bool * casein_fullscreen = &casein::fullscreen;
 extern "C" bool * casein_window_live_resize = &casein::window_live_resize;
 

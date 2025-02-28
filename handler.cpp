@@ -3,6 +3,7 @@ import :internal;
 
 extern "C" void casein_enable_filedrop(bool);
 
+bool casein::cursor_visible = true;
 bool casein::fullscreen {};
 casein::native_handle_t casein::native_ptr {};
 dotz::vec2 casein::mouse_pos {};

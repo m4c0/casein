@@ -12,6 +12,7 @@ extern "C" float * casein_screen_scale_factor;
 extern "C" casein::point * casein_mouse_pos;
 extern "C" casein::point * casein_mouse_rel;
 extern "C" casein::point * casein_window_size;
+extern "C" bool * casein_cursor_visible;
 extern "C" bool * casein_fullscreen;
 extern "C" bool * casein_window_live_resize;
 
