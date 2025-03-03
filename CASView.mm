@@ -51,6 +51,18 @@ extern void ** casein_native_ptr;
 }
 #endif
 
+- (void)mouseEntered:(NSEvent *)event { casein_call(casein::MOUSE_ENTER); }
+- (void)mouseExited:(NSEvent *)event  { casein_call(casein::MOUSE_LEAVE); }
+- (void)updateTrackingAreas {
+  [super updateTrackingAreas];
+
+  if ([self.trackingAreas count]) [self removeTrackingArea:self.trackingAreas[0]];
+
+  NSTrackingAreaOptions opts = NSTrackingMouseEnteredAndExited | NSTrackingActiveAlways;
+  NSTrackingArea * area = [[NSTrackingArea alloc] initWithRect:self.bounds options:opts owner:self userInfo:nil];
+  [self addTrackingArea:area];
+}
+
 - (void)sendResizeEvent {
   *casein_window_size = {
     static_cast<float>(self.frame.size.width),

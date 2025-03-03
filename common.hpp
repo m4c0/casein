@@ -10,6 +10,8 @@ namespace casein {
     KEY_UP,
     LEAVE_BACKGROUND,
     MOUSE_DOWN,
+    MOUSE_ENTER,
+    MOUSE_LEAVE,
     MOUSE_MOVE,
     MOUSE_MOVE_REL,
     MOUSE_UP,
