@@ -173,8 +173,11 @@ static void resize_window() {
 static void set_mouse_pos() {
   NSPoint p;
   p.x = casein_mouse_pos->x;
-  p.y = g_window.contentView.frame.size.height - casein_mouse_pos->y;
+  p.y = casein_mouse_pos->y;
   p = [g_window.contentView convertPoint:p toView:nil];
+  // Convert point to Quartz coordinate system, which is not the same as Cocoa's
+  p.x += g_window.frame.origin.x;
+  p.y += NSMaxY(NSScreen.mainScreen.frame) - NSMaxY(g_window.frame);
   CGWarpMouseCursorPosition(p);
 }
 
