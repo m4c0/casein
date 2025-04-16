@@ -272,11 +272,22 @@ static void resize_window() {
   MoveWindow(g_hwnd, rect.left, rect.top, w, h, true);
 }
 
+static void set_cursor_pos() {
+  RECT rect {};
+  GetWindowRect(g_hwnd, &rect);
+
+  auto x = casein::mouse_pos.x + rect.left;
+  auto y = casein::mouse_pos.y + rect.top;
+  SetCursorPos(x, y);
+}
+
 void casein::interrupt(casein::interrupts irq) {
   if (!g_hwnd) return;
 
   switch (irq) {
+  case IRQ_CURSOR: ShowCursor(casein::cursor_visible); break;
   case IRQ_FULLSCREEN: casein::fullscreen ? enter_fullscreen() : leave_fullscreen(); break;
+  case IRQ_MOUSE_POS: set_cursor_pos(); break;
   case IRQ_QUIT:
     // This is the only way to properly programatically exit an app from any thread. Other attempts froze the app or
     // kept it as a "background app".
