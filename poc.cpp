@@ -50,6 +50,12 @@ static void flip_fullscreen() {
   interrupt(IRQ_FULLSCREEN);
 }
 
+static void capture() {
+  using namespace casein;
+  mouse_pos = window_size / 2;
+  interrupt(IRQ_MOUSE_POS);
+}
+
 static void title() {
   static char buf[1024] = "title 0";
   if (++buf[6] > '9') {
@@ -87,6 +93,7 @@ static struct init {
     handle(KEY_DOWN, K_Q, &exit);
     handle(KEY_DOWN, K_X, &title);
     handle(KEY_DOWN, K_Z, &resize);
+    handle(KEY_DOWN, K_C, &capture);
     handle(KEY_DOWN, K_COMMA, &title);
     handle(KEY_DOWN, K_DOT, &title);
     handle(KEY_DOWN, K_SLASH, &title);

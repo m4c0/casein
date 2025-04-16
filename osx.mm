@@ -170,6 +170,14 @@ static void resize_window() {
   [g_window setFrame:frect display:YES animate:YES];
 }
 
+static void set_mouse_pos() {
+  NSPoint p;
+  p.x = casein_mouse_pos->x;
+  p.y = g_window.contentView.frame.size.height - casein_mouse_pos->y;
+  p = [g_window.contentView convertPoint:p toView:nil];
+  CGWarpMouseCursorPosition(p);
+}
+
 static void enter_fullscreen() {
   if (g_window.styleMask & NSWindowStyleMaskFullScreen) return;
   [g_window toggleFullScreen:nil];
@@ -203,6 +211,7 @@ extern "C" void casein_interrupt(casein::interrupts irq) {
   switch (irq) {
   case casein::IRQ_CURSOR: *casein_cursor_visible ? [NSCursor unhide] : [NSCursor hide]; break;
   case casein::IRQ_FULLSCREEN: *casein_fullscreen ? enter_fullscreen() : leave_fullscreen(); break;
+  case casein::IRQ_MOUSE_POS: set_mouse_pos(); break;
   case casein::IRQ_QUIT: [NSApp terminate:nil]; break;
   case casein::IRQ_WINDOW_SIZE: resize_window(); break;
   case casein::IRQ_WINDOW_TITLE: set_window_title(); break;

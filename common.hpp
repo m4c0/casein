@@ -118,6 +118,7 @@ namespace casein {
   enum interrupts {
     IRQ_CURSOR,
     IRQ_FULLSCREEN,
+    IRQ_MOUSE_POS,
     IRQ_QUIT,
     IRQ_WINDOW_SIZE,
     IRQ_WINDOW_TITLE,
