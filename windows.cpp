@@ -338,4 +338,7 @@ extern "C" int CALLBACK WinMain(_In_ HINSTANCE h_instance, _In_opt_ HINSTANCE /*
 } catch (const std::exception & e) {
   MessageBox(NULL, _T(e.what()), _T("Unhandled error"), NULL);
   return 1;
+} catch (...) {
+  MessageBox(NULL, _T("Check the application logs for more details"), _T("Unhandled error"), NULL);
+  return 1;
 }
