@@ -273,6 +273,8 @@ static void resize_window() {
 }
 
 static void set_cursor_pos() {
+  if (GetForegroundWindow() != g_hwnd) return;
+
   RECT rect {};
   GetWindowRect(g_hwnd, &rect);
 
