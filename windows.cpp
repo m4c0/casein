@@ -273,6 +273,7 @@ static void resize_window() {
 }
 
 static void set_cursor_pos() {
+  // Avoids warping if user is on another app
   if (GetForegroundWindow() != g_hwnd) return;
 
   RECT rect {};
@@ -290,6 +291,8 @@ static void set_cursor_visibility() {
     BYTE CursorMaskXOR[] = { 0x00 };
     return CreateCursor(NULL, 0, 0, 1, 1, CursorMaskAND, CursorMaskXOR);
   }();
+  // The only "sane" way to change cursor is via the window class.
+  // Other changes affect the global cursor.
   auto h = casein::cursor_visible ? shown : hidden;
   SetClassLongPtr(g_hwnd, GCLP_HCURSOR, (LONG_PTR)h);
 }
