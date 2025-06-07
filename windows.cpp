@@ -296,9 +296,6 @@ void casein::interrupt(casein::interrupts irq) {
   if (!g_hwnd) return;
 
   switch (irq) {
-    // TODO: fix this interrupt
-    // It might require SetCursor or even changing the window class, according to SetCursor docs
-    // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setcursor
   case IRQ_CURSOR: set_cursor_visibility(); break;
   case IRQ_FULLSCREEN: casein::fullscreen ? enter_fullscreen() : leave_fullscreen(); break;
   case IRQ_MOUSE_POS: set_cursor_pos(); break;
