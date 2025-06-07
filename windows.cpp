@@ -281,6 +281,17 @@ static void set_cursor_pos() {
   SetCursorPos(x, y);
 }
 
+static void set_cursor_visibility() {
+  static HCURSOR shown  = LoadCursor(NULL, IDC_ARROW);
+  static HCURSOR hidden = [] {
+    BYTE CursorMaskAND[] = { 0xFF };
+    BYTE CursorMaskXOR[] = { 0x00 };
+    return CreateCursor(NULL, 0, 0, 1, 1, CursorMaskAND, CursorMaskXOR);
+  }();
+  auto h = casein::cursor_visible ? shown : hidden;
+  SetClassLongPtr(g_hwnd, GCLP_HCURSOR, (LONG_PTR)h);
+}
+
 void casein::interrupt(casein::interrupts irq) {
   if (!g_hwnd) return;
 
@@ -288,7 +299,7 @@ void casein::interrupt(casein::interrupts irq) {
     // TODO: fix this interrupt
     // It might require SetCursor or even changing the window class, according to SetCursor docs
     // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setcursor
-  case IRQ_CURSOR: ShowCursor(casein::cursor_visible); break;
+  case IRQ_CURSOR: set_cursor_visibility(); break;
   case IRQ_FULLSCREEN: casein::fullscreen ? enter_fullscreen() : leave_fullscreen(); break;
   case IRQ_MOUSE_POS: set_cursor_pos(); break;
   case IRQ_QUIT:
@@ -321,6 +332,7 @@ extern "C" int CALLBACK WinMain(_In_ HINSTANCE h_instance, _In_opt_ HINSTANCE /*
   register_class(h_instance);
   auto hwnd = g_hwnd = create_window(h_instance, cmd_show);
   casein_enable_filedrop(g_drop_enabled);
+  set_cursor_visibility();
   if (casein::fullscreen) enter_fullscreen();
   setup_raw_input();
   return main_loop(hwnd);
