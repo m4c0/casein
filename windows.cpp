@@ -297,25 +297,37 @@ static void set_cursor_visibility() {
   SetClassLongPtr(g_hwnd, GCLP_HCURSOR, (LONG_PTR)h);
 }
 
+static void set_fullscreen() {
+  casein::fullscreen ? enter_fullscreen() : leave_fullscreen();
+}
+
+static void quit() {
+  // This is the only way to properly programatically exit an app from any
+  // thread. Other attempts froze the app or kept it as a "background app".
+  SendMessage(g_hwnd, WM_CLOSE, 0, 0);
+}
+
+static void set_window_title() {
+  SetWindowText(g_hwnd, casein::window_title.cstr().begin());
+}
+
+static void set_window_size() {
+  // TODO: set fullscreen resolution
+  if (casein::fullscreen) return;
+
+  resize_window();
+}
+
 void casein::interrupt(casein::interrupts irq) {
   if (!g_hwnd) return;
 
   switch (irq) {
-  case IRQ_CURSOR: set_cursor_visibility(); break;
-  case IRQ_FULLSCREEN: casein::fullscreen ? enter_fullscreen() : leave_fullscreen(); break;
-  case IRQ_MOUSE_POS: set_cursor_pos(); break;
-  case IRQ_QUIT:
-    // This is the only way to properly programatically exit an app from any thread. Other attempts froze the app or
-    // kept it as a "background app".
-    SendMessage(g_hwnd, WM_CLOSE, 0, 0);
-    break;
-  case IRQ_WINDOW_TITLE: SetWindowText(g_hwnd, casein::window_title.cstr().begin()); break;
-  case IRQ_WINDOW_SIZE:
-    // TODO: set fullscreen resolution
-    if (casein::fullscreen) return;
-
-    resize_window();
-    break;
+    case IRQ_CURSOR:       set_cursor_visibility(); break;
+    case IRQ_FULLSCREEN:   set_fullscreen();        break;
+    case IRQ_MOUSE_POS:    set_cursor_pos();        break;
+    case IRQ_QUIT:         quit();                  break;
+    case IRQ_WINDOW_TITLE: set_window_title();      break;
+    case IRQ_WINDOW_SIZE:  set_window_size();       break;
   }
 }
 
