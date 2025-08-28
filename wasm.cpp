@@ -25,7 +25,9 @@ extern "C" void casein_enable_filedrop(bool en) {}
 
 void casein::interrupt(casein::interrupts irq) {
   switch (irq) {
+    case IRQ_CURSOR: silog::log(silog::warning, "Changing cursor visibility is not supported"); break;
     case IRQ_FULLSCREEN: silog::log(silog::warning, "Fullscreen not supported"); break;
+    case IRQ_MOUSE_POS: silog::log(silog::warning, "Changing mouse pos is not supported"); break;
     case IRQ_QUIT: silog::log(silog::warning, "Quit not supported"); break;
     case IRQ_WINDOW_SIZE: ::window_size(casein::window_size.x, casein::window_size.y); break;
     case IRQ_WINDOW_TITLE: ::window_title(casein::window_title.begin(), casein::window_title.size()); break;
