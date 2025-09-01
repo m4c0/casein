@@ -11,6 +11,7 @@ namespace {
   enum js_mouse_event { jsme_down = 0, jsme_move, jsme_up };
 }
 
+IMPORT(void, set_fullscreen)(bool f);
 IMPORT(void, window_size)(int x, int y);
 IMPORT(void, window_title)(const char *, int);
 
@@ -26,7 +27,7 @@ extern "C" void casein_enable_filedrop(bool en) {}
 void casein::interrupt(casein::interrupts irq) {
   switch (irq) {
     case IRQ_CURSOR: silog::log(silog::warning, "Changing cursor visibility is not supported"); break;
-    case IRQ_FULLSCREEN: silog::log(silog::warning, "Fullscreen not supported"); break;
+    case IRQ_FULLSCREEN: ::set_fullscreen(casein::fullscreen); break;
     case IRQ_MOUSE_POS: silog::log(silog::warning, "Changing mouse pos is not supported"); break;
     case IRQ_QUIT: silog::log(silog::warning, "Quit not supported"); break;
     case IRQ_WINDOW_SIZE: ::window_size(casein::window_size.x, casein::window_size.y); break;

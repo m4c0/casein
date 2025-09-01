@@ -19,6 +19,14 @@
   document.addEventListener('keyup', (e) => leco_exports.casein_key(0, e.keyCode));
 
   leco_imports.casein = {
+    set_fullscreen : (en) => {
+      if (en) {
+        canvas.style.width = canvas.style.height = '100%';
+      } else {
+        canvas.style.removeProperty("width");
+        canvas.style.removeProperty("height");
+      }
+    },
     window_size : (x, y) => {
       canvas.width = x;
       canvas.height = y;
