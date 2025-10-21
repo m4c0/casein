@@ -26,6 +26,7 @@ namespace casein {
   };
   enum keys : unsigned {
     K_NULL,
+    K_TAB = '\t',
     K_SPACE = ' ',
     K_MINUS = '-',
     K_DOT = '.',

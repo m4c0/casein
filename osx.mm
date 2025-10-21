@@ -31,6 +31,7 @@ extern bool * casein_keydown_repeating;
     case NSRightArrowFunctionKey: return casein::K_RIGHT;
     case NSUpArrowFunctionKey: return casein::K_UP;
     case NSDownArrowFunctionKey: return casein::K_DOWN;
+    case 9: return casein::K_TAB;
     case 13: return casein::K_ENTER;
     case 27: return casein::K_ESCAPE;
     default:
