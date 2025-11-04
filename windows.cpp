@@ -246,15 +246,15 @@ static void enter_fullscreen() {
 
   // TODO: provide data about display w/h/refresh using EnumDisplaySettings
 
-  DEVMODE dm {};
-  EnumDisplaySettings(mi.szDevice, 0, &dm);
-  dm.dmPelsWidth = casein::window_size.x;
-  dm.dmPelsHeight = casein::window_size.y;
-  dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT;
-  if (ChangeDisplaySettingsEx(mi.szDevice, &dm, nullptr, CDS_FULLSCREEN, nullptr) == DISP_CHANGE_SUCCESSFUL) {
-    ShowWindow(g_hwnd, SW_MAXIMIZE);
-    return;
-  }
+  //DEVMODE dm {};
+  //EnumDisplaySettings(mi.szDevice, 0, &dm);
+  //dm.dmPelsWidth = casein::window_size.x;
+  //dm.dmPelsHeight = casein::window_size.y;
+  //dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT;
+  //if (ChangeDisplaySettingsEx(mi.szDevice, &dm, nullptr, CDS_FULLSCREEN, nullptr) == DISP_CHANGE_SUCCESSFUL) {
+  //  ShowWindow(g_hwnd, SW_MAXIMIZE);
+  //  return;
+  //}
 
   // Fallback to maximize
   set_window_rect(mi.rcMonitor);
@@ -262,7 +262,7 @@ static void enter_fullscreen() {
 static void leave_fullscreen() {
   SetWindowLongPtr(g_hwnd, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
   set_window_rect(g_old_hwnd_rect);
-  ChangeDisplaySettings(nullptr, CDS_RESET);
+  //ChangeDisplaySettings(nullptr, CDS_RESET);
 }
 
 static void resize_window() {
