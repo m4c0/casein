@@ -2,11 +2,11 @@ module;
 
 #ifdef __APPLE__
 typedef struct CAMetalLayer casein_native_handle;
-#elif defined(_WIN32)
+#elif _WIN32
 typedef struct HWND__ casein_native_handle;
-#elif defined(__ANDROID__)
+#elif __ANDROID__
 typedef struct ANativeWindow casein_native_handle;
-#elif defined(__wasm__)
+#elif __wasm__
 using casein_native_handle = void;
 #elif __linux__
 struct casein_native_handle;
