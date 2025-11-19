@@ -147,6 +147,7 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     // From ValidateRect docs: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-validaterect
     // "The system continues to generate WM_PAINT messages until the current update region is validated."
     casein_call(REPAINT);
+    ValidateRect(hwnd, nullptr);
     return 0;
   case WM_SIZE: {
     auto w = LOWORD(l_param);
