@@ -306,7 +306,9 @@ static void set_fullscreen() {
 static void quit() {
   // This is the only way to properly programatically exit an app from any
   // thread. Other attempts froze the app or kept it as a "background app".
-  SendMessage(g_hwnd, WM_CLOSE, 0, 0);
+  // i.e. We use WM_CLOSE instead of WM_QUIT (or PostQuitMessage etc) and we
+  // need to use SendNotifyMessage instead of SendMessage.
+  SendNotifyMessage(g_hwnd, WM_CLOSE, 0, 0);
 }
 
 static void set_window_title() {
