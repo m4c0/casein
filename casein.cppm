@@ -31,6 +31,7 @@ export namespace casein {
   extern dotz::vec2 mouse_rel;
   extern float screen_scale_factor;
   extern bool keydown_repeating;
+  extern keys last_key;
   extern hai::varray<hai::cstr> dropped_files;
 
   void interrupt(interrupts);
