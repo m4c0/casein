@@ -57,6 +57,7 @@ extern "C" void casein_call_g(casein::event_type et, casein::gestures g) {
 }
 extern "C" void casein_call_k(casein::event_type et, casein::keys k) {
   if (auto & fn = emap_k[et][k]) fn();
+  casein::last_key = k;
   casein_call(et);
 }
 extern "C" void casein_call_m(casein::event_type et, casein::mouse_buttons m) {

@@ -78,8 +78,10 @@ static casein::keys wp2c(WPARAM wp) {
   case VK_SPACE: return casein::K_SPACE;
   case VK_OEM_COMMA: return casein::K_COMMA;
   case VK_OEM_PERIOD: return casein::K_DOT;
-  case VK_OEM_2: // TODO: deal with these internationally
-    return casein::K_SLASH;
+  // TODO: deal with these internationally
+  case VK_OEM_2: return casein::K_SLASH;
+  case VK_OEM_4: return casein::K_LBRACKET;
+  case VK_OEM_6: return casein::K_RBRACKET;
   default:
     if (wp >= VK_F1 && wp <= VK_F12) {
       return static_cast<casein::keys>(casein::K_F1 + (wp - VK_F1));
@@ -147,6 +149,7 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM 
     // From ValidateRect docs: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-validaterect
     // "The system continues to generate WM_PAINT messages until the current update region is validated."
     casein_call(REPAINT);
+    ValidateRect(hwnd, nullptr);
     return 0;
   case WM_SIZE: {
     auto w = LOWORD(l_param);
@@ -246,15 +249,15 @@ static void enter_fullscreen() {
 
   // TODO: provide data about display w/h/refresh using EnumDisplaySettings
 
-  DEVMODE dm {};
-  EnumDisplaySettings(mi.szDevice, 0, &dm);
-  dm.dmPelsWidth = casein::window_size.x;
-  dm.dmPelsHeight = casein::window_size.y;
-  dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT;
-  if (ChangeDisplaySettingsEx(mi.szDevice, &dm, nullptr, CDS_FULLSCREEN, nullptr) == DISP_CHANGE_SUCCESSFUL) {
-    ShowWindow(g_hwnd, SW_MAXIMIZE);
-    return;
-  }
+  //DEVMODE dm {};
+  //EnumDisplaySettings(mi.szDevice, 0, &dm);
+  //dm.dmPelsWidth = casein::window_size.x;
+  //dm.dmPelsHeight = casein::window_size.y;
+  //dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT;
+  //if (ChangeDisplaySettingsEx(mi.szDevice, &dm, nullptr, CDS_FULLSCREEN, nullptr) == DISP_CHANGE_SUCCESSFUL) {
+  //  ShowWindow(g_hwnd, SW_MAXIMIZE);
+  //  return;
+  //}
 
   // Fallback to maximize
   set_window_rect(mi.rcMonitor);
@@ -262,7 +265,7 @@ static void enter_fullscreen() {
 static void leave_fullscreen() {
   SetWindowLongPtr(g_hwnd, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
   set_window_rect(g_old_hwnd_rect);
-  ChangeDisplaySettings(nullptr, CDS_RESET);
+  //ChangeDisplaySettings(nullptr, CDS_RESET);
 }
 
 static void resize_window() {
@@ -305,7 +308,9 @@ static void set_fullscreen() {
 static void quit() {
   // This is the only way to properly programatically exit an app from any
   // thread. Other attempts froze the app or kept it as a "background app".
-  SendMessage(g_hwnd, WM_CLOSE, 0, 0);
+  // i.e. We use WM_CLOSE instead of WM_QUIT (or PostQuitMessage etc) and we
+  // need to use SendNotifyMessage instead of SendMessage.
+  SendNotifyMessage(g_hwnd, WM_CLOSE, 0, 0);
 }
 
 static void set_window_title() {
