@@ -184,10 +184,11 @@ static void set_mouse_pos() {
 
 static void enter_fullscreen() {
   if (g_window.styleMask & NSWindowStyleMaskFullScreen) return;
-  [g_window toggleFullScreen:nil];
+  [g_window performSelectorOnMainThread:@selector(toggleFullScreen:) withObject:nil waitUntilDone:NO];
 }
 static void leave_fullscreen() {
-  if (g_window.styleMask & NSWindowStyleMaskFullScreen) [g_window toggleFullScreen:nil];
+  if (g_window.styleMask & NSWindowStyleMaskFullScreen) 
+    [g_window performSelectorOnMainThread:@selector(toggleFullScreen:) withObject:nil waitUntilDone:NO];
 }
 static NSWindow * create_key_window() {
   NSWindow * wnd = g_window = [CASWindow new];
@@ -207,7 +208,7 @@ static NSWindow * create_key_window() {
   [wnd makeKeyAndOrderFront:wnd];
 
   casein_enable_filedrop(g_drop_enabled);
-  if (*casein_fullscreen) enter_fullscreen();
+  if (*casein_fullscreen) [g_window toggleFullScreen:nil];
   return wnd;
 }
 
