@@ -44,6 +44,7 @@ namespace casein {
     K_9 = '9',
     K_EQUAL = '=',
     K_LBRACKET = '[',
+    K_BACKSLASH = '\\',
     K_RBRACKET = ']',
     K_A = 'a',
     K_B = 'b',

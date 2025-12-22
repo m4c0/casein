@@ -83,6 +83,7 @@ static casein::keys wp2c(WPARAM wp) {
   case VK_OEM_PERIOD: return casein::K_DOT;
   case VK_OEM_PLUS: return casein::K_EQUAL;
   case VK_OEM_2: return casein::K_SLASH;
+  case VK_OEM_5: return casein::K_BACKSLASH;
   case VK_OEM_4: return casein::K_LBRACKET;
   case VK_OEM_6: return casein::K_RBRACKET;
 
