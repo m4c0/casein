@@ -15,7 +15,6 @@ struct casein_native_handle {
 };
 
 module casein;
-import :internal;
 import silog;
 
 static volatile bool should_quit = false;
@@ -59,7 +58,10 @@ static void key(casein::event_type evt, XEvent * e) {
   casein_call_k(evt, key_of(&e->xkey));
 }
 
-extern "C" int main() {
+extern "C" void casein_init();
+extern "C" int main() try {
+  casein_init();
+
   auto dpy = XOpenDisplay(nullptr);
   if (!dpy) {
     silog::log(silog::error, "ERROR: could not open display");
@@ -106,4 +108,7 @@ extern "C" int main() {
   casein_call(casein::QUIT);
   XCloseDisplay(dpy);
   return exit_code;
+} catch (...) {
+  silog::error("Unhandled error");
+  return 1;
 }

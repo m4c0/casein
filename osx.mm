@@ -223,7 +223,10 @@ extern "C" void casein_interrupt(casein::interrupts irq) {
   }
 }
 
-int main(int argc, char ** argv) {
+extern "C" void casein_init();
+int main(int argc, char ** argv) try {
+  casein_init();
+
   @autoreleasepool {
     CASAppDelegate * app_d = [CASAppDelegate new];
 
@@ -235,4 +238,6 @@ int main(int argc, char ** argv) {
     [app run];
     return 0;
   }
+} catch (...) {
+  return 1;
 }

@@ -1,5 +1,4 @@
 module casein;
-import :internal;
 
 extern "C" void casein_enable_filedrop(bool);
 
@@ -20,6 +19,8 @@ static fn_t emap[casein::MAX_EVENT_TYPE] {};
 static fn_t emap_g[casein::MAX_EVENT_TYPE][casein::G_MAX] {};
 static fn_t emap_k[casein::MAX_EVENT_TYPE][casein::K_MAX] {};
 static fn_t emap_m[casein::MAX_EVENT_TYPE][casein::M_MAX] {};
+
+extern "C" __attribute__((weak)) void casein_init() {}
 
 namespace casein {
   void handle(event_type et, hai::fn<void> fn) {

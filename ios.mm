@@ -133,8 +133,10 @@ extern "C" void casein_interrupt(casein::interrupts irq) {
 }
 @end
 
+extern "C" void casein_init();
 extern "C" void casein_exit(int code) { abort(); }
 int main(int argc, char ** argv) {
+  casein_init();
   @autoreleasepool {
     return UIApplicationMain(argc, argv, nil, @"CASAppDelegate");
   }

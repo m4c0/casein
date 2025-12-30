@@ -26,7 +26,6 @@ module;
 // https://learn.microsoft.com/en-us/windows/win32/inputdev/about-keyboard-input#scan-codes
 
 module casein;
-import :internal;
 
 using namespace casein;
 
@@ -352,8 +351,11 @@ static int main_loop(HWND hwnd) {
   return static_cast<int>(msg.wParam);
 }
 
+extern "C" void casein_init();
 extern "C" int CALLBACK WinMain(_In_ HINSTANCE h_instance, _In_opt_ HINSTANCE /* unused */,
                                 _In_ LPSTR /* command line */, _In_ int cmd_show) try {
+  casein_init();
+
   register_class(h_instance);
   auto hwnd = g_hwnd = create_window(h_instance, cmd_show);
   casein_enable_filedrop(g_drop_enabled);

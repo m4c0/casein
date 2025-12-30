@@ -33,7 +33,10 @@ static void process_command(android_app * app) {
   }
 }
 
+extern "C" void casein_init();
 void android_main(android_app * app) {
+  casein_init();
+
   app->onAppCmd = handle_command;
 
   do {

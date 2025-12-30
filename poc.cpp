@@ -78,31 +78,29 @@ static void exit() {
   interrupt(IRQ_QUIT);
 }
 
-static struct init {
-  init() {
-    using namespace casein;
+extern "C" void casein_init() {
+  using namespace casein;
 
-    handle(CREATE_WINDOW, &on_window_created);
-    handle(FILES_DROP, &file_dropped);
-    handle(GESTURE, G_TAP_1, &tap_1);
-    handle(GESTURE, G_TAP_2, &tap_2);
-    handle(GESTURE, &gesture);
-    handle(KEY_DOWN, K_LEFT, &left);
-    handle(KEY_DOWN, K_RIGHT, &right);
-    handle(KEY_DOWN, K_F, &flip_fullscreen);
-    handle(KEY_DOWN, K_Q, &exit);
-    handle(KEY_DOWN, K_X, &title);
-    handle(KEY_DOWN, K_Z, &resize);
-    handle(KEY_DOWN, K_C, &capture);
-    handle(KEY_DOWN, K_COMMA, &title);
-    handle(KEY_DOWN, K_DOT, &title);
-    handle(KEY_DOWN, K_SLASH, &title);
-    handle(MOUSE_DOWN, &mouse_down);
-    handle(RESIZE_WINDOW, &resize_window);
-    handle(TOUCH_DOWN, &touch_down);
-    handle(QUIT, &quit);
+  handle(CREATE_WINDOW, &on_window_created);
+  handle(FILES_DROP, &file_dropped);
+  handle(GESTURE, G_TAP_1, &tap_1);
+  handle(GESTURE, G_TAP_2, &tap_2);
+  handle(GESTURE, &gesture);
+  handle(KEY_DOWN, K_LEFT, &left);
+  handle(KEY_DOWN, K_RIGHT, &right);
+  handle(KEY_DOWN, K_F, &flip_fullscreen);
+  handle(KEY_DOWN, K_Q, &exit);
+  handle(KEY_DOWN, K_X, &title);
+  handle(KEY_DOWN, K_Z, &resize);
+  handle(KEY_DOWN, K_C, &capture);
+  handle(KEY_DOWN, K_COMMA, &title);
+  handle(KEY_DOWN, K_DOT, &title);
+  handle(KEY_DOWN, K_SLASH, &title);
+  handle(MOUSE_DOWN, &mouse_down);
+  handle(RESIZE_WINDOW, &resize_window);
+  handle(TOUCH_DOWN, &touch_down);
+  handle(QUIT, &quit);
 
-    window_title = "Casein Proof-of-Concept";
-    window_size = { 300, 300 };
-  }
-} i;
+  window_title = "Casein Proof-of-Concept";
+  window_size = { 300, 300 };
+}
