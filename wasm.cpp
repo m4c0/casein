@@ -78,7 +78,10 @@ void EXPORT(casein_mouse)(int e, int button, int ofsx, int ofsy) {
   }
 }
 
+extern "C" void casein_init();
 int main() {
+  casein_init();
+
   casein::interrupt(casein::IRQ_FULLSCREEN);
   casein::interrupt(casein::IRQ_WINDOW_SIZE);
   casein::interrupt(casein::IRQ_WINDOW_TITLE);
