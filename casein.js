@@ -16,6 +16,9 @@
   document.body.style.position = "relative";
   document.body.appendChild(canvas);
 
+  var canvas_width  = canvas.clientWidth;
+  var canvas_height = canvas.clientHeight;
+
   leco_imports.casein = {
     start_events : () => {
       canvas.addEventListener('mousedown', (e) => mevt(0, e));
@@ -29,15 +32,18 @@
     },
     set_fullscreen : (en) => {
       if (en) {
-        canvas.style.width = canvas.style.height = '100%';
+        canvas_width  = canvas.clientWidth;
+        canvas_height = canvas.clientHeight;
+        canvas.width  = canvas.parentElement.clientWidth  - 2;
+        canvas.height = canvas.parentElement.clientHeight - 2;
       } else {
-        canvas.style.removeProperty("width");
-        canvas.style.removeProperty("height");
+        canvas.width  = canvas_width;
+        canvas.height = canvas_height;
       }
     },
     window_size : (x, y) => {
-      canvas.width = x;
-      canvas.height = y;
+      canvas.clientWidth = x;
+      canvas.clientHeight = y;
     },
     window_title : (ptr, size) => document.title = vaselin_tostr(ptr, size),
   };
