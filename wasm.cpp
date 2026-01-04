@@ -12,6 +12,7 @@ namespace {
 }
 
 IMPORT(void, set_fullscreen)(bool f);
+IMPORT(void, start_events)();
 IMPORT(void, window_size)(int x, int y);
 IMPORT(void, window_title)(const char *, int);
 
@@ -78,9 +79,16 @@ void EXPORT(casein_mouse)(int e, int button, int ofsx, int ofsy) {
   }
 }
 
+void EXPORT(casein_resize)(int w, int h) {
+  casein::window_size = { w, h };
+  casein_call(casein::RESIZE_WINDOW);
+}
+
 extern "C" void casein_init();
 int main() {
   casein_init();
+
+  start_events();
 
   casein::interrupt(casein::IRQ_FULLSCREEN);
   casein::interrupt(casein::IRQ_WINDOW_SIZE);

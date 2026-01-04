@@ -8,17 +8,26 @@
   canvas.style.transform = "translate(-50%, -50%)";
 
   function mevt(id, e) { leco_exports.casein_mouse(id, e.button, e.offsetX, e.offsetY); }
-  canvas.addEventListener('mousedown', (e) => mevt(0, e));
-  canvas.addEventListener('mousemove', (e) => mevt(1, e));
-  canvas.addEventListener('mouseup', (e) => mevt(2, e));
+
+  const cro = new ResizeObserver(_ => {
+    // offsetX counts border as well
+    leco_exports.casein_resize(canvas.offsetWidth - 2, canvas.offsetHeight - 2);
+  });
 
   document.body.style.position = "relative";
   document.body.appendChild(canvas);
 
-  document.addEventListener('keydown', (e) => leco_exports.casein_key(1, e.keyCode));
-  document.addEventListener('keyup', (e) => leco_exports.casein_key(0, e.keyCode));
-
   leco_imports.casein = {
+    start_events : () => {
+      canvas.addEventListener('mousedown', (e) => mevt(0, e));
+      canvas.addEventListener('mousemove', (e) => mevt(1, e));
+      canvas.addEventListener('mouseup', (e) => mevt(2, e));
+
+      cro.observe(canvas);
+
+      document.addEventListener('keydown', (e) => leco_exports.casein_key(1, e.keyCode));
+      document.addEventListener('keyup', (e) => leco_exports.casein_key(0, e.keyCode));
+    },
     set_fullscreen : (en) => {
       if (en) {
         canvas.style.width = canvas.style.height = '100%';
