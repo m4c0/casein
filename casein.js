@@ -10,8 +10,7 @@
   function mevt(id, e) { leco_exports.casein_mouse(id, e.button, e.offsetX, e.offsetY); }
 
   const cro = new ResizeObserver(_ => {
-    // offsetX counts border as well
-    leco_exports.casein_resize(canvas.offsetWidth - 2, canvas.offsetHeight - 2);
+    leco_exports.casein_resize(canvas.clientWidth, canvas.clientHeight);
   });
 
   document.body.style.position = "relative";
