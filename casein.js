@@ -19,6 +19,11 @@
   var canvas_width  = canvas.clientWidth;
   var canvas_height = canvas.clientHeight;
 
+  function rsz() {
+    canvas.width  = canvas.parentElement.clientWidth  - 2;
+    canvas.height = canvas.parentElement.clientHeight - 2;
+  }
+
   leco_imports.casein = {
     start_events : () => {
       canvas.addEventListener('mousedown', (e) => mevt(0, e));
@@ -36,7 +41,9 @@
         canvas_height = canvas.clientHeight;
         canvas.width  = canvas.parentElement.clientWidth  - 2;
         canvas.height = canvas.parentElement.clientHeight - 2;
+        window.addEventListener('resize', rsz);
       } else {
+        window.removeEventListener('resize', rsz);
         canvas.width  = canvas_width;
         canvas.height = canvas_height;
       }
