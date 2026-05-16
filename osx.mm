@@ -1,4 +1,4 @@
-@import AppKit;
+#import <AppKit/AppKit.h>
 #import "CASView.h"
 #import "externc.hpp"
 
